@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          display_name: string | null
+          id: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: string | null
+          subscription_tier: string | null
+          updated_at: string
+          videos_remaining: number
+          videos_used_this_month: number
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          display_name?: string | null
+          id: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          updated_at?: string
+          videos_remaining?: number
+          videos_used_this_month?: number
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          display_name?: string | null
+          id?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          updated_at?: string
+          videos_remaining?: number
+          videos_used_this_month?: number
+        }
+        Relationships: []
+      }
+      video_jobs: {
+        Row: {
+          brand_name: string
+          created_at: string
+          creative_description: string | null
+          drive_link: string | null
+          error_message: string | null
+          id: string
+          language: string
+          product_analysis: string | null
+          product_image_url: string
+          status: string
+          target_audience: string
+          updated_at: string
+          user_id: string
+          video_length: string
+          video_prompt: string | null
+          video_url: string | null
+        }
+        Insert: {
+          brand_name: string
+          created_at?: string
+          creative_description?: string | null
+          drive_link?: string | null
+          error_message?: string | null
+          id?: string
+          language?: string
+          product_analysis?: string | null
+          product_image_url: string
+          status?: string
+          target_audience: string
+          updated_at?: string
+          user_id: string
+          video_length?: string
+          video_prompt?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          brand_name?: string
+          created_at?: string
+          creative_description?: string | null
+          drive_link?: string | null
+          error_message?: string | null
+          id?: string
+          language?: string
+          product_analysis?: string | null
+          product_image_url?: string
+          status?: string
+          target_audience?: string
+          updated_at?: string
+          user_id?: string
+          video_length?: string
+          video_prompt?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
