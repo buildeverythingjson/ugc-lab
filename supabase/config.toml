@@ -8,3 +8,9 @@ verify_jwt = false
 
 [functions.customer-portal]
 verify_jwt = false
+
+[functions.submit-video-job]
+verify_jwt = false
+
+[functions.video-job-callback]
+verify_jwt = false
