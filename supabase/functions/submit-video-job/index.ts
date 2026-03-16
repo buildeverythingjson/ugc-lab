@@ -32,7 +32,7 @@ serve(async (req) => {
   );
 
   try {
-    // Authenticate user
+    // 1. Authenticate user
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) throw new Error("No authorization header");
     const token = authHeader.replace("Bearer ", "");
@@ -40,10 +40,10 @@ serve(async (req) => {
     if (userError || !userData.user) throw new Error("User not authenticated");
     const userId = userData.user.id;
 
-    // Parse body
+    // 2. Parse request body
     const { jobId, imageUrl, brandName, targetAudience, creativeDescription, language, videoLength } = await req.json();
 
-    // Check videos_remaining
+    // 3. Check videos_remaining
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("videos_remaining, videos_used_this_month")
@@ -59,16 +59,13 @@ serve(async (req) => {
       );
     }
 
-    // Build callback URL
-    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-    const callbackApiKey = Deno.env.get("VIDEO_CALLBACK_API_KEY") ?? "";
-    const callbackUrl = `${supabaseUrl}/functions/v1/video-job-callback?apiKey=${callbackApiKey}`;
+    // 4. Build callback URL
+    const callbackUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/video-job-callback?apiKey=${Deno.env.get("VIDEO_CALLBACK_API_KEY")}`;
 
-    // Map values
+    // 5. Map values and POST to n8n
     const mappedLength = VIDEO_LENGTH_MAP[videoLength] ?? "12 seconds";
     const mappedLanguage = LANGUAGE_MAP[language] ?? "Norwegian";
 
-    // Send to n8n
     const n8nUrl = Deno.env.get("N8N_WEBHOOK_URL");
     if (!n8nUrl) throw new Error("N8N_WEBHOOK_URL not configured");
 
@@ -94,10 +91,10 @@ serve(async (req) => {
       throw new Error(`n8n webhook failed: ${n8nResponse.status} ${errText}`);
     }
 
-    // Update job status to processing
+    // 6. Update job status to processing
     await supabase.from("video_jobs").update({ status: "processing" }).eq("id", jobId);
 
-    // Decrement videos_remaining, increment videos_used_this_month
+    // 7. Update profile credits
     await supabase
       .from("profiles")
       .update({
@@ -106,6 +103,7 @@ serve(async (req) => {
       })
       .eq("id", userId);
 
+    // 8. Return success
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

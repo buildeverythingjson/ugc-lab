@@ -8,18 +8,13 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // 1. Handle OPTIONS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    { auth: { persistSession: false } }
-  );
-
   try {
-    // Validate API key from query params
+    // 2. Validate API key from query params
     const url = new URL(req.url);
     const apiKey = url.searchParams.get("apiKey");
     const expectedKey = Deno.env.get("VIDEO_CALLBACK_API_KEY") ?? "";
@@ -31,16 +26,25 @@ serve(async (req) => {
       });
     }
 
-    // Parse body
+    // 3. Parse request body
     const { jobId, status, videoUrl, driveLink, error } = await req.json();
 
+    // 4. Create Supabase client with service role key (bypass RLS)
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    // 5. Handle completed status
     if (status === "completed") {
       await supabase
         .from("video_jobs")
         .update({ status: "completed", video_url: videoUrl, drive_link: driveLink })
         .eq("id", jobId);
-    } else if (status === "failed") {
-      // Get the job to find user_id for refund
+    }
+    // 6. Handle failed status with credit refund
+    else if (status === "failed") {
       const { data: job } = await supabase
         .from("video_jobs")
         .update({ status: "failed", error_message: error })
@@ -49,7 +53,6 @@ serve(async (req) => {
         .single();
 
       if (job?.user_id) {
-        // Refund video credit
         const { data: profile } = await supabase
           .from("profiles")
           .select("videos_remaining, videos_used_this_month")
@@ -68,6 +71,7 @@ serve(async (req) => {
       }
     }
 
+    // 7. Return success
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
