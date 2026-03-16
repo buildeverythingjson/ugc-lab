@@ -14,6 +14,7 @@ import NewVideo from "./pages/dashboard/NewVideo";
 import MyVideos from "./pages/dashboard/MyVideos";
 import Subscription from "./pages/dashboard/Subscription";
 import SettingsPage from "./pages/dashboard/SettingsPage";
+import VideoDetail from "./pages/dashboard/VideoDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
               <Route index element={<Overview />} />
               <Route path="new-video" element={<NewVideo />} />
               <Route path="videos" element={<MyVideos />} />
+              <Route path="videos/:id" element={<VideoDetail />} />
               <Route path="subscription" element={<Subscription />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
