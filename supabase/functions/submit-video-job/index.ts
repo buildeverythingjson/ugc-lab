@@ -98,12 +98,11 @@ serve(async (req) => {
     await supabase.from("video_jobs").update({ status: "processing" }).eq("id", jobId);
 
     // Decrement videos_remaining, increment videos_used_this_month
-    await supabase.rpc("", {}).catch(() => {}); // not needed, using direct update
     await supabase
       .from("profiles")
       .update({
         videos_remaining: profile.videos_remaining - 1,
-        videos_used_this_month: (profile as any).videos_used_this_month + 1,
+        videos_used_this_month: profile.videos_used_this_month + 1,
       })
       .eq("id", userId);
 
