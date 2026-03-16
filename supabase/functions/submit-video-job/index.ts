@@ -62,6 +62,15 @@ serve(async (req) => {
     // 4. Build callback URL
     const callbackUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/video-job-callback?apiKey=${Deno.env.get("VIDEO_CALLBACK_API_KEY")}`;
 
+    // 4b. Create signed upload URL for Supabase Storage (video delivery)
+    const videoFileName = `${jobId}.mp4`;
+    const { data: signedUploadData, error: signedUploadError } = await supabase.storage
+      .from("generated-videos")
+      .createSignedUploadUrl(videoFileName);
+    if (signedUploadError) throw new Error(`Storage signed URL error: ${signedUploadError.message}`);
+
+    const videoPublicUrl = `${Deno.env.get("SUPABASE_URL")}/storage/v1/object/public/generated-videos/${videoFileName}`;
+
     // 5. Map values and POST to n8n
     const mappedLength = VIDEO_LENGTH_MAP[videoLength] ?? "12 seconds";
     const mappedLanguage = LANGUAGE_MAP[language] ?? "Norwegian";
