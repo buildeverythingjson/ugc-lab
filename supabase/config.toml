@@ -10,7 +10,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.submit-video-job]
-verify_jwt = false
+verify_jwt = true
 
 [functions.video-job-callback]
 verify_jwt = false
