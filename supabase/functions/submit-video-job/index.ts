@@ -79,6 +79,8 @@ serve(async (req) => {
     if (creativeDescription) n8nPayload.creativePrompt = creativeDescription;
     if (brandName) n8nPayload.brandName = brandName;
     if (targetAudience) n8nPayload.targetAudience = targetAudience;
+    n8nPayload.storageUploadUrl = signedUploadData.signedUrl;
+    n8nPayload.videoPublicUrl = videoPublicUrl;
 
     const n8nResponse = await fetch(n8nUrl, {
       method: "POST",

@@ -108,13 +108,19 @@ const VideoDetail = () => {
         </Card>
       )}
 
-      {status === "completed" && job.drive_link && (
+      {status === "completed" && job.video_url && (
         <Card className="border-green-500/20 bg-green-500/5">
-          <CardContent className="pt-6">
-            <a href={job.drive_link} target="_blank" rel="noopener noreferrer">
+          <CardContent className="pt-6 space-y-4">
+            <video
+              src={job.video_url}
+              controls
+              playsInline
+              className="w-full rounded-lg max-h-[480px] bg-black"
+            />
+            <a href={job.video_url} download>
               <Button className="bg-green-600 hover:bg-green-700 text-white">
-                <ExternalLink size={16} className="mr-2" />
-                Åpne i Google Drive
+                <Download size={16} className="mr-2" />
+                Last ned video
               </Button>
             </a>
           </CardContent>

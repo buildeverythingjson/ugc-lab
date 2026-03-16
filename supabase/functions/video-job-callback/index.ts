@@ -38,10 +38,9 @@ serve(async (req) => {
 
     // 5. Handle completed status
     if (status === "completed") {
-      await supabase
-        .from("video_jobs")
-        .update({ status: "completed", video_url: videoUrl, drive_link: driveLink })
-        .eq("id", jobId);
+      const updateData: Record<string, unknown> = { status: "completed", video_url: videoUrl };
+      if (driveLink) updateData.drive_link = driveLink;
+      await supabase.from("video_jobs").update(updateData).eq("id", jobId);
     }
     // 6. Handle failed status with credit refund
     else if (status === "failed") {
