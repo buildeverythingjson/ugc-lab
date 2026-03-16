@@ -46,7 +46,7 @@ serve(async (req) => {
     // Check videos_remaining
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("videos_remaining")
+      .select("videos_remaining, videos_used_this_month")
       .eq("id", userId)
       .single();
 
