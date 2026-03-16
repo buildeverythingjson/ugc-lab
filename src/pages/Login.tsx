@@ -1,21 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Supabase auth
-    toast.info("Backend er ikke koblet til ennå");
-    setLoading(false);
+    try {
+      await signIn(email, password);
+      toast.success("Logget inn!");
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || "Innlogging feilet");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,40 +44,20 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">E-post</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="din@epost.no"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+              <Input id="email" type="email" placeholder="din@epost.no" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Passord</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
-            >
+            <Button type="submit" disabled={loading} className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90">
               {loading ? "Logger inn..." : "Logg inn"}
             </Button>
           </form>
 
           <p className="text-sm text-muted-foreground text-center mt-6">
             Har du ikke en konto?{" "}
-            <Link to="/register" className="text-primary hover:underline">
-              Registrer deg
-            </Link>
+            <Link to="/register" className="text-primary hover:underline">Registrer deg</Link>
           </p>
         </div>
       </div>
