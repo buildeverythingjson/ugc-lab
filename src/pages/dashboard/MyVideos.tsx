@@ -169,9 +169,9 @@ const MyVideos = () => {
                       <DropdownMenuTrigger asChild>
                         <button
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                          className="w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
+                          className="w-5 h-5 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
                         >
-                          <MoreVertical size={14} className="text-white" />
+                          <MoreVertical size={11} className="text-white" />
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
