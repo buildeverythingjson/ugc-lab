@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const examples = [
   { src: "https://files.advideolab.com/assets/library/2026/01/1769813178339-88424ef9.mp4" },
@@ -14,6 +14,7 @@ const infiniteExamples = [...examples, ...examples];
 
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -23,19 +24,25 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
     video.loop = true;
     video.autoplay = true;
     video.preload = "auto";
-    const playPromise = video.play();
-    if (playPromise) {
-      playPromise.catch(() => {
-        // Retry on interaction
-        const handleInteraction = () => {
-          video.play();
-          document.removeEventListener("touchstart", handleInteraction);
-          document.removeEventListener("click", handleInteraction);
-        };
-        document.addEventListener("touchstart", handleInteraction, { once: true });
-        document.addEventListener("click", handleInteraction, { once: true });
-      });
-    }
+
+    const handleCanPlay = () => {
+      setReady(true);
+      const playPromise = video.play();
+      if (playPromise) {
+        playPromise.catch(() => {
+          const handleInteraction = () => {
+            video.play();
+          };
+          document.addEventListener("touchstart", handleInteraction, { once: true });
+          document.addEventListener("click", handleInteraction, { once: true });
+        });
+      }
+    };
+
+    video.addEventListener("canplay", handleCanPlay);
+    if (video.readyState >= 3) handleCanPlay();
+
+    return () => video.removeEventListener("canplay", handleCanPlay);
   }, []);
 
   return (
@@ -46,7 +53,7 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
       loop
       playsInline
       preload="auto"
-      className="w-full h-full object-cover pointer-events-none"
+      className={`w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"}`}
       src={src}
     />
   );
