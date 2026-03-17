@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 const examples = [
   { src: "https://files.advideolab.com/assets/library/2026/01/1769813178339-88424ef9.mp4" },
@@ -9,8 +10,47 @@ const examples = [
   { src: "https://files.advideolab.com/assets/library/2026/01/1769813210931-2e964f2f.mp4" },
 ];
 
-// Duplicate items for seamless infinite scroll
 const infiniteExamples = [...examples, ...examples];
+
+const AutoPlayVideo = ({ src }: { src: string }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.playsInline = true;
+    video.loop = true;
+    video.autoplay = true;
+    video.preload = "auto";
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise.catch(() => {
+        // Retry on interaction
+        const handleInteraction = () => {
+          video.play();
+          document.removeEventListener("touchstart", handleInteraction);
+          document.removeEventListener("click", handleInteraction);
+        };
+        document.addEventListener("touchstart", handleInteraction, { once: true });
+        document.addEventListener("click", handleInteraction, { once: true });
+      });
+    }
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      muted
+      autoPlay
+      loop
+      playsInline
+      preload="auto"
+      className="w-full h-full object-cover pointer-events-none"
+      src={src}
+    />
+  );
+};
 
 const ExampleGallery = () => {
   return (
@@ -27,19 +67,9 @@ const ExampleGallery = () => {
         <div className="md:hidden overflow-hidden -mx-4">
           <div className="flex gap-4 animate-[marquee_12s_linear_infinite] w-max">
             {infiniteExamples.map((ex, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 w-[60vw] max-w-[250px]"
-              >
+              <div key={i} className="flex-shrink-0 w-[60vw] max-w-[250px]">
                 <div className="rounded-xl overflow-hidden border border-border bg-card aspect-[9/16]">
-                  <video
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover pointer-events-none"
-                    src={ex.src}
-                  />
+                  <AutoPlayVideo src={ex.src} />
                 </div>
               </div>
             ))}
@@ -57,14 +87,7 @@ const ExampleGallery = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
               <div className="rounded-xl overflow-hidden border border-border bg-card aspect-[9/16]">
-                <video
-                  muted
-                  autoPlay
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover"
-                  src={ex.src}
-                />
+                <AutoPlayVideo src={ex.src} />
               </div>
             </motion.div>
           ))}
