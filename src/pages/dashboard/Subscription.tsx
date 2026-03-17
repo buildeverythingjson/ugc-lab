@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,7 +15,6 @@ const Subscription = () => {
   useEffect(() => {
     if (searchParams.get("success") === "true") {
       toast.success("Abonnementet er aktivert!");
-      // Check subscription status after successful checkout
       supabase.functions.invoke("check-subscription").then(() => refreshProfile());
     }
   }, [searchParams]);
@@ -74,7 +73,6 @@ const Subscription = () => {
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";
-          const isStartup = key === "startup";
 
           return (
             <div
@@ -99,12 +97,27 @@ const Subscription = () => {
                 <span className="text-muted-foreground text-sm ml-1">kr/mnd</span>
               </div>
               <ul className="space-y-2 mb-6 flex-1">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check size={14} className="text-primary mt-0.5 shrink-0" />
-                    <span className="text-muted-foreground">{f}</span>
-                  </li>
-                ))}
+                {plan.features.map((f) => {
+                  const isComingSoon = f.includes("(kommer snart)");
+                  const displayText = f.replace(" (kommer snart)", "");
+                  return (
+                    <li key={f} className={`flex items-start gap-2 text-sm ${isComingSoon ? "opacity-60" : ""}`}>
+                      {isComingSoon ? (
+                        <Clock size={14} className="text-muted-foreground mt-0.5 shrink-0" />
+                      ) : (
+                        <Check size={14} className="text-primary mt-0.5 shrink-0" />
+                      )}
+                      <span className="text-muted-foreground">
+                        {displayText}
+                        {isComingSoon && (
+                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-muted text-muted-foreground">
+                            Snart
+                          </span>
+                        )}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
               <Button
                 onClick={() => handleCheckout(key)}
