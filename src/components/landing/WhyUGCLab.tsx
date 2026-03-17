@@ -57,7 +57,7 @@ const WhyUGCLab = () => {
 
               {/* Content */}
               <div className="flex-1 pt-1">
-                <h3 className="font-display text-lg font-bold mb-1.5 group-hover:text-primary transition-colors duration-300">
+                <h3 className="font-display text-lg font-bold mb-1.5">
                   {feature.title}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
