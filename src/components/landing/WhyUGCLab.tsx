@@ -47,7 +47,7 @@ const WhyUGCLab = () => {
             >
               {/* Vertical line connector */}
               {i < features.length - 1 && (
-                <div className="absolute left-[23px] top-[68px] bottom-0 w-px bg-gradient-to-b from-primary/30 to-transparent" />
+                <div className="absolute left-[23px] top-[68px] bottom-0 w-px bg-gradient-to-b from-accent/30 to-transparent" />
               )}
 
               {/* Icon */}

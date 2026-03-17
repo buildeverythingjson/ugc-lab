@@ -45,7 +45,7 @@ const HowItWorks = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative p-6 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors card-shadow group"
+              className="relative p-6 rounded-xl bg-card border border-border hover:border-accent/30 transition-colors card-shadow group"
             >
               <div className="text-xs font-semibold text-accent mb-4">Steg {i + 1}</div>
               <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
