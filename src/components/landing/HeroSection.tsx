@@ -21,12 +21,12 @@ const HeroSection = () => {
           </div>
 
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-6">
-            Profesjonelle UGC-videoer{" "}
-            <span className="text-gradient">på norsk</span> — laget av AI på minutter
+            UGC-innhold med AI —{" "}
+            <span className="text-gradient">på sekunder</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Bygget for norske merkevarer. Last opp produktbildet ditt, og få engasjerende videoinnhold tilpasset det norske markedet — uten byråer eller freelancere.
+            Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
