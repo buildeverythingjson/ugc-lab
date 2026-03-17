@@ -15,10 +15,7 @@ const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!loading && user) {
-      navigate("/dashboard", { replace: true });
-    }
+  // Don't redirect logged-in users — allow them to view the landing page
   }, [user, loading, navigate]);
 
   return (

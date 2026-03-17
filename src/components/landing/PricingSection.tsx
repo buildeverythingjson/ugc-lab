@@ -94,11 +94,7 @@ const PricingSection = () => {
 
               <Link to="/register">
                 <Button
-                  className={`w-full ${
-                    plan.popular
-                      ? "bg-gradient-primary text-primary-foreground hover:opacity-90"
-                      : "bg-secondary text-secondary-foreground hover:bg-surface-hover"
-                  }`}
+                  className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
                 >
                   {(plan as any).trialPrice ? `Prøv for ${(plan as any).trialPrice} kr` : "Velg plan"}
                 </Button>
