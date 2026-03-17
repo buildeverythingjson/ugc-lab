@@ -13,6 +13,7 @@ import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Overview from "./pages/dashboard/Overview";
 import NewVideo from "./pages/dashboard/NewVideo";
+import NewImage from "./pages/dashboard/NewImage";
 import MyVideos from "./pages/dashboard/MyVideos";
 import Subscription from "./pages/dashboard/Subscription";
 import SettingsPage from "./pages/dashboard/SettingsPage";
