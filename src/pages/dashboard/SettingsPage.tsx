@@ -9,7 +9,9 @@ import { useState } from "react";
 
 const SettingsPage = () => {
   const { profile, user, refreshProfile } = useAuth();
-  const [displayName, setDisplayName] = useState(profile?.display_name || "");
+  const [firstName, setFirstName] = useState(profile?.first_name || "");
+  const [lastName, setLastName] = useState(profile?.last_name || "");
+  const [website, setWebsite] = useState(profile?.website || "");
   const [newPassword, setNewPassword] = useState("");
 
   const handleUpdateProfile = async () => {
