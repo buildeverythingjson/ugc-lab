@@ -19,8 +19,18 @@ const CostComparison = () => {
           transition={{ duration: 0.6 }}
           className="max-w-3xl mx-auto"
         >
-          <div className="rounded-2xl border border-border bg-card card-shadow overflow-hidden relative">
-            <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-card card-shadow overflow-visible relative">
+            {/* Vertical divider line (desktop) */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border hidden md:block z-0" />
+
+            {/* VS badge centered on the divider line */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:flex">
+              <div className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
+                <span className="font-display font-bold text-sm text-primary">VS</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-[1fr,1fr]">
               {/* Traditional UGC */}
               <div className="p-8 space-y-5">
                 <h3 className="font-display text-lg font-bold text-destructive">Tradisjonell UGC</h3>
@@ -40,6 +50,13 @@ const CostComparison = () => {
                 </ul>
               </div>
 
+              {/* Mobile VS */}
+              <div className="flex md:hidden items-center justify-center py-2 relative z-10">
+                <div className="w-10 h-10 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
+                  <span className="font-display font-bold text-xs text-primary">VS</span>
+                </div>
+              </div>
+
               {/* UGC Lab */}
               <div className="p-8 space-y-5 bg-primary/5">
                 <h3 className="font-display text-lg font-bold text-primary">UGC Lab</h3>
@@ -57,23 +74,6 @@ const CostComparison = () => {
                     <span className="text-muted-foreground">Ubegrenset regenerering</span>
                   </li>
                 </ul>
-              </div>
-            </div>
-
-            {/* VS badge centered on the divider line */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:flex">
-              <div className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
-                <span className="font-display font-bold text-sm text-primary">VS</span>
-              </div>
-            </div>
-
-            {/* Vertical divider line (desktop) */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border hidden md:block" />
-
-            {/* Horizontal VS for mobile */}
-            <div className="flex md:hidden items-center justify-center -mt-4 -mb-4 relative z-10">
-              <div className="w-10 h-10 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
-                <span className="font-display font-bold text-xs text-primary">VS</span>
               </div>
             </div>
           </div>
