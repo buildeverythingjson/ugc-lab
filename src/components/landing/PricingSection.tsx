@@ -11,11 +11,9 @@ const plans = [
   {
     name: "Startup",
     price: "499",
-    trialPrice: "10",
-    trialTierKey: "trial",
     tierKey: "startup",
-    trialPriceId: "price_1TBvZn09raYItIuAon2pFcJT",
     priceId: "price_1TBOg909raYItIuAgRaaN8zT",
+    trialPriceId: "price_1TBvZn09raYItIuAon2pFcJT",
     features: [
       "5 videoer per måned",
       "Opptil 15 sekunder",
@@ -57,20 +55,21 @@ const plans = [
 ];
 
 const PricingSection = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<string | null>(null);
 
-  const handlePlanSelect = async (priceId: string, tierKey: string) => {
+  // User has used trial if they have or had a trial/startup/growth/business tier
+  const hasUsedTrial = profile?.subscription_tier === "trial" || profile?.subscription_tier === "startup" || profile?.subscription_tier === "growth" || profile?.subscription_tier === "business";
+
+  const handlePlanSelect = async (priceId: string, loadingKey: string) => {
     if (!user) {
-      // Store selected plan and redirect to register
       localStorage.setItem("pending_checkout_price_id", priceId);
       navigate("/register");
       return;
     }
 
-    // Already logged in - go straight to checkout
-    setLoading(tierKey);
+    setLoading(loadingKey);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId },
@@ -97,60 +96,63 @@ const PricingSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {plans.map((plan, i) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`relative rounded-xl border p-8 flex flex-col ${
-                plan.popular
-                  ? "border-foreground bg-card glow-primary scale-[1.02]"
-                  : "border-border bg-card"
-              } card-shadow`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-                  Mest populær
-                </div>
-              )}
+          {plans.map((plan, i) => {
+            const showTrial = plan.trialPriceId && !hasUsedTrial;
 
-              <h3 className="font-display text-xl font-bold mb-2">{plan.name}</h3>
-              <div className="mb-6">
-                <span className="font-display text-4xl font-bold">{plan.price}</span>
-                <span className="text-muted-foreground text-sm ml-1">kr/mnd</span>
-              </div>
-
-              <ul className="space-y-3 mb-8 flex-1">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm">
-                    <Check size={16} className="text-foreground mt-0.5 shrink-0" />
-                    <span className="text-muted-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="space-y-2">
-                {plan.trialPrice && (
-                  <Button
-                    className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
-                    disabled={loading === "trial"}
-                    onClick={() => handlePlanSelect(plan.trialPriceId!, "trial")}
-                  >
-                    {loading === "trial" ? "Laster..." : `Prøv for ${plan.trialPrice} kr`}
-                  </Button>
+            return (
+              <motion.div
+                key={plan.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className={`relative rounded-xl border p-8 flex flex-col ${
+                  plan.popular
+                    ? "border-foreground bg-card glow-primary scale-[1.02]"
+                    : "border-border bg-card"
+                } card-shadow`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                    Mest populær
+                  </div>
                 )}
+
+                <h3 className="font-display text-xl font-bold mb-2">{plan.name}</h3>
+                <div className="mb-6">
+                  <span className="font-display text-4xl font-bold">{plan.price}</span>
+                  <span className="text-muted-foreground text-sm ml-1">kr/mnd</span>
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3 text-sm">
+                      <Check size={16} className="text-foreground mt-0.5 shrink-0" />
+                      <span className="text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
                 <Button
                   className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
-                  disabled={loading === plan.tierKey}
-                  onClick={() => handlePlanSelect(plan.priceId, plan.tierKey)}
+                  disabled={loading !== null}
+                  onClick={() =>
+                    showTrial
+                      ? handlePlanSelect(plan.trialPriceId!, "trial")
+                      : handlePlanSelect(plan.priceId, plan.tierKey)
+                  }
                 >
-                  {loading === plan.tierKey ? "Laster..." : "Velg plan"}
+                  {loading === "trial" && showTrial
+                    ? "Laster..."
+                    : loading === plan.tierKey
+                    ? "Laster..."
+                    : showTrial
+                    ? "Prøv for 10 kr"
+                    : "Velg plan"}
                 </Button>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
