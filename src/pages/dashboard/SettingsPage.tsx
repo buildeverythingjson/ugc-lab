@@ -16,9 +16,10 @@ const SettingsPage = () => {
 
   const handleUpdateProfile = async () => {
     if (!user) return;
+    const displayName = `${firstName} ${lastName}`.trim();
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: displayName })
+      .update({ display_name: displayName, first_name: firstName, last_name: lastName, website: website || null } as any)
       .eq("id", user.id);
     if (error) {
       toast.error("Kunne ikke oppdatere profilen");
