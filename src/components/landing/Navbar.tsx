@@ -28,6 +28,9 @@ const Navbar = () => {
           <a href="#priser" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Priser
           </a>
+          <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            FAQ
+          </a>
           <Link to="/login">
             <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
               Logg inn
