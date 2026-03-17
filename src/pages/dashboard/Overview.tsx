@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Video, CreditCard, Clock } from "lucide-react";
+import { PlusCircle, Video, CreditCard, Clock, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useRef } from "react";
@@ -37,9 +37,30 @@ const Overview = () => {
     { label: "Videoer denne måneden", value: `${used}`, icon: Clock },
     { label: "Nåværende plan", value: tier.charAt(0).toUpperCase() + tier.slice(1), icon: CreditCard },
   ];
+  const isTrialUser = (profile as any)?.has_used_trial && (!profile?.subscription_tier || profile?.subscription_tier === "trial");
 
   return (
     <div className="space-y-8">
+      {isTrialUser && (
+        <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-3 flex-1">
+            <div className="rounded-full bg-primary/10 p-2.5">
+              <Sparkles size={20} className="text-primary" />
+            </div>
+            <div>
+              <p className="font-display font-semibold text-sm">Prøveperioden din er brukt opp</p>
+              <p className="text-muted-foreground text-sm mt-0.5">
+                Oppgrader til en plan for å fortsette å lage videoer.
+              </p>
+            </div>
+          </div>
+          <Link to="/dashboard/subscription">
+            <Button size="sm" className="bg-gradient-primary text-primary-foreground hover:opacity-90">
+              Se planer
+            </Button>
+          </Link>
+        </div>
+      )}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold">
