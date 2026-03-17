@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload, Lock, Sparkles, Loader2 } from "lucide-react";
+import { Upload, Lock, Sparkles, Loader2, Image, Globe, Users, Type, Clock, Wand2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,6 +14,7 @@ const NewVideo = () => {
   const { user, profile, refreshProfile } = useAuth();
   const isBusiness = profile?.subscription_tier === "business";
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [brandName, setBrandName] = useState("");
@@ -22,6 +23,8 @@ const NewVideo = () => {
   const [language, setLanguage] = useState("Norsk");
   const [videoLength, setVideoLength] = useState("15");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const videosRemaining = profile?.videos_remaining ?? 0;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,30 +36,33 @@ const NewVideo = () => {
     }
   };
 
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!imageFile || !user) return;
 
-    if ((profile?.videos_remaining ?? 0) <= 0) {
+    if (videosRemaining <= 0) {
       toast.error("Du har brukt alle videoene dine denne måneden. Oppgrader planen din for flere.");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      // 1. Upload image to Supabase Storage
       const filePath = `${user.id}/${Date.now()}_${imageFile.name}`;
       const { error: uploadError } = await supabase.storage
         .from('product-images')
         .upload(filePath, imageFile);
       if (uploadError) throw uploadError;
 
-      // 2. Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('product-images')
         .getPublicUrl(filePath);
 
-      // 3. Create video_jobs row
       const jobId = crypto.randomUUID();
       const { error: insertError } = await supabase.from('video_jobs').insert({
         id: jobId,
@@ -71,7 +77,6 @@ const NewVideo = () => {
       });
       if (insertError) throw insertError;
 
-      // 4. Call edge function to trigger n8n
       const { error: fnError } = await supabase.functions.invoke('submit-video-job', {
         body: {
           jobId,
@@ -85,7 +90,6 @@ const NewVideo = () => {
       });
       if (fnError) throw fnError;
 
-      // 5. Refresh profile and navigate
       await refreshProfile();
       toast.success("Videogenerering startet!");
       navigate(`/dashboard/videos/${jobId}`);
@@ -98,108 +102,178 @@ const NewVideo = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-2xl">
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold">Lag ny video</h1>
-        <p className="text-muted-foreground mt-1">Fyll ut skjemaet for å generere en UGC-video</p>
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-2xl font-bold">Lag ny video</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">Beskriv produktet ditt og generer en UGC-video</p>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Kreditter</span>
+          <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-secondary font-semibold text-foreground">
+            {videosRemaining}
+          </span>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Image upload */}
-        <div className="space-y-2">
-          <Label>Produktbilde *</Label>
-          <label className="flex flex-col items-center justify-center w-full h-48 rounded-xl border-2 border-dashed border-border bg-surface hover:border-primary/40 transition-colors cursor-pointer overflow-hidden">
-            {imagePreview ? (
-              <img src={imagePreview} alt="Preview" className="w-full h-full object-contain" />
-            ) : (
-              <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                <Upload size={32} />
-                <span className="text-sm">Last opp produktbilde</span>
-                <span className="text-xs">JPG, PNG eller WEBP</span>
+      <form onSubmit={handleSubmit} className="space-y-0">
+        {/* Main card */}
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          {/* Script / Description area */}
+          <div className="p-6 pb-4">
+            <div className="relative">
+              <Textarea
+                placeholder="Beskriv stilen og budskapet du ønsker for videoen..."
+                rows={5}
+                value={creativeDescription}
+                onChange={(e) => setCreativeDescription(e.target.value)}
+                className="resize-none border-0 bg-transparent p-0 text-base placeholder:text-muted-foreground/60 focus-visible:ring-0 shadow-none"
+              />
+              <div className="absolute top-0 right-0">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors"
+                  onClick={() => toast.info("AI-manusskriver kommer snart!")}
+                >
+                  <Wand2 size={14} />
+                  AI Manus
+                </button>
               </div>
-            )}
-            <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleImageChange} />
-          </label>
-        </div>
+            </div>
+          </div>
 
-        {/* Brand name */}
-        <div className="space-y-2">
-          <Label htmlFor="brand">Merkenavn *</Label>
-          <Input id="brand" placeholder="F.eks. Norsk Hudpleie AS" required value={brandName} onChange={(e) => setBrandName(e.target.value)} />
-        </div>
+          {/* Divider */}
+          <div className="border-t border-border" />
 
-        {/* Target audience */}
-        <div className="space-y-2">
-          <Label htmlFor="audience">Målgruppe *</Label>
-          <Input id="audience" placeholder="F.eks. Kvinner 25-45 som er interessert i hudpleie" required value={targetAudience} onChange={(e) => setTargetAudience(e.target.value)} />
-        </div>
+          {/* Toolbar row */}
+          <div className="px-6 py-3 flex flex-wrap items-center gap-2">
+            {/* Image upload button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className={`inline-flex items-center gap-2 px-3 py-2 rounded-full border text-sm transition-colors ${
+                imageFile
+                  ? "border-foreground/20 bg-primary/5 text-foreground"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/20"
+              }`}
+            >
+              <Image size={16} />
+              {imageFile ? imageFile.name.slice(0, 20) : "Produktbilde"}
+              {imageFile && (
+                <span
+                  onClick={(e) => { e.stopPropagation(); removeImage(); }}
+                  className="ml-1 hover:text-destructive cursor-pointer"
+                >
+                  <X size={14} />
+                </span>
+              )}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={handleImageChange}
+            />
 
-        {/* Creative description */}
-        <div className="space-y-2">
-          <Label htmlFor="description">Kreativ beskrivelse</Label>
-          <Textarea
-            id="description"
-            placeholder="Beskriv stilen du ønsker, f.eks. 'Energisk og moderne, med fokus på naturlige ingredienser'"
-            rows={3}
-            value={creativeDescription}
-            onChange={(e) => setCreativeDescription(e.target.value)}
-          />
-        </div>
+            {/* Language */}
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="w-auto h-9 rounded-full border-border bg-card text-sm gap-2 px-3 [&>svg]:opacity-50">
+                <Globe size={16} className="shrink-0 text-muted-foreground" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Norsk">Norsk</SelectItem>
+                <SelectItem value="Engelsk">Engelsk</SelectItem>
+                <SelectItem value="Svensk">Svensk</SelectItem>
+                <SelectItem value="Dansk">Dansk</SelectItem>
+              </SelectContent>
+            </Select>
 
-        {/* Language */}
-        <div className="space-y-2">
-          <Label>Språk *</Label>
-          <Select value={language} onValueChange={setLanguage}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Norsk">Norsk</SelectItem>
-              <SelectItem value="Engelsk">Engelsk</SelectItem>
-              <SelectItem value="Svensk">Svensk</SelectItem>
-              <SelectItem value="Dansk">Dansk</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+            {/* Video length */}
+            <div className="flex items-center rounded-full border border-border bg-card overflow-hidden">
+              {[
+                { value: "15", label: "15s", locked: false },
+                { value: "30", label: "30s", locked: !isBusiness },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => !opt.locked && setVideoLength(opt.value)}
+                  disabled={opt.locked}
+                  className={`inline-flex items-center gap-1 px-3 py-2 text-sm transition-colors ${
+                    videoLength === opt.value
+                      ? "bg-primary text-primary-foreground"
+                      : opt.locked
+                      ? "text-muted-foreground/40 cursor-not-allowed"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Clock size={14} />
+                  {opt.label}
+                  {opt.locked && <Lock size={12} />}
+                </button>
+              ))}
+            </div>
 
-        {/* Video length */}
-        <div className="space-y-2">
-          <Label>Videolengde *</Label>
-          <div className="flex gap-3">
-            {[
-              { value: "15", label: "15 sek", locked: false },
-              { value: "30", label: "30 sek", locked: !isBusiness, plan: "Business" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => !opt.locked && setVideoLength(opt.value)}
-                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
-                  videoLength === opt.value
-                    ? "border-primary bg-primary/10 text-primary"
-                    : opt.locked
-                    ? "border-border bg-surface text-muted-foreground cursor-not-allowed opacity-50"
-                    : "border-border bg-surface text-foreground hover:border-primary/30"
-                }`}
-                disabled={opt.locked}
-                title={opt.locked ? `Oppgrader til ${opt.plan} for denne lengden` : undefined}
-              >
-                {opt.locked && <Lock size={14} />}
-                {opt.label}
-              </button>
-            ))}
+            {/* Submit button - pushed to right */}
+            <div className="flex-1" />
+            <Button
+              type="submit"
+              disabled={isSubmitting || !imageFile}
+              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {isSubmitting ? (
+                <><Loader2 size={16} className="mr-1.5 animate-spin" /> Genererer...</>
+              ) : (
+                <><Sparkles size={16} className="mr-1.5" /> Generer</>
+              )}
+            </Button>
           </div>
         </div>
 
-        <Button
-          type="submit"
-          disabled={isSubmitting || !imageFile}
-          className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary h-12"
-        >
-          {isSubmitting ? (
-            <><Loader2 size={18} className="mr-2 animate-spin" /> Genererer...</>
-          ) : (
-            <><Sparkles size={18} className="mr-2" /> Generer video</>
-          )}
-        </Button>
+        {/* Detail fields below */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
+          <div className="space-y-2">
+            <Label htmlFor="brand" className="text-sm text-muted-foreground font-normal">Merkenavn *</Label>
+            <Input
+              id="brand"
+              placeholder="F.eks. Norsk Hudpleie"
+              required
+              value={brandName}
+              onChange={(e) => setBrandName(e.target.value)}
+              className="bg-card border-border"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="audience" className="text-sm text-muted-foreground font-normal">Målgruppe *</Label>
+            <Input
+              id="audience"
+              placeholder="F.eks. Kvinner 25-45"
+              required
+              value={targetAudience}
+              onChange={(e) => setTargetAudience(e.target.value)}
+              className="bg-card border-border"
+            />
+          </div>
+        </div>
+
+        {/* Image preview */}
+        {imagePreview && (
+          <div className="pt-4">
+            <div className="relative w-32 h-32 rounded-xl border border-border overflow-hidden bg-card">
+              <img src={imagePreview} alt="Forhåndsvisning" className="w-full h-full object-cover" />
+              <button
+                type="button"
+                onClick={removeImage}
+                className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-foreground/80 text-background flex items-center justify-center hover:bg-foreground transition-colors"
+              >
+                <X size={12} />
+              </button>
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );
