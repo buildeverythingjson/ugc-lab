@@ -113,7 +113,7 @@ const MyVideos = () => {
                 to={`/dashboard/videos/${job.id}`}
                 className="rounded-xl border border-border bg-card p-4 card-shadow hover:border-primary/30 transition-colors block"
               >
-                <div className="w-full aspect-[9/16] rounded-lg mb-3 bg-secondary/30 overflow-hidden">
+                <div className="w-full aspect-[9/16] max-h-48 rounded-lg mb-3 bg-secondary/30 overflow-hidden">
                   {job.video_url ? (
                     <video
                       src={job.video_url}
