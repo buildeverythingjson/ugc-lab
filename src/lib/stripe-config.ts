@@ -36,10 +36,10 @@ export const STRIPE_TIERS = {
     price_id: "price_1TBOgL09raYItIuA0kJtfct2",
     product_id: "prod_U9i6JhAVuRPx6u",
     videos_per_month: 30,
-    max_length: 60,
+    max_length: 30,
     features: [
       "30 videoer per måned",
-      "Opptil 60 sekunder",
+      "Opptil 30 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "Dedikert støtte",
