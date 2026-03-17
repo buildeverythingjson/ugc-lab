@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2 } from "lucide-react";
+import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2, Download, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
@@ -31,17 +32,18 @@ const MyVideos = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState<VideoJob[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteJobId, setDeleteJobId] = useState<string | null>(null);
 
-  const handleDelete = async (jobId: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { error } = await supabase.from("video_jobs").delete().eq("id", jobId);
+  const handleDelete = async () => {
+    if (!deleteJobId) return;
+    const { error } = await supabase.from("video_jobs").delete().eq("id", deleteJobId);
     if (error) {
       toast({ title: "Kunne ikke slette", description: error.message, variant: "destructive" });
     } else {
-      setJobs((prev) => prev.filter((j) => j.id !== jobId));
+      setJobs((prev) => prev.filter((j) => j.id !== deleteJobId));
       toast({ title: "Video slettet" });
     }
+    setDeleteJobId(null);
   };
 
   useEffect(() => {
@@ -162,6 +164,33 @@ const MyVideos = () => {
                       <Play size={18} className="text-black ml-0.5" fill="black" />
                     </div>
                   </div>
+                  <div className="absolute top-1.5 right-1.5 z-10">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
+                        >
+                          <MoreVertical size={14} className="text-white" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                        {job.video_url && (
+                          <DropdownMenuItem asChild>
+                            <a href={job.video_url} download onClick={(e) => e.stopPropagation()}>
+                              <Download size={14} className="mr-2" /> Last ned
+                            </a>
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={(e) => { e.stopPropagation(); setDeleteJobId(job.id); }}
+                        >
+                          <Trash2 size={14} className="mr-2" /> Slett
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
                 <div className="p-3 space-y-1.5">
                   <div className="flex items-center justify-between">
@@ -175,39 +204,29 @@ const MyVideos = () => {
                     <span>{job.video_length} sek</span>
                     <span>{formatDate(job.created_at)}</span>
                   </div>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <button
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                        className="w-full flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors pt-1"
-                      >
-                        <Trash2 size={12} /> Slett
-                      </button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent onClick={(e) => e.stopPropagation()}>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Slett video?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Avbryt</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-600 hover:bg-red-700"
-                          onClick={(e) => handleDelete(job.id, e)}
-                        >
-                          Slett
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
                 </div>
               </Link>
             );
           })}
         </div>
       )}
+
+      <AlertDialog open={!!deleteJobId} onOpenChange={(open) => !open && setDeleteJobId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Slett video?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Avbryt</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={handleDelete}>
+              Slett
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
