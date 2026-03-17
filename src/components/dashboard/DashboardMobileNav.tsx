@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, ImagePlus, Lock } from "lucide-react";
 
 const navItems = [
   { label: "Oversikt", icon: LayoutDashboard, path: "/dashboard" },
   { label: "Ny video", icon: PlusCircle, path: "/dashboard/new-video" },
+  { label: "Bilde", icon: ImagePlus, path: "/dashboard/new-image", comingSoon: true },
   { label: "Videoer", icon: Video, path: "/dashboard/videos" },
-  { label: "Plan", icon: CreditCard, path: "/dashboard/subscription" },
   { label: "Innst.", icon: Settings, path: "/dashboard/settings" },
 ];
 
