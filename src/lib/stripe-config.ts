@@ -43,6 +43,7 @@ export const STRIPE_TIERS = {
       "AI-analyse av produktet",
       "Last ned i HD",
       "Prioritert støtte",
+      "150 bilder per måned (kommer snart)",
     ],
   },
   business: {
