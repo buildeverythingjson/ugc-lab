@@ -6,7 +6,6 @@ import WhyUGCLab from "@/components/landing/WhyUGCLab";
 import CostComparison from "@/components/landing/CostComparison";
 import PricingSection from "@/components/landing/PricingSection";
 import FAQSection from "@/components/landing/FAQSection";
-import FinalCTA from "@/components/landing/FinalCTA";
 import Footer from "@/components/landing/Footer";
 
 const Index = () => {
@@ -20,7 +19,6 @@ const Index = () => {
       <CostComparison />
       <PricingSection />
       <FAQSection />
-      <FinalCTA />
       <Footer />
     </div>
   );
