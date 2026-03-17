@@ -17,7 +17,7 @@ const HeroSection = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-sm text-foreground mb-8">
             <Play size={14} />
-            Norges første AI-videoplattform for UGC
+            AI-drevet video- og bildegenerering
           </div>
 
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-6">
