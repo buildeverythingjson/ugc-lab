@@ -113,25 +113,26 @@ const MyVideos = () => {
                 to={`/dashboard/videos/${job.id}`}
                 className="rounded-xl border border-border bg-card p-4 card-shadow hover:border-primary/30 transition-colors block"
               >
-                {job.video_url ? (
-                  <video
-                    src={job.video_url}
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="w-full h-32 object-cover rounded-lg mb-3 bg-secondary/30"
-                    onLoadedData={(e) => {
-                      const vid = e.currentTarget;
-                      vid.currentTime = 1;
-                    }}
-                  />
-                ) : job.product_image_url ? (
-                  <img
-                    src={job.product_image_url}
-                    alt={job.brand_name}
-                    className="w-full h-32 object-contain rounded-lg mb-3 bg-secondary/30"
-                  />
-                ) : null}
+                <div className="w-full aspect-[9/16] rounded-lg mb-3 bg-secondary/30 overflow-hidden">
+                  {job.video_url ? (
+                    <video
+                      src={job.video_url}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover"
+                      onLoadedData={(e) => {
+                        e.currentTarget.currentTime = 1;
+                      }}
+                    />
+                  ) : job.product_image_url ? (
+                    <img
+                      src={job.product_image_url}
+                      alt={job.brand_name}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : null}
+                </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-sm truncate">{job.brand_name}</h3>
