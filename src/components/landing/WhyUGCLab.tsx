@@ -43,7 +43,7 @@ const WhyUGCLab = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative flex items-start gap-6 py-8 group"
+              className="relative flex items-start gap-6 py-8"
             >
               {/* Vertical line connector */}
               {i < features.length - 1 && (
@@ -51,13 +51,13 @@ const WhyUGCLab = () => {
               )}
 
               {/* Icon */}
-              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 border border-primary/25 flex items-center justify-center group-hover:bg-primary/20 group-hover:border-primary/40 transition-all duration-300 group-hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)]">
+              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 border border-primary/25 flex items-center justify-center">
                 <feature.icon size={20} className="text-primary" />
               </div>
 
               {/* Content */}
               <div className="flex-1 pt-1">
-                <h3 className="font-display text-lg font-bold mb-1.5 group-hover:text-primary transition-colors duration-300">
+                <h3 className="font-display text-lg font-bold mb-1.5">
                   {feature.title}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
