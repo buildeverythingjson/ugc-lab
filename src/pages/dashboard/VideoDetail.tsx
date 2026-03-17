@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ArrowLeft, Clock, Loader2, CheckCircle2, XCircle, Download, RefreshCw } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -111,12 +112,16 @@ const VideoDetail = () => {
       {status === "completed" && job.video_url && (
         <Card className="border-green-500/20 bg-green-500/5">
           <CardContent className="pt-6 space-y-4">
-            <video
-              src={job.video_url}
-              controls
-              playsInline
-              className="w-full rounded-lg max-h-[480px] bg-black"
-            />
+            <div className="w-full max-w-[360px] mx-auto">
+              <AspectRatio ratio={9 / 16}>
+                <video
+                  src={job.video_url}
+                  controls
+                  playsInline
+                  className="w-full h-full rounded-lg bg-black object-contain"
+                />
+              </AspectRatio>
+            </div>
             <a href={job.video_url} download>
               <Button className="bg-green-600 hover:bg-green-700 text-white">
                 <Download size={16} className="mr-2" />
