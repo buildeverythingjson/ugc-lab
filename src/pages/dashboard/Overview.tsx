@@ -9,7 +9,7 @@ const Overview = () => {
   const tier = profile?.subscription_tier || "Ingen";
   const remaining = profile?.videos_remaining ?? 0;
   const used = profile?.videos_used_this_month ?? 0;
-  const tierMax = profile?.subscription_tier === "business" ? 30 : profile?.subscription_tier === "pro" ? 10 : profile?.subscription_tier === "starter" ? 5 : 0;
+  const tierMax = profile?.subscription_tier === "business" ? 30 : profile?.subscription_tier === "growth" ? 15 : profile?.subscription_tier === "startup" ? 5 : 0;
 
   const statsCards = [
     { label: "Gjenværende videoer", value: `${remaining} av ${tierMax}`, icon: Video },

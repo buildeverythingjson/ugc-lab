@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 
 const plans = [
   {
-    name: "Starter",
+    name: "Startup",
     price: "499",
+    trialPrice: "10",
     features: [
       "5 videoer per måned",
       "Opptil 15 sekunder",
@@ -17,7 +18,7 @@ const plans = [
     popular: false,
   },
   {
-    name: "Pro",
+    name: "Growth",
     price: "899",
     features: [
       "15 videoer per måned",
@@ -99,7 +100,7 @@ const PricingSection = () => {
                       : "bg-secondary text-secondary-foreground hover:bg-surface-hover"
                   }`}
                 >
-                  Velg plan
+                  {(plan as any).trialPrice ? `Prøv for ${(plan as any).trialPrice} kr` : "Velg plan"}
                 </Button>
               </Link>
             </motion.div>
