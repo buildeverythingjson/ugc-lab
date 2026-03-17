@@ -12,7 +12,7 @@ const examples = [
 
 const infiniteExamples = [...examples, ...examples];
 
-const LOOP_END_TRIM_SECONDS = 0.35;
+const LOOP_END_TRIM_SECONDS = 0.85;
 const LOOP_RESTART_AT_SECONDS = 0.06;
 
 const AutoPlayVideo = ({ src }: { src: string }) => {
