@@ -20,6 +20,7 @@ const plans = [
       "AI-analyse av produktet",
       "Last ned i HD",
       "E-poststøtte",
+      "30 bilder per måned (kommer snart)",
     ],
     popular: false,
   },
