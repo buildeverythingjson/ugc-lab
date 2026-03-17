@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Video, Clock, Loader2, CheckCircle2, XCircle, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -113,11 +113,22 @@ const MyVideos = () => {
                 to={`/dashboard/videos/${job.id}`}
                 className="rounded-xl border border-border bg-card card-shadow hover:border-primary/30 transition-colors block overflow-hidden group"
               >
-                <div className="w-full aspect-[9/16] bg-secondary/30 relative">
+                <div
+                  className="w-full aspect-[9/16] bg-secondary/30 relative"
+                  onMouseEnter={(e) => {
+                    const video = e.currentTarget.querySelector("video");
+                    if (video) video.play().catch(() => {});
+                  }}
+                  onMouseLeave={(e) => {
+                    const video = e.currentTarget.querySelector("video");
+                    if (video) { video.pause(); video.currentTime = 1; }
+                  }}
+                >
                   {job.video_url ? (
                     <video
                       src={job.video_url}
                       muted
+                      loop
                       playsInline
                       preload="metadata"
                       className="w-full h-full object-cover"
@@ -132,7 +143,7 @@ const MyVideos = () => {
                       className="w-full h-full object-contain"
                     />
                   ) : null}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:opacity-0 transition-opacity">
                     <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
                       <Play size={18} className="text-black ml-0.5" fill="black" />
                     </div>
