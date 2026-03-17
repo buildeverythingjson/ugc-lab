@@ -20,10 +20,12 @@ const HeroSection = () => {
             Norges første AI-videoplattform for UGC
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-6">
-            UGC-innhold med AI —{" "}
-            <span className="text-gradient">på sekunder</span>
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-2">
+            UGC-innhold med AI.
           </h1>
+          <p className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold max-w-4xl mx-auto mb-6">
+            <span className="text-gradient">På sekunder.</span>
+          </p>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
             Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
