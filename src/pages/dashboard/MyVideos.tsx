@@ -111,9 +111,9 @@ const MyVideos = () => {
               <Link
                 key={job.id}
                 to={`/dashboard/videos/${job.id}`}
-                className="rounded-xl border border-border bg-card p-4 card-shadow hover:border-primary/30 transition-colors block"
+                className="rounded-xl border border-border bg-card card-shadow hover:border-primary/30 transition-colors block overflow-hidden"
               >
-                <div className="w-24 aspect-[9/16] rounded-lg mb-3 bg-secondary/30 overflow-hidden">
+                <div className="w-full aspect-[9/16] bg-secondary/30">
                   {job.video_url ? (
                     <video
                       src={job.video_url}
@@ -133,7 +133,7 @@ const MyVideos = () => {
                     />
                   ) : null}
                 </div>
-                <div className="space-y-2">
+                <div className="p-3 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-sm truncate">{job.brand_name}</h3>
                     <Badge variant="outline" className={`${config.color} border text-xs`}>
