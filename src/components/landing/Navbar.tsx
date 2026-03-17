@@ -28,6 +28,9 @@ const Navbar = () => {
           <a href="#priser" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Priser
           </a>
+          <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            FAQ
+          </a>
           <Link to="/login">
             <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
               Logg inn
@@ -49,6 +52,9 @@ const Navbar = () => {
           </a>
           <a href="#priser" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
             Priser
+          </a>
+          <a href="#faq" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
+            FAQ
           </a>
           <Link to="/login" onClick={() => setMobileOpen(false)}>
             <Button variant="outline" size="sm" className="w-full border-border">

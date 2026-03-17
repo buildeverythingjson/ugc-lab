@@ -1,7 +1,13 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
+import SocialProofBar from "@/components/landing/SocialProofBar";
+import ExampleGallery from "@/components/landing/ExampleGallery";
+import HowItWorks from "@/components/landing/HowItWorks";
+import WhyUGCLab from "@/components/landing/WhyUGCLab";
+import CostComparison from "@/components/landing/CostComparison";
 import PricingSection from "@/components/landing/PricingSection";
+import FAQSection from "@/components/landing/FAQSection";
+import FinalCTA from "@/components/landing/FinalCTA";
 import Footer from "@/components/landing/Footer";
 
 const Index = () => {
@@ -9,8 +15,14 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      <FeaturesSection />
+      <SocialProofBar />
+      <ExampleGallery />
+      <HowItWorks />
+      <WhyUGCLab />
+      <CostComparison />
       <PricingSection />
+      <FAQSection />
+      <FinalCTA />
       <Footer />
     </div>
   );

@@ -1,0 +1,80 @@
+import { X, Check } from "lucide-react";
+import { motion } from "framer-motion";
+
+const CostComparison = () => {
+  return (
+    <section className="py-24 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Spar tusenvis hver måned</h2>
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            Se forskjellen mellom tradisjonell UGC og UGC Lab
+          </p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mx-auto"
+        >
+          <div className="rounded-2xl border border-border bg-card card-shadow overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr,auto,1fr]">
+              {/* Traditional UGC */}
+              <div className="p-8 space-y-5">
+                <h3 className="font-display text-lg font-bold text-destructive">Tradisjonell UGC</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3 text-sm">
+                    <X size={16} className="text-destructive mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">5 000 – 15 000 kr per video</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <X size={16} className="text-destructive mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">3-7 dagers leveringstid</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <X size={16} className="text-destructive mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">Begrenset revisjon</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* VS divider */}
+              <div className="flex items-center justify-center px-4 py-4 md:py-0">
+                <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <span className="font-display font-bold text-sm text-primary">VS</span>
+                </div>
+              </div>
+
+              {/* UGC Lab */}
+              <div className="p-8 space-y-5 bg-primary/5">
+                <h3 className="font-display text-lg font-bold text-primary">UGC Lab</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3 text-sm">
+                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">Fra 99 kr per video</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">Klar på 5 minutter</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-sm">
+                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <span className="text-muted-foreground">Ubegrenset regenerering</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-center text-muted-foreground mt-8">
+            Start i dag og spar opptil <span className="text-foreground font-semibold">95%</span> på UGC-produksjon
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default CostComparison;
