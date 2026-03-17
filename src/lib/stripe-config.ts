@@ -60,6 +60,7 @@ export const STRIPE_TIERS = {
       "Last ned i HD",
       "Dedikert støtte",
       "API-tilgang",
+      "300 bilder per måned (kommer snart)",
     ],
   },
 } as const;
