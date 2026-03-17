@@ -46,6 +46,11 @@ const DashboardSidebar = () => {
             >
               <item.icon size={18} />
               {item.label}
+              {item.comingSoon && (
+                <span className="ml-auto inline-flex items-center gap-1 text-[10px] text-muted-foreground/60">
+                  <Lock size={10} /> Snart
+                </span>
+              )}
             </Link>
           );
         })}

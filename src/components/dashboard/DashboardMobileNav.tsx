@@ -25,7 +25,10 @@ const DashboardMobileNav = () => {
                 active ? "text-primary" : "text-muted-foreground"
               }`}
             >
-              <item.icon size={20} />
+              <div className="relative">
+                <item.icon size={20} />
+                {item.comingSoon && <Lock size={8} className="absolute -top-1 -right-2 text-muted-foreground/60" />}
+              </div>
               {item.label}
             </Link>
           );

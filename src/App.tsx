@@ -43,6 +43,7 @@ const App = () => (
             }>
               <Route index element={<Overview />} />
               <Route path="new-video" element={<NewVideo />} />
+              <Route path="new-image" element={<NewImage />} />
               <Route path="videos" element={<MyVideos />} />
               <Route path="videos/:id" element={<VideoDetail />} />
               <Route path="subscription" element={<Subscription />} />
