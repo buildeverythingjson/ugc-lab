@@ -43,7 +43,7 @@ const WhyUGCLab = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative flex items-start gap-6 py-8 group"
+              className="relative flex items-start gap-6 py-8"
             >
               {/* Vertical line connector */}
               {i < features.length - 1 && (
