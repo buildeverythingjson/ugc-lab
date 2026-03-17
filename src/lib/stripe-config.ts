@@ -1,7 +1,8 @@
 // Stripe tier configuration
 export const STRIPE_TIERS = {
-  starter: {
-    name: "Starter",
+  startup: {
+    name: "Startup",
+    trial_price: "10",
     price: "499",
     price_id: "price_1TBOg909raYItIuAgRaaN8zT",
     product_id: "prod_U9i6QeNaASwqqS",
