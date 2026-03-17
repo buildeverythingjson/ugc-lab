@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -31,11 +33,19 @@ const Navbar = () => {
           <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             FAQ
           </a>
-          <Link to="/login">
-            <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
-              Logg inn
-            </Button>
-          </Link>
+          {user ? (
+            <Link to="/dashboard">
+              <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/login">
+              <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
+                Logg inn
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -56,11 +66,19 @@ const Navbar = () => {
           <a href="#faq" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
             FAQ
           </a>
-          <Link to="/login" onClick={() => setMobileOpen(false)}>
-            <Button variant="outline" size="sm" className="w-full border-border">
-              Logg inn
-            </Button>
-          </Link>
+          {user ? (
+            <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+              <Button variant="outline" size="sm" className="w-full border-border">
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/login" onClick={() => setMobileOpen(false)}>
+              <Button variant="outline" size="sm" className="w-full border-border">
+                Logg inn
+              </Button>
+            </Link>
+          )}
         </div>
       )}
     </nav>
