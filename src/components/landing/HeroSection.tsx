@@ -39,24 +39,6 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Dashboard mockup */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="mt-16 max-w-4xl mx-auto"
-        >
-          <div className="rounded-xl border border-border bg-card p-2 card-shadow">
-            <div className="rounded-lg bg-surface aspect-video flex items-center justify-center">
-              <div className="text-center space-y-3 p-8">
-                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto">
-                  <Play size={28} className="text-primary ml-1" />
-                </div>
-                <p className="text-muted-foreground text-sm">UGC Lab Dashboard</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
