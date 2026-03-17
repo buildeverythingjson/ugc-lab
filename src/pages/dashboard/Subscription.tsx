@@ -73,7 +73,8 @@ const Subscription = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).map(([key, plan]) => {
           const isCurrent = currentTier === key;
-          const isPopular = key === "pro";
+          const isPopular = key === "growth";
+          const isStartup = key === "startup";
 
           return (
             <div
