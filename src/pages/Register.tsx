@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signUp(email, password, name);
+      await signUp(email, password, firstName, lastName, website);
       toast.success("Konto opprettet! Sjekk e-posten din for bekreftelse.");
       navigate("/login");
     } catch (error: any) {
