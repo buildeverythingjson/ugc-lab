@@ -2,17 +2,67 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-background py-12">
+    <footer className="border-t border-border bg-background py-16">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="font-display font-bold text-lg text-gradient">UGC Lab</div>
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">Personvern</a>
-            <a href="#" className="hover:text-foreground transition-colors">Vilkår</a>
-            <a href="#" className="hover:text-foreground transition-colors">Kontakt</a>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+          {/* Brand */}
+          <div>
+            <Link to="/" className="font-display text-xl font-bold text-gradient">
+              UGC Lab
+            </Link>
+            <p className="text-sm text-muted-foreground mt-3 max-w-xs leading-relaxed">
+              AI-drevet UGC-videoproduksjon for moderne merkevarer
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground">
-            © 2026 UGC Lab. Alle rettigheter reservert.
+
+          {/* Produkt */}
+          <div>
+            <h4 className="font-display font-semibold text-sm mb-4">Produkt</h4>
+            <ul className="space-y-2.5">
+              <li>
+                <a href="#funksjoner" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Funksjoner
+                </a>
+              </li>
+              <li>
+                <a href="#priser" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Priser
+                </a>
+              </li>
+              <li>
+                <a href="#faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  FAQ
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Juridisk */}
+          <div>
+            <h4 className="font-display font-semibold text-sm mb-4">Juridisk</h4>
+            <ul className="space-y-2.5">
+              <li>
+                <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Personvern
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Vilkår
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:support@ugclab.no" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Kontakt
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-8">
+          <p className="text-sm text-muted-foreground text-center">
+            © {new Date().getFullYear()} UGC Lab. Alle rettigheter reservert.
           </p>
         </div>
       </div>
