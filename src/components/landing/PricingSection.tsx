@@ -66,7 +66,7 @@ const PricingSection = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className={`relative rounded-xl border p-8 flex flex-col ${
                 plan.popular
-                  ? "border-primary bg-card glow-primary scale-[1.02]"
+                  ? "border-accent bg-card glow-primary scale-[1.02]"
                   : "border-border bg-card"
               } card-shadow`}
             >
