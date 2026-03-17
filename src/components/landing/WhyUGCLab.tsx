@@ -47,12 +47,12 @@ const WhyUGCLab = () => {
             >
               {/* Vertical line connector */}
               {i < features.length - 1 && (
-                <div className="absolute left-[23px] top-[68px] bottom-0 w-px bg-gradient-to-b from-accent/30 to-transparent" />
+                <div className="absolute left-[23px] top-[68px] bottom-0 w-px bg-gradient-to-b from-border to-transparent" />
               )}
 
               {/* Icon */}
-              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 border border-accent/25 flex items-center justify-center">
-                <feature.icon size={20} className="text-accent" />
+              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-primary/5 border border-border flex items-center justify-center">
+                <feature.icon size={20} className="text-foreground" />
               </div>
 
               {/* Content */}
