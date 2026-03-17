@@ -19,7 +19,9 @@ export type Database = {
           created_at: string
           current_period_end: string | null
           display_name: string | null
+          first_name: string | null
           id: string
+          last_name: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
           subscription_status: string | null
@@ -27,12 +29,15 @@ export type Database = {
           updated_at: string
           videos_remaining: number
           videos_used_this_month: number
+          website: string | null
         }
         Insert: {
           created_at?: string
           current_period_end?: string | null
           display_name?: string | null
+          first_name?: string | null
           id: string
+          last_name?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           subscription_status?: string | null
@@ -40,12 +45,15 @@ export type Database = {
           updated_at?: string
           videos_remaining?: number
           videos_used_this_month?: number
+          website?: string | null
         }
         Update: {
           created_at?: string
           current_period_end?: string | null
           display_name?: string | null
+          first_name?: string | null
           id?: string
+          last_name?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
           subscription_status?: string | null
@@ -53,6 +61,7 @@ export type Database = {
           updated_at?: string
           videos_remaining?: number
           videos_used_this_month?: number
+          website?: string | null
         }
         Relationships: []
       }
