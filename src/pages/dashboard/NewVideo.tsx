@@ -166,7 +166,6 @@ const NewVideo = () => {
             {[
               { value: "15", label: "15 sek", locked: false },
               { value: "30", label: "30 sek", locked: true, plan: "Pro" },
-              { value: "60", label: "60 sek", locked: true, plan: "Business" },
             ].map((opt) => (
               <button
                 key={opt.value}
