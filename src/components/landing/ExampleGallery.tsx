@@ -33,8 +33,9 @@ const ExampleGallery = () => {
               <div className="rounded-xl overflow-hidden border border-border bg-card aspect-[9/16]">
                 <video
                   muted
+                  autoPlay
+                  loop
                   playsInline
-                  controls
                   className="w-full h-full object-cover"
                   src={ex.src}
                 />
