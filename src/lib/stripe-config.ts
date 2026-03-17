@@ -27,6 +27,7 @@ export const STRIPE_TIERS = {
       "AI-analyse av produktet",
       "Last ned i HD",
       "E-poststøtte",
+      "30 bilder per måned (kommer snart)",
     ],
   },
   growth: {
@@ -42,6 +43,7 @@ export const STRIPE_TIERS = {
       "AI-analyse av produktet",
       "Last ned i HD",
       "Prioritert støtte",
+      "150 bilder per måned (kommer snart)",
     ],
   },
   business: {
@@ -58,6 +60,7 @@ export const STRIPE_TIERS = {
       "Last ned i HD",
       "Dedikert støtte",
       "API-tilgang",
+      "300 bilder per måned (kommer snart)",
     ],
   },
 } as const;
