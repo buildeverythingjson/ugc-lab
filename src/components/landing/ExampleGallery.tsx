@@ -4,9 +4,9 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const examples = [
-  { src: "https://assets.mixkit.co/videos/51185/51185-720.mp4", brand: "Glow Skincare", length: "15s" },
-  { src: "https://assets.mixkit.co/videos/50415/50415-720.mp4", brand: "Pure Beauty", length: "15s" },
-  { src: "https://assets.mixkit.co/videos/52031/52031-720.mp4", brand: "Luxe Cosmetics", length: "30s" },
+  { src: "https://files.advideolab.com/assets/library/2026/01/1769813178339-88424ef9.mp4", brand: "Glow Skincare", length: "15s" },
+  { src: "https://files.advideolab.com/assets/library/2026/01/1769638080415-8bae04cc.mp4", brand: "Pure Beauty", length: "15s" },
+  { src: "https://files.advideolab.com/assets/library/2026/01/1769813210931-2e964f2f.mp4", brand: "Luxe Cosmetics", length: "30s" },
 ];
 
 const ExampleGallery = () => {
