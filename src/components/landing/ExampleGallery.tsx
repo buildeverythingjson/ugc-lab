@@ -14,37 +14,64 @@ const infiniteExamples = [...examples, ...examples];
 
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isTransitioningLoop, setIsTransitioningLoop] = useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
     video.muted = true;
     video.playsInline = true;
     video.loop = true;
     video.autoplay = true;
     video.preload = "auto";
 
-    const handlePlaying = () => setPlaying(true);
+    const revealVideo = () => {
+      setIsPlaying(true);
+      requestAnimationFrame(() => {
+        setIsTransitioningLoop(false);
+      });
+    };
+
+    const hideForLoopTransition = () => {
+      if (!video.duration || Number.isNaN(video.duration)) return;
+      if (video.duration - video.currentTime <= 0.18) {
+        setIsTransitioningLoop(true);
+      }
+    };
+
+    const handleSeeking = () => {
+      if (video.currentTime <= 0.12) {
+        setIsTransitioningLoop(true);
+      }
+    };
 
     const tryPlay = () => {
-      const p = video.play();
-      if (p) {
-        p.catch(() => {
-          const retry = () => video.play();
+      const playPromise = video.play();
+      if (playPromise) {
+        playPromise.catch(() => {
+          const retry = () => void video.play();
           document.addEventListener("touchstart", retry, { once: true });
           document.addEventListener("click", retry, { once: true });
         });
       }
     };
 
-    video.addEventListener("playing", handlePlaying);
     video.addEventListener("canplay", tryPlay);
+    video.addEventListener("playing", revealVideo);
+    video.addEventListener("timeupdate", hideForLoopTransition);
+    video.addEventListener("seeking", handleSeeking);
+    video.addEventListener("seeked", handleSeeking);
+
     if (video.readyState >= 3) tryPlay();
 
     return () => {
-      video.removeEventListener("playing", handlePlaying);
       video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("playing", revealVideo);
+      video.removeEventListener("timeupdate", hideForLoopTransition);
+      video.removeEventListener("seeking", handleSeeking);
+      video.removeEventListener("seeked", handleSeeking);
     };
   }, []);
 
@@ -57,13 +84,12 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
         loop
         playsInline
         preload="auto"
-        className={`w-full h-full object-cover pointer-events-none ${playing ? "visible" : "invisible"}`}
+        className={`w-full h-full object-cover pointer-events-none ${isPlaying ? "visible" : "invisible"}`}
         src={src}
       />
-      {/* Overlay that hides thumbnail - only visible when not playing */}
       <div
-        className={`absolute inset-0 bg-card transition-opacity duration-500 pointer-events-none ${
-          playing ? "opacity-0" : "opacity-100"
+        className={`absolute inset-0 bg-card transition-opacity duration-200 pointer-events-none ${
+          isPlaying && !isTransitioningLoop ? "opacity-0" : "opacity-100"
         }`}
       />
     </div>
