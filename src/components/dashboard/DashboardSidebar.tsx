@@ -20,7 +20,7 @@ const DashboardSidebar = () => {
     navigate("/");
   };
 
-  const initials = (profile?.display_name || "U").charAt(0).toUpperCase();
+  const initials = (profile?.first_name || profile?.display_name || "U").charAt(0).toUpperCase();
 
   return (
     <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border bg-card">
@@ -56,7 +56,7 @@ const DashboardSidebar = () => {
             {initials}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{profile?.display_name || "Bruker"}</p>
+            <p className="text-sm font-medium truncate">{profile?.first_name || "Bruker"}</p>
           </div>
         </div>
         <button
