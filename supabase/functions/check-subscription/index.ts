@@ -9,7 +9,7 @@ const corsHeaders = {
 
 const TIER_MAP: Record<string, { tier: string; videos: number }> = {
   "prod_U9i6QeNaASwqqS": { tier: "starter", videos: 5 },
-  "prod_U9i6UdxaxHRbcS": { tier: "pro", videos: 10 },
+  "prod_U9i6UdxaxHRbcS": { tier: "pro", videos: 15 },
   "prod_U9i6JhAVuRPx6u": { tier: "business", videos: 30 },
 };
 

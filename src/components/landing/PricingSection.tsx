@@ -20,8 +20,8 @@ const plans = [
     name: "Pro",
     price: "899",
     features: [
-      "10 videoer per måned",
-      "Opptil 30 sekunder",
+      "15 videoer per måned",
+      "Opptil 15 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "Prioritert støtte",
