@@ -20,7 +20,7 @@ const DashboardSidebar = () => {
     navigate("/");
   };
 
-  const initials = (profile?.display_name || "U").charAt(0).toUpperCase();
+  const initials = (profile?.first_name || profile?.display_name || "U").charAt(0).toUpperCase();
 
   return (
     <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border bg-card">
