@@ -35,38 +35,28 @@ const WhyUGCLab = () => {
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto space-y-16">
-          {features.map((feature, i) => {
-            const isReversed = i % 2 === 1;
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className={`flex flex-col md:flex-row items-center gap-8 md:gap-16 ${
-                  isReversed ? "md:flex-row-reverse" : ""
-                }`}
-              >
-                {/* Text side */}
-                <div className="flex-1 space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <feature.icon size={24} className="text-primary" />
-                  </div>
-                  <h3 className="font-display text-xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {features.map((feature, i) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="group relative rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-8 hover:border-primary/30 transition-all duration-300"
+            >
+              {/* Subtle glow on hover */}
+              <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                {/* Visual placeholder */}
-                <div className="flex-1 w-full">
-                  <div className="rounded-2xl border border-border bg-card aspect-[4/3] flex items-center justify-center card-shadow">
-                    <feature.icon size={48} className="text-primary/20" />
-                  </div>
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors duration-300">
+                  <feature.icon size={22} className="text-primary" />
                 </div>
-              </motion.div>
-            );
-          })}
+                <h3 className="font-display text-lg font-bold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
