@@ -27,6 +27,7 @@ export const STRIPE_TIERS = {
       "AI-analyse av produktet",
       "Last ned i HD",
       "E-poststøtte",
+      "30 bilder per måned (kommer snart)",
     ],
   },
   growth: {
