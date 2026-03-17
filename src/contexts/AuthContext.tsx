@@ -5,6 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 interface Profile {
   id: string;
   display_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  website: string | null;
   subscription_tier: string | null;
   subscription_status: string | null;
   videos_remaining: number;
