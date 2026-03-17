@@ -60,7 +60,7 @@ const PricingSection = () => {
   const [loading, setLoading] = useState<string | null>(null);
 
   // User has used trial if they have or had a trial/startup/growth/business tier
-  const hasUsedTrial = !!(profile as any)?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
+  const hasUsedTrial = !!profile?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
 
   const handlePlanSelect = async (priceId: string, loadingKey: string) => {
     if (!user) {

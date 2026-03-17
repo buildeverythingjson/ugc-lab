@@ -13,6 +13,7 @@ interface Profile {
   videos_remaining: number;
   videos_used_this_month: number;
   current_period_end: string | null;
+  has_used_trial: boolean;
 }
 
 interface AuthContextType {

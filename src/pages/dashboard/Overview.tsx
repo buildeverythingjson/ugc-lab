@@ -37,7 +37,7 @@ const Overview = () => {
     { label: "Videoer denne måneden", value: `${used}`, icon: Clock },
     { label: "Nåværende plan", value: tier.charAt(0).toUpperCase() + tier.slice(1), icon: CreditCard },
   ];
-  const isTrialUser = (profile as any)?.has_used_trial && (!profile?.subscription_tier || profile?.subscription_tier === "trial");
+  const isTrialUser = profile?.has_used_trial && (!profile?.subscription_tier || profile?.subscription_tier === "trial");
 
   return (
     <div className="space-y-8">
