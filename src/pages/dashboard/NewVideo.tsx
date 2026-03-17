@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Lock, Sparkles, Loader2, Image, Globe, Clock, Wand2, X, ArrowUp, Paperclip } from "lucide-react";
+import { Lock, Sparkles, Loader2, Image, Globe, Clock, Wand2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,7 +15,6 @@ const NewVideo = () => {
   const isBusiness = profile?.subscription_tier === "business";
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [brandName, setBrandName] = useState("");
@@ -43,14 +43,6 @@ const NewVideo = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const autoResize = () => {
-    const el = textareaRef.current;
-    if (el) {
-      el.style.height = "auto";
-      el.style.height = Math.min(el.scrollHeight, 200) + "px";
-    }
-  };
-
   const generateScript = async () => {
     if (!brandName.trim() || !targetAudience.trim()) {
       toast.error("Fyll inn merkenavn og målgruppe først.");
@@ -66,7 +58,6 @@ const NewVideo = () => {
       if (data?.script) {
         setCreativeDescription(data.script);
         toast.success("Manus generert!");
-        setTimeout(autoResize, 0);
       }
     } catch (err: any) {
       console.error(err);
@@ -135,185 +126,184 @@ const NewVideo = () => {
     }
   };
 
-  const canSubmit = imageFile && brandName.trim() && targetAudience.trim();
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
-      {/* Centered content */}
-      <div className="w-full max-w-2xl space-y-8">
-        {/* Title area */}
-        <div className="text-center space-y-2">
-          <h1 className="font-display text-2xl sm:text-3xl font-bold">Hva skal videoen handle om?</h1>
-          <p className="text-muted-foreground text-sm">
-            Skriv et manus eller la AI generere et for deg
-          </p>
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-2xl font-bold">Lag ny video</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">Beskriv produktet ditt og generer en UGC-video</p>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="text-muted-foreground">Kreditter</span>
+          <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-secondary font-semibold text-foreground">
+            {videosRemaining}
+          </span>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-0">
+        {/* Main card */}
+        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+          {/* Script / Description area */}
+          <div className="p-6 pb-4">
+            <div className="relative">
+              <Textarea
+                placeholder="Beskriv stilen og budskapet du ønsker for videoen..."
+                rows={5}
+                value={creativeDescription}
+                onChange={(e) => setCreativeDescription(e.target.value)}
+                className="resize-none border-0 bg-transparent p-0 text-base placeholder:text-muted-foreground/60 focus-visible:ring-0 shadow-none"
+              />
+              <div className="absolute top-0 right-0">
+                <button
+                  type="button"
+                  disabled={isGeneratingScript}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors disabled:opacity-50"
+                  onClick={generateScript}
+                >
+                  {isGeneratingScript ? (
+                    <><Loader2 size={14} className="animate-spin" /> Genererer...</>
+                  ) : (
+                    <><Wand2 size={14} /> AI Manus</>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-border" />
+
+          {/* Toolbar row */}
+          <div className="px-6 py-3 flex flex-wrap items-center gap-2">
+            {/* Image upload button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className={`inline-flex items-center gap-2 px-3 py-2 rounded-full border text-sm transition-colors ${
+                imageFile
+                  ? "border-foreground/20 bg-primary/5 text-foreground"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/20"
+              }`}
+            >
+              <Image size={16} />
+              {imageFile ? imageFile.name.slice(0, 20) : "Produktbilde"}
+              {imageFile && (
+                <span
+                  onClick={(e) => { e.stopPropagation(); removeImage(); }}
+                  className="ml-1 hover:text-destructive cursor-pointer"
+                >
+                  <X size={14} />
+                </span>
+              )}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+
+            {/* Language */}
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="w-auto h-9 rounded-full border-border bg-card text-sm gap-2 px-3 [&>svg]:opacity-50">
+                <Globe size={16} className="shrink-0 text-muted-foreground" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Norsk">Norsk</SelectItem>
+                <SelectItem value="Engelsk">Engelsk</SelectItem>
+                <SelectItem value="Svensk">Svensk</SelectItem>
+                <SelectItem value="Dansk">Dansk</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Video length */}
+            <div className="flex items-center rounded-full border border-border bg-card overflow-hidden">
+              {[
+                { value: "15", label: "15s", locked: false },
+                { value: "30", label: "30s", locked: !isBusiness },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => !opt.locked && setVideoLength(opt.value)}
+                  disabled={opt.locked}
+                  className={`inline-flex items-center gap-1 px-3 py-2 text-sm transition-colors ${
+                    videoLength === opt.value
+                      ? "bg-primary text-primary-foreground"
+                      : opt.locked
+                      ? "text-muted-foreground/40 cursor-not-allowed"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Clock size={14} />
+                  {opt.label}
+                  {opt.locked && <Lock size={12} />}
+                </button>
+              ))}
+            </div>
+
+            {/* Submit button - pushed to right */}
+            <div className="flex-1" />
+            <Button
+              type="submit"
+              disabled={isSubmitting || !imageFile}
+              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {isSubmitting ? (
+                <><Loader2 size={16} className="mr-1.5 animate-spin" /> Genererer...</>
+              ) : (
+                <><Sparkles size={16} className="mr-1.5" /> Generer</>
+              )}
+            </Button>
+          </div>
         </div>
 
-        {/* Detail fields - above the composer */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <Label htmlFor="brand" className="text-xs text-muted-foreground font-normal">Merkenavn</Label>
+        {/* Detail fields below */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
+          <div className="space-y-2">
+            <Label htmlFor="brand" className="text-sm text-muted-foreground font-normal">Merkenavn *</Label>
             <Input
               id="brand"
               placeholder="F.eks. Norsk Hudpleie"
               required
               value={brandName}
               onChange={(e) => setBrandName(e.target.value)}
-              className="bg-card border-border h-10"
+              className="bg-card border-border"
             />
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="audience" className="text-xs text-muted-foreground font-normal">Målgruppe</Label>
+          <div className="space-y-2">
+            <Label htmlFor="audience" className="text-sm text-muted-foreground font-normal">Målgruppe *</Label>
             <Input
               id="audience"
               placeholder="F.eks. Kvinner 25-45"
               required
               value={targetAudience}
               onChange={(e) => setTargetAudience(e.target.value)}
-              className="bg-card border-border h-10"
+              className="bg-card border-border"
             />
           </div>
         </div>
 
-        {/* Composer card */}
-        <form onSubmit={handleSubmit}>
-          <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-            {/* Image preview inside composer */}
-            {imagePreview && (
-              <div className="px-4 pt-4">
-                <div className="relative inline-flex rounded-xl border border-border overflow-hidden bg-secondary">
-                  <img src={imagePreview} alt="Forhåndsvisning" className="h-20 w-20 object-cover" />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute top-1 right-1 w-5 h-5 rounded-full bg-foreground/70 text-background flex items-center justify-center hover:bg-foreground transition-colors"
-                  >
-                    <X size={10} />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Textarea */}
-            <div className="px-4 pt-4 pb-2">
-              <textarea
-                ref={textareaRef}
-                placeholder="Skriv manuset ditt her, eller klikk AI Manus for å generere..."
-                value={creativeDescription}
-                onChange={(e) => {
-                  setCreativeDescription(e.target.value);
-                  autoResize();
-                }}
-                rows={3}
-                className="w-full resize-none bg-transparent text-foreground text-[15px] leading-relaxed placeholder:text-muted-foreground/50 focus:outline-none"
-                style={{ minHeight: "80px", maxHeight: "200px" }}
-              />
-            </div>
-
-            {/* Bottom toolbar */}
-            <div className="px-3 pb-3 flex items-center gap-1.5">
-              {/* Attach image */}
+        {/* Image preview */}
+        {imagePreview && (
+          <div className="pt-4">
+            <div className="relative w-32 h-32 rounded-xl border border-border overflow-hidden bg-card">
+              <img src={imagePreview} alt="Forhåndsvisning" className="w-full h-full object-cover" />
               <button
                 type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className={`p-2 rounded-xl transition-colors ${
-                  imageFile
-                    ? "text-foreground bg-secondary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-                title="Last opp produktbilde"
+                onClick={removeImage}
+                className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-foreground/80 text-background flex items-center justify-center hover:bg-foreground transition-colors"
               >
-                <Paperclip size={18} />
+                <X size={12} />
               </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                className="hidden"
-                onChange={handleImageChange}
-              />
-
-              {/* AI Script button */}
-              <button
-                type="button"
-                disabled={isGeneratingScript}
-                onClick={generateScript}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors disabled:opacity-50"
-              >
-                {isGeneratingScript ? (
-                  <><Loader2 size={16} className="animate-spin" /> Genererer...</>
-                ) : (
-                  <><Wand2 size={16} /> AI Manus</>
-                )}
-              </button>
-
-              {/* Language selector */}
-              <Select value={language} onValueChange={setLanguage}>
-                <SelectTrigger className="w-auto h-9 rounded-xl border-0 bg-transparent text-sm gap-1.5 px-3 text-muted-foreground hover:text-foreground hover:bg-secondary [&>svg]:opacity-50">
-                  <Globe size={16} className="shrink-0" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Norsk">Norsk</SelectItem>
-                  <SelectItem value="Engelsk">Engelsk</SelectItem>
-                  <SelectItem value="Svensk">Svensk</SelectItem>
-                  <SelectItem value="Dansk">Dansk</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Video length toggle */}
-              <div className="flex items-center rounded-xl overflow-hidden">
-                {[
-                  { value: "15", label: "15s", locked: false },
-                  { value: "30", label: "30s", locked: !isBusiness },
-                ].map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => !opt.locked && setVideoLength(opt.value)}
-                    disabled={opt.locked}
-                    className={`inline-flex items-center gap-1 px-2.5 py-2 text-sm transition-colors rounded-lg ${
-                      videoLength === opt.value
-                        ? "text-foreground bg-secondary"
-                        : opt.locked
-                        ? "text-muted-foreground/30 cursor-not-allowed"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                    }`}
-                  >
-                    <Clock size={14} />
-                    {opt.label}
-                    {opt.locked && <Lock size={11} />}
-                  </button>
-                ))}
-              </div>
-
-              {/* Spacer + Submit */}
-              <div className="flex-1" />
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">
-                  {videosRemaining} kreditter
-                </span>
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !canSubmit}
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
-                    canSubmit && !isSubmitting
-                      ? "bg-foreground text-background hover:bg-foreground/90"
-                      : "bg-secondary text-muted-foreground/40 cursor-not-allowed"
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <Loader2 size={18} className="animate-spin" />
-                  ) : (
-                    <ArrowUp size={18} />
-                  )}
-                </button>
-              </div>
             </div>
           </div>
-        </form>
-      </div>
+        )}
+      </form>
     </div>
   );
 };
