@@ -14,8 +14,7 @@ const infiniteExamples = [...examples, ...examples];
 
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [ready, setReady] = useState(false);
-  const [nearEnd, setNearEnd] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -26,61 +25,48 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
     video.autoplay = true;
     video.preload = "auto";
 
-    const handleCanPlay = () => {
-      setReady(true);
-      const playPromise = video.play();
-      if (playPromise) {
-        playPromise.catch(() => {
-          const handleInteraction = () => {
-            video.play();
-          };
-          document.addEventListener("touchstart", handleInteraction, { once: true });
-          document.addEventListener("click", handleInteraction, { once: true });
+    const handlePlaying = () => setPlaying(true);
+
+    const tryPlay = () => {
+      const p = video.play();
+      if (p) {
+        p.catch(() => {
+          const retry = () => video.play();
+          document.addEventListener("touchstart", retry, { once: true });
+          document.addEventListener("click", retry, { once: true });
         });
       }
     };
 
-    // Fade out near end, fade back in after loop restarts
-    const handleTimeUpdate = () => {
-      if (video.duration && video.currentTime > video.duration - 0.4) {
-        setNearEnd(true);
-      } else if (video.currentTime < 0.5) {
-        setNearEnd(false);
-      }
-    };
-
-    const handleSeeked = () => {
-      // When loop restarts, currentTime resets
-      if (video.currentTime < 0.5) {
-        setNearEnd(false);
-      }
-    };
-
-    video.addEventListener("canplay", handleCanPlay);
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("seeked", handleSeeked);
-    if (video.readyState >= 3) handleCanPlay();
+    video.addEventListener("playing", handlePlaying);
+    video.addEventListener("canplay", tryPlay);
+    if (video.readyState >= 3) tryPlay();
 
     return () => {
-      video.removeEventListener("canplay", handleCanPlay);
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("seeked", handleSeeked);
+      video.removeEventListener("playing", handlePlaying);
+      video.removeEventListener("canplay", tryPlay);
     };
   }, []);
 
   return (
-    <video
-      ref={videoRef}
-      muted
-      autoPlay
-      loop
-      playsInline
-      preload="auto"
-      className={`w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${
-        !ready || nearEnd ? "opacity-0" : "opacity-100"
-      }`}
-      src={src}
-    />
+    <div className="relative w-full h-full bg-card">
+      <video
+        ref={videoRef}
+        muted
+        autoPlay
+        loop
+        playsInline
+        preload="auto"
+        className={`w-full h-full object-cover pointer-events-none ${playing ? "visible" : "invisible"}`}
+        src={src}
+      />
+      {/* Overlay that hides thumbnail - only visible when not playing */}
+      <div
+        className={`absolute inset-0 bg-card transition-opacity duration-500 pointer-events-none ${
+          playing ? "opacity-0" : "opacity-100"
+        }`}
+      />
+    </div>
   );
 };
 
