@@ -37,7 +37,7 @@ const CostComparison = () => {
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">
                     <X size={16} className="text-destructive mt-0.5 shrink-0" />
-                    <span className="text-muted-foreground">5 000 – 15 000 kr per video</span>
+                    <span className="text-muted-foreground">2 000 – 5 000 kr per video</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm">
                     <X size={16} className="text-destructive mt-0.5 shrink-0" />
