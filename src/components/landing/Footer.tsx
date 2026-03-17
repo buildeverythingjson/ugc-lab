@@ -52,9 +52,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="mailto:support@ugclab.no" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Kontakt
-                </a>
+                <Link to="/kontakt" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Kontakt oss
+                </Link>
               </li>
             </ul>
           </div>
