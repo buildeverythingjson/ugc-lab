@@ -15,6 +15,7 @@ const infiniteExamples = [...examples, ...examples];
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
+  const [nearEnd, setNearEnd] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -39,10 +40,32 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
       }
     };
 
+    // Fade out near end, fade back in after loop restarts
+    const handleTimeUpdate = () => {
+      if (video.duration && video.currentTime > video.duration - 0.4) {
+        setNearEnd(true);
+      } else if (video.currentTime < 0.5) {
+        setNearEnd(false);
+      }
+    };
+
+    const handleSeeked = () => {
+      // When loop restarts, currentTime resets
+      if (video.currentTime < 0.5) {
+        setNearEnd(false);
+      }
+    };
+
     video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("seeked", handleSeeked);
     if (video.readyState >= 3) handleCanPlay();
 
-    return () => video.removeEventListener("canplay", handleCanPlay);
+    return () => {
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("seeked", handleSeeked);
+    };
   }, []);
 
   return (
@@ -53,7 +76,9 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
       loop
       playsInline
       preload="auto"
-      className={`w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"}`}
+      className={`w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${
+        !ready || nearEnd ? "opacity-0" : "opacity-100"
+      }`}
       src={src}
     />
   );
