@@ -22,8 +22,20 @@ const STATUS_CONFIG = {
 
 const VideoDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [job, setJob] = useState<VideoJob | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const handleDelete = async () => {
+    if (!id) return;
+    const { error } = await supabase.from("video_jobs").delete().eq("id", id);
+    if (error) {
+      toast({ title: "Kunne ikke slette", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Video slettet" });
+      navigate("/dashboard/videos");
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
