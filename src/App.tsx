@@ -47,6 +47,7 @@ const App = () => (
               <Route path="subscription" element={<Subscription />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
+            <Route path="/kontakt" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
