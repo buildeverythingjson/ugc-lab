@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -16,11 +16,11 @@ const plans = [
     trialPriceId: "price_1TBvZn09raYItIuAon2pFcJT",
     features: [
       "5 videoer per måned",
+      "30 bilder per måned (kommer snart)",
       "Opptil 15 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "E-poststøtte",
-      "30 bilder per måned (kommer snart)",
     ],
     popular: false,
   },
@@ -31,11 +31,11 @@ const plans = [
     priceId: "price_1TBOgG09raYItIuApOD5GBfp",
     features: [
       "15 videoer per måned",
+      "150 bilder per måned (kommer snart)",
       "Opptil 15 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "Prioritert støtte",
-      "150 bilder per måned (kommer snart)",
     ],
     popular: true,
   },
@@ -46,12 +46,12 @@ const plans = [
     priceId: "price_1TBOgL09raYItIuA0kJtfct2",
     features: [
       "30 videoer per måned",
+      "300 bilder per måned (kommer snart)",
       "Opptil 30 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "Dedikert støtte",
       "API-tilgang",
-      "300 bilder per måned (kommer snart)",
     ],
     popular: false,
   },
@@ -62,7 +62,6 @@ const PricingSection = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<string | null>(null);
 
-  // User has used trial if they have or had a trial/startup/growth/business tier
   const hasUsedTrial = !!profile?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
 
   const handlePlanSelect = async (priceId: string, loadingKey: string) => {
@@ -128,12 +127,27 @@ const PricingSection = () => {
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-1">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm">
-                      <Check size={16} className="text-foreground mt-0.5 shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
+                  {plan.features.map((feature) => {
+                    const isComingSoon = feature.includes("(kommer snart)");
+                    const displayText = feature.replace(" (kommer snart)", "");
+                    return (
+                      <li key={feature} className={`flex items-start gap-3 text-sm ${isComingSoon ? "opacity-60" : ""}`}>
+                        {isComingSoon ? (
+                          <Clock size={16} className="text-muted-foreground mt-0.5 shrink-0" />
+                        ) : (
+                          <Check size={16} className="text-foreground mt-0.5 shrink-0" />
+                        )}
+                        <span className="text-muted-foreground">
+                          {displayText}
+                          {isComingSoon && (
+                            <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-muted text-muted-foreground">
+                              Snart
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <Button

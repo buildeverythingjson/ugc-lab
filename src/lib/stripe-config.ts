@@ -23,11 +23,11 @@ export const STRIPE_TIERS = {
     max_length: 15,
     features: [
       "5 videoer per måned",
+      "30 bilder per måned (kommer snart)",
       "Opptil 15 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "E-poststøtte",
-      "30 bilder per måned (kommer snart)",
     ],
   },
   growth: {
@@ -39,11 +39,11 @@ export const STRIPE_TIERS = {
     max_length: 15,
     features: [
       "15 videoer per måned",
+      "150 bilder per måned (kommer snart)",
       "Opptil 15 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "Prioritert støtte",
-      "150 bilder per måned (kommer snart)",
     ],
   },
   business: {
@@ -55,12 +55,12 @@ export const STRIPE_TIERS = {
     max_length: 30,
     features: [
       "30 videoer per måned",
+      "300 bilder per måned (kommer snart)",
       "Opptil 30 sekunder",
       "AI-analyse av produktet",
       "Last ned i HD",
       "Dedikert støtte",
       "API-tilgang",
-      "300 bilder per måned (kommer snart)",
     ],
   },
 } as const;
