@@ -71,7 +71,7 @@ const Subscription = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).map(([key, plan]) => {
+        {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";
           const isStartup = key === "startup";
@@ -115,7 +115,7 @@ const Subscription = () => {
                     : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
-                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : isStartup ? "Prøv for 10 kr" : "Velg plan"}
+                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : isStartup ? "Prøv for 10 kr" : key === "trial" ? "Prøv for 10 kr" : "Velg plan"}
               </Button>
             </div>
           );

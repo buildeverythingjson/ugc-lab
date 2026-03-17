@@ -1,13 +1,21 @@
-import { Check, Lock } from "lucide-react";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const plans = [
   {
     name: "Startup",
     price: "499",
     trialPrice: "10",
+    trialTierKey: "trial",
+    tierKey: "startup",
+    trialPriceId: "price_1TBvZn09raYItIuAon2pFcJT",
+    priceId: "price_1TBOg909raYItIuAgRaaN8zT",
     features: [
       "5 videoer per måned",
       "Opptil 15 sekunder",
@@ -20,6 +28,8 @@ const plans = [
   {
     name: "Growth",
     price: "899",
+    tierKey: "growth",
+    priceId: "price_1TBOgG09raYItIuApOD5GBfp",
     features: [
       "15 videoer per måned",
       "Opptil 15 sekunder",
@@ -32,6 +42,8 @@ const plans = [
   {
     name: "Business",
     price: "1 999",
+    tierKey: "business",
+    priceId: "price_1TBOgL09raYItIuA0kJtfct2",
     features: [
       "30 videoer per måned",
       "Opptil 30 sekunder",
@@ -45,6 +57,33 @@ const plans = [
 ];
 
 const PricingSection = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handlePlanSelect = async (priceId: string, tierKey: string) => {
+    if (!user) {
+      // Store selected plan and redirect to register
+      localStorage.setItem("pending_checkout_price_id", priceId);
+      navigate("/register");
+      return;
+    }
+
+    // Already logged in - go straight to checkout
+    setLoading(tierKey);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { priceId },
+      });
+      if (error) throw error;
+      if (data?.url) window.open(data.url, "_blank");
+    } catch (error: any) {
+      toast.error(error.message || "Noe gikk galt");
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <section id="priser" className="py-24 bg-hero-gradient">
       <div className="container mx-auto px-4">
@@ -92,13 +131,24 @@ const PricingSection = () => {
                 ))}
               </ul>
 
-              <Link to="/register">
+              <div className="space-y-2">
+                {plan.trialPrice && (
+                  <Button
+                    className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
+                    disabled={loading === "trial"}
+                    onClick={() => handlePlanSelect(plan.trialPriceId!, "trial")}
+                  >
+                    {loading === "trial" ? "Laster..." : `Prøv for ${plan.trialPrice} kr`}
+                  </Button>
+                )}
                 <Button
                   className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
+                  disabled={loading === plan.tierKey}
+                  onClick={() => handlePlanSelect(plan.priceId, plan.tierKey)}
                 >
-                  {(plan as any).trialPrice ? `Prøv for ${(plan as any).trialPrice} kr` : "Velg plan"}
+                  {loading === plan.tierKey ? "Laster..." : "Velg plan"}
                 </Button>
-              </Link>
+              </div>
             </motion.div>
           ))}
         </div>

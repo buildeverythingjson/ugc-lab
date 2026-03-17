@@ -24,6 +24,7 @@ const Register = () => {
     try {
       await signUp(email, password, firstName, lastName, website);
       toast.success("Konto opprettet! Sjekk e-posten din for bekreftelse.");
+      // Keep pending_checkout_price_id in localStorage so it persists through email verification + login
       navigate("/login");
     } catch (error: any) {
       toast.error(error.message || "Registrering feilet");

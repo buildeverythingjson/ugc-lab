@@ -2,14 +2,35 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Video, CreditCard, Clock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 const Overview = () => {
   const { profile } = useAuth();
+  const checkoutTriggered = useRef(false);
+
+  useEffect(() => {
+    const pendingPriceId = localStorage.getItem("pending_checkout_price_id");
+    if (pendingPriceId && !checkoutTriggered.current) {
+      checkoutTriggered.current = true;
+      localStorage.removeItem("pending_checkout_price_id");
+      supabase.functions.invoke("create-checkout", {
+        body: { priceId: pendingPriceId },
+      }).then(({ data, error }) => {
+        if (error) {
+          toast.error("Kunne ikke starte betaling");
+          return;
+        }
+        if (data?.url) window.open(data.url, "_blank");
+      });
+    }
+  }, []);
 
   const tier = profile?.subscription_tier || "Ingen";
   const remaining = profile?.videos_remaining ?? 0;
   const used = profile?.videos_used_this_month ?? 0;
-  const tierMax = profile?.subscription_tier === "business" ? 30 : profile?.subscription_tier === "growth" ? 15 : profile?.subscription_tier === "startup" ? 5 : 0;
+  const tierMax = profile?.subscription_tier === "business" ? 30 : profile?.subscription_tier === "growth" ? 15 : profile?.subscription_tier === "startup" ? 5 : profile?.subscription_tier === "trial" ? 1 : 0;
 
   const statsCards = [
     { label: "Gjenværende videoer", value: `${remaining} av ${tierMax}`, icon: Video },

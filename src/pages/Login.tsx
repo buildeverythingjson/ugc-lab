@@ -21,6 +21,7 @@ const Login = () => {
     try {
       await signIn(email, password);
       toast.success("Logget inn!");
+      // Dashboard will handle pending checkout redirect
       navigate("/dashboard");
     } catch (error: any) {
       toast.error(error.message || "Innlogging feilet");
