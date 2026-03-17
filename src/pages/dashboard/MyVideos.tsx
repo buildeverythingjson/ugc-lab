@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Video, Clock, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Video, Clock, Loader2, CheckCircle2, XCircle, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -101,7 +101,7 @@ const MyVideos = () => {
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {jobs.map((job) => {
             const status = (job.status as keyof typeof STATUS_CONFIG) || "pending";
             const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending;
@@ -111,9 +111,9 @@ const MyVideos = () => {
               <Link
                 key={job.id}
                 to={`/dashboard/videos/${job.id}`}
-                className="rounded-xl border border-border bg-card card-shadow hover:border-primary/30 transition-colors block overflow-hidden"
+                className="rounded-xl border border-border bg-card card-shadow hover:border-primary/30 transition-colors block overflow-hidden group"
               >
-                <div className="w-full aspect-[9/16] bg-secondary/30">
+                <div className="w-full aspect-[9/16] bg-secondary/30 relative">
                   {job.video_url ? (
                     <video
                       src={job.video_url}
@@ -132,6 +132,11 @@ const MyVideos = () => {
                       className="w-full h-full object-contain"
                     />
                   ) : null}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+                      <Play size={18} className="text-black ml-0.5" fill="black" />
+                    </div>
+                  </div>
                 </div>
                 <div className="p-3 space-y-1.5">
                   <div className="flex items-center justify-between">
