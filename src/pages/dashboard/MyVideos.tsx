@@ -44,6 +44,7 @@ const MyVideos = () => {
     }
   };
 
+  useEffect(() => {
     if (!user) return;
 
     const fetchJobs = async () => {
