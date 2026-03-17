@@ -103,14 +103,37 @@ const VideoDetail = () => {
         <ArrowLeft size={16} /> Tilbake til Mine videoer
       </Link>
 
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold">{job.brand_name}</h1>
-        <div className="mt-2">
-          <Badge variant="outline" className={`${config.color} border`}>
-            <StatusIcon size={14} className={`mr-1.5 ${status === "processing" ? "animate-spin" : ""}`} />
-            {config.label}
-          </Badge>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">{job.brand_name}</h1>
+          <div className="mt-2">
+            <Badge variant="outline" className={`${config.color} border`}>
+              <StatusIcon size={14} className={`mr-1.5 ${status === "processing" ? "animate-spin" : ""}`} />
+              {config.label}
+            </Badge>
+          </div>
         </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" size="sm" className="text-destructive border-destructive/30 hover:bg-destructive/10">
+              <Trash2 size={14} className="mr-1.5" /> Slett
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Slett video?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Avbryt</AlertDialogCancel>
+              <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={handleDelete}>
+                Slett
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       {status === "processing" && (
