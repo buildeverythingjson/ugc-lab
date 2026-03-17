@@ -93,6 +93,9 @@ const Register = () => {
               <Input id="email" type="email" placeholder="din@epost.no" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="website">Nettside (valgfritt)</Label>
+              <Input id="website" type="url" placeholder="https://dinside.no" value={website} onChange={(e) => setWebsite(e.target.value)} />
+            <div className="space-y-2">
               <Label htmlFor="password">Passord</Label>
               <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
