@@ -23,7 +23,7 @@ const CostComparison = () => {
             {/* Vertical divider line (desktop) */}
             <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border hidden md:block z-0" />
 
-            {/* VS badge centered on the divider line */}
+            {/* VS badge (desktop) */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:flex">
               <div className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
                 <span className="font-display font-bold text-sm text-primary">VS</span>
@@ -50,9 +50,10 @@ const CostComparison = () => {
                 </ul>
               </div>
 
-              {/* Mobile VS */}
-              <div className="flex md:hidden items-center justify-center py-2 relative z-10">
-                <div className="w-10 h-10 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
+              {/* Mobile: horizontal line with VS badge centered */}
+              <div className="relative flex md:hidden items-center justify-center py-0">
+                <div className="absolute left-0 right-0 top-1/2 h-px bg-border" />
+                <div className="relative z-10 w-10 h-10 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
                   <span className="font-display font-bold text-xs text-primary">VS</span>
                 </div>
               </div>
