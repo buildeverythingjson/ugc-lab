@@ -99,7 +99,7 @@ const PricingSection = () => {
                       : "bg-secondary text-secondary-foreground hover:bg-surface-hover"
                   }`}
                 >
-                  Velg plan
+                  {(plan as any).trialPrice ? `Prøv for ${(plan as any).trialPrice} kr` : "Velg plan"}
                 </Button>
               </Link>
             </motion.div>

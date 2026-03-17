@@ -16,8 +16,8 @@ export const STRIPE_TIERS = {
       "E-poststøtte",
     ],
   },
-  pro: {
-    name: "Pro",
+  growth: {
+    name: "Growth",
     price: "899",
     price_id: "price_1TBOgG09raYItIuApOD5GBfp",
     product_id: "prod_U9i6UdxaxHRbcS",

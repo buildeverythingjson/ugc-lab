@@ -115,7 +115,7 @@ const Subscription = () => {
                     : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
-                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : "Velg plan"}
+                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : isStartup ? "Prøv for 10 kr" : "Velg plan"}
               </Button>
             </div>
           );
