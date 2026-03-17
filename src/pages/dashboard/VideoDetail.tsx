@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ArrowLeft, Clock, Loader2, CheckCircle2, XCircle, Download, RefreshCw } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
