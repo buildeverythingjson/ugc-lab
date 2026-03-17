@@ -11,7 +11,9 @@ import { Separator } from "@/components/ui/separator";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [website, setWebsite] = useState("");
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signUp(email, password, name);
+      await signUp(email, password, firstName, lastName, website);
       toast.success("Konto opprettet! Sjekk e-posten din for bekreftelse.");
       navigate("/login");
     } catch (error: any) {
@@ -76,13 +78,23 @@ const Register = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Navn</Label>
-              <Input id="name" type="text" placeholder="Ditt navn" value={name} onChange={(e) => setName(e.target.value)} required />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">Fornavn</Label>
+                <Input id="firstName" type="text" placeholder="Fornavn" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Etternavn</Label>
+                <Input id="lastName" type="text" placeholder="Etternavn" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">E-post</Label>
               <Input id="email" type="email" placeholder="din@epost.no" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="website">Nettside (valgfritt)</Label>
+              <Input id="website" type="url" placeholder="https://dinside.no" value={website} onChange={(e) => setWebsite(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Passord</Label>

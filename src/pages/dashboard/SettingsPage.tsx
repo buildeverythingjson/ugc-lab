@@ -9,14 +9,17 @@ import { useState } from "react";
 
 const SettingsPage = () => {
   const { profile, user, refreshProfile } = useAuth();
-  const [displayName, setDisplayName] = useState(profile?.display_name || "");
+  const [firstName, setFirstName] = useState(profile?.first_name || "");
+  const [lastName, setLastName] = useState(profile?.last_name || "");
+  const [website, setWebsite] = useState(profile?.website || "");
   const [newPassword, setNewPassword] = useState("");
 
   const handleUpdateProfile = async () => {
     if (!user) return;
+    const displayName = `${firstName} ${lastName}`.trim();
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: displayName })
+      .update({ display_name: displayName, first_name: firstName, last_name: lastName, website: website || null } as any)
       .eq("id", user.id);
     if (error) {
       toast.error("Kunne ikke oppdatere profilen");
@@ -45,13 +48,23 @@ const SettingsPage = () => {
 
       <div className="rounded-xl border border-border bg-card p-6 card-shadow space-y-4">
         <h2 className="font-display font-semibold">Profil</h2>
-        <div className="space-y-2">
-          <Label htmlFor="displayName">Visningsnavn</Label>
-          <Input id="displayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Ditt navn" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="firstName">Fornavn</Label>
+            <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Fornavn" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Etternavn</Label>
+            <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Etternavn" />
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">E-post</Label>
           <Input id="email" type="email" value={user?.email || ""} disabled />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="website">Nettside</Label>
+          <Input id="website" type="url" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://dinside.no" />
         </div>
         <Button onClick={handleUpdateProfile} className="bg-gradient-primary text-primary-foreground hover:opacity-90">
           Lagre endringer

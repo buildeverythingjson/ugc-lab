@@ -5,6 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 interface Profile {
   id: string;
   display_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  website: string | null;
   subscription_tier: string | null;
   subscription_status: string | null;
   videos_remaining: number;
@@ -17,7 +20,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, displayName: string) => Promise<void>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, website?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -71,12 +74,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, displayName: string) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, website?: string) => {
+    const displayName = `${firstName} ${lastName}`.trim();
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { display_name: displayName },
+        data: { display_name: displayName, first_name: firstName, last_name: lastName, website: website || null },
         emailRedirectTo: window.location.origin,
       },
     });
