@@ -101,7 +101,7 @@ const MyVideos = () => {
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {jobs.map((job) => {
             const status = (job.status as keyof typeof STATUS_CONFIG) || "pending";
             const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending;
