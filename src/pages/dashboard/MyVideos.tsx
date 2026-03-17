@@ -32,17 +32,18 @@ const MyVideos = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState<VideoJob[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteJobId, setDeleteJobId] = useState<string | null>(null);
 
-  const handleDelete = async (jobId: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const { error } = await supabase.from("video_jobs").delete().eq("id", jobId);
+  const handleDelete = async () => {
+    if (!deleteJobId) return;
+    const { error } = await supabase.from("video_jobs").delete().eq("id", deleteJobId);
     if (error) {
       toast({ title: "Kunne ikke slette", description: error.message, variant: "destructive" });
     } else {
-      setJobs((prev) => prev.filter((j) => j.id !== jobId));
+      setJobs((prev) => prev.filter((j) => j.id !== deleteJobId));
       toast({ title: "Video slettet" });
     }
+    setDeleteJobId(null);
   };
 
   useEffect(() => {
