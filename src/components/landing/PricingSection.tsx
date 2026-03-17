@@ -66,12 +66,12 @@ const PricingSection = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className={`relative rounded-xl border p-8 flex flex-col ${
                 plan.popular
-                  ? "border-primary bg-card glow-primary scale-[1.02]"
+                  ? "border-accent bg-card glow-primary scale-[1.02]"
                   : "border-border bg-card"
               } card-shadow`}
             >
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-primary text-xs font-semibold text-primary-foreground">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent text-xs font-semibold text-accent-foreground">
                   Mest populær
                 </div>
               )}
@@ -85,7 +85,7 @@ const PricingSection = () => {
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3 text-sm">
-                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <Check size={16} className="text-accent mt-0.5 shrink-0" />
                     <span className="text-muted-foreground">{feature}</span>
                   </li>
                 ))}

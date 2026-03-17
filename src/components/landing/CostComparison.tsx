@@ -59,19 +59,19 @@ const CostComparison = () => {
               </div>
 
               {/* UGC Lab */}
-              <div className="p-8 space-y-5 bg-primary/5">
-                <h3 className="font-display text-lg font-bold text-primary">UGC Lab</h3>
+              <div className="p-8 space-y-5 bg-accent/5">
+                <h3 className="font-display text-lg font-bold text-accent">UGC Lab</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">
-                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <Check size={16} className="text-accent mt-0.5 shrink-0" />
                     <span className="text-muted-foreground">Fra 99 kr per video</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm">
-                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <Check size={16} className="text-accent mt-0.5 shrink-0" />
                     <span className="text-muted-foreground">Klar på 5 minutter</span>
                   </li>
                   <li className="flex items-start gap-3 text-sm">
-                    <Check size={16} className="text-primary mt-0.5 shrink-0" />
+                    <Check size={16} className="text-accent mt-0.5 shrink-0" />
                     <span className="text-muted-foreground">Ubegrenset regenerering</span>
                   </li>
                 </ul>
