@@ -164,6 +164,33 @@ const MyVideos = () => {
                       <Play size={18} className="text-black ml-0.5" fill="black" />
                     </div>
                   </div>
+                  <div className="absolute top-1.5 right-1.5 z-10">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                          className="w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
+                        >
+                          <MoreVertical size={14} className="text-white" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                        {job.video_url && (
+                          <DropdownMenuItem asChild>
+                            <a href={job.video_url} download onClick={(e) => e.stopPropagation()}>
+                              <Download size={14} className="mr-2" /> Last ned
+                            </a>
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={(e) => { e.stopPropagation(); setDeleteJobId(job.id); }}
+                        >
+                          <Trash2 size={14} className="mr-2" /> Slett
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
                 <div className="p-3 space-y-1.5">
                   <div className="flex items-center justify-between">
@@ -177,33 +204,6 @@ const MyVideos = () => {
                     <span>{job.video_length} sek</span>
                     <span>{formatDate(job.created_at)}</span>
                   </div>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <button
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                        className="w-full flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors pt-1"
-                      >
-                        <Trash2 size={12} /> Slett
-                      </button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent onClick={(e) => e.stopPropagation()}>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Slett video?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Avbryt</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-600 hover:bg-red-700"
-                          onClick={(e) => handleDelete(job.id, e)}
-                        >
-                          Slett
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
                 </div>
               </Link>
             );
