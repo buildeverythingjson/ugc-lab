@@ -23,7 +23,7 @@ const NewVideo = () => {
   const [language, setLanguage] = useState("Norsk");
   const [videoLength, setVideoLength] = useState("15");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isGeneratingScript, setIsGeneratingScript] = useState(false);
   const videosRemaining = profile?.videos_remaining ?? 0;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
