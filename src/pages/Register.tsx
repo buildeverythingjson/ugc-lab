@@ -78,9 +78,15 @@ const Register = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Navn</Label>
-              <Input id="name" type="text" placeholder="Ditt navn" value={name} onChange={(e) => setName(e.target.value)} required />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">Fornavn</Label>
+                <Input id="firstName" type="text" placeholder="Fornavn" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Etternavn</Label>
+                <Input id="lastName" type="text" placeholder="Etternavn" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">E-post</Label>
