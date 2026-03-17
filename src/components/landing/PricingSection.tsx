@@ -71,17 +71,20 @@ const PricingSection = () => {
       return;
     }
 
-    setLoading(loadingKey);
+    const newWindow = window.open("about:blank", "_blank");
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId },
       });
       if (error) throw error;
-      if (data?.url) window.open(data.url, "_blank");
+      if (data?.url && newWindow) {
+        newWindow.location.href = data.url;
+      } else if (data?.url) {
+        window.open(data.url, "_blank");
+      }
     } catch (error: any) {
+      newWindow?.close();
       toast.error(error.message || "Noe gikk galt");
-    } finally {
-      setLoading(null);
     }
   };
 

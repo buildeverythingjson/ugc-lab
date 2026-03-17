@@ -20,20 +20,21 @@ const Subscription = () => {
   }, [searchParams]);
 
   const handleCheckout = async (tierKey: TierKey) => {
-    setLoading(tierKey);
+    const newWindow = window.open("about:blank", "_blank");
     try {
       const tier = STRIPE_TIERS[tierKey];
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId: tier.price_id },
       });
       if (error) throw error;
-      if (data?.url) {
+      if (data?.url && newWindow) {
+        newWindow.location.href = data.url;
+      } else if (data?.url) {
         window.open(data.url, "_blank");
       }
     } catch (error: any) {
+      newWindow?.close();
       toast.error(error.message || "Noe gikk galt");
-    } finally {
-      setLoading(null);
     }
   };
 
