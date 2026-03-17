@@ -166,7 +166,7 @@ const NewVideo = () => {
           <div className="flex gap-3">
             {[
               { value: "15", label: "15 sek", locked: false },
-              { value: "30", label: "30 sek", locked: true, plan: "Pro" },
+              { value: "30", label: "30 sek", locked: !isBusiness, plan: "Business" },
             ].map((opt) => (
               <button
                 key={opt.value}
