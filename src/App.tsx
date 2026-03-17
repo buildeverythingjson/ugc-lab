@@ -17,6 +17,7 @@ import MyVideos from "./pages/dashboard/MyVideos";
 import Subscription from "./pages/dashboard/Subscription";
 import SettingsPage from "./pages/dashboard/SettingsPage";
 import VideoDetail from "./pages/dashboard/VideoDetail";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="subscription" element={<Subscription />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
+            <Route path="/kontakt" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
