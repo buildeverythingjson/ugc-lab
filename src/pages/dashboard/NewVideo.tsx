@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const NewVideo = () => {
   const { user, profile, refreshProfile } = useAuth();
+  const isBusiness = profile?.subscription_tier === "business";
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
