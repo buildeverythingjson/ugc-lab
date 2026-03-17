@@ -1,11 +1,13 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Video, Clock, Loader2, CheckCircle2, XCircle, Play } from "lucide-react";
+import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 import type { Tables } from "@/integrations/supabase/types";
 
 type VideoJob = Tables<"video_jobs">;
@@ -29,6 +31,18 @@ const MyVideos = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState<VideoJob[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const handleDelete = async (jobId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { error } = await supabase.from("video_jobs").delete().eq("id", jobId);
+    if (error) {
+      toast({ title: "Kunne ikke slette", description: error.message, variant: "destructive" });
+    } else {
+      setJobs((prev) => prev.filter((j) => j.id !== jobId));
+      toast({ title: "Video slettet" });
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -161,6 +175,33 @@ const MyVideos = () => {
                     <span>{job.video_length} sek</span>
                     <span>{formatDate(job.created_at)}</span>
                   </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                        className="w-full flex items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-red-400 transition-colors pt-1"
+                      >
+                        <Trash2 size={12} /> Slett
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Slett video?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Avbryt</AlertDialogCancel>
+                        <AlertDialogAction
+                          className="bg-red-600 hover:bg-red-700"
+                          onClick={(e) => handleDelete(job.id, e)}
+                        >
+                          Slett
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </Link>
             );
