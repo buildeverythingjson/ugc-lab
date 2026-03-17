@@ -1,6 +1,5 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
-import SocialProofBar from "@/components/landing/SocialProofBar";
 import ExampleGallery from "@/components/landing/ExampleGallery";
 import HowItWorks from "@/components/landing/HowItWorks";
 import WhyUGCLab from "@/components/landing/WhyUGCLab";
@@ -15,7 +14,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      <SocialProofBar />
       <ExampleGallery />
       <HowItWorks />
       <WhyUGCLab />
