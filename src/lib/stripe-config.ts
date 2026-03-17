@@ -1,8 +1,21 @@
 // Stripe tier configuration
 export const STRIPE_TIERS = {
+  trial: {
+    name: "Startup Trial",
+    price: "10",
+    price_id: "price_1TBvZn09raYItIuAon2pFcJT",
+    product_id: "prod_UAG5kKbvPbhTYE",
+    videos_per_month: 1,
+    max_length: 15,
+    features: [
+      "1 video",
+      "Opptil 15 sekunder",
+      "AI-analyse av produktet",
+      "Last ned i HD",
+    ],
+  },
   startup: {
     name: "Startup",
-    trial_price: "10",
     price: "499",
     price_id: "price_1TBOg909raYItIuAgRaaN8zT",
     product_id: "prod_U9i6QeNaASwqqS",
