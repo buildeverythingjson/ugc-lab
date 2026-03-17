@@ -35,25 +35,34 @@ const WhyUGCLab = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto space-y-0">
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-8 hover:border-primary/30 transition-all duration-300"
+              className="relative flex items-start gap-6 py-8 group"
             >
-              {/* Subtle glow on hover */}
-              <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              {/* Vertical line connector */}
+              {i < features.length - 1 && (
+                <div className="absolute left-[23px] top-[68px] bottom-0 w-px bg-gradient-to-b from-primary/30 to-transparent" />
+              )}
 
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors duration-300">
-                  <feature.icon size={22} className="text-primary" />
-                </div>
-                <h3 className="font-display text-lg font-bold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+              {/* Icon */}
+              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 border border-primary/25 flex items-center justify-center group-hover:bg-primary/20 group-hover:border-primary/40 transition-all duration-300 group-hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)]">
+                <feature.icon size={20} className="text-primary" />
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 pt-1">
+                <h3 className="font-display text-lg font-bold mb-1.5 group-hover:text-primary transition-colors duration-300">
+                  {feature.title}
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             </motion.div>
           ))}
