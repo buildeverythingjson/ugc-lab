@@ -44,6 +44,7 @@ export type Database = {
           current_period_end: string | null
           display_name: string | null
           first_name: string | null
+          has_used_trial: boolean
           id: string
           last_name: string | null
           stripe_customer_id: string | null
@@ -60,6 +61,7 @@ export type Database = {
           current_period_end?: string | null
           display_name?: string | null
           first_name?: string | null
+          has_used_trial?: boolean
           id: string
           last_name?: string | null
           stripe_customer_id?: string | null
@@ -76,6 +78,7 @@ export type Database = {
           current_period_end?: string | null
           display_name?: string | null
           first_name?: string | null
+          has_used_trial?: boolean
           id?: string
           last_name?: string | null
           stripe_customer_id?: string | null
