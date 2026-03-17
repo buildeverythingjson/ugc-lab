@@ -51,7 +51,7 @@ const CostComparison = () => {
               </div>
 
               {/* Mobile: horizontal line with centered VS badge */}
-              <div className="relative flex md:hidden items-center justify-center h-16 mx-8">
+              <div className="relative flex md:hidden items-center justify-center h-10 mx-8 -my-2">
                 <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-border" />
                 <div className="relative z-10 w-10 h-10 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-lg">
                   <span className="font-display font-bold text-xs text-primary">VS</span>
