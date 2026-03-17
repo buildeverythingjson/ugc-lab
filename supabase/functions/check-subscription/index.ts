@@ -90,6 +90,11 @@ serve(async (req) => {
       current_period_end: subscriptionEnd,
     };
 
+    // Mark trial as permanently used
+    if (tierInfo.tier === "trial") {
+      updateData.has_used_trial = true;
+    }
+
     // If tier changed or no videos remaining set, initialize videos
     if (!profile?.subscription_tier || profile.subscription_tier !== tierInfo.tier) {
       updateData.videos_remaining = tierInfo.videos;
