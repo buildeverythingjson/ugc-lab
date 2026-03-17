@@ -14,8 +14,7 @@ const infiniteExamples = [...examples, ...examples];
 
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isTransitioningLoop, setIsTransitioningLoop] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -27,30 +26,15 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
     video.autoplay = true;
     video.preload = "auto";
 
-    const revealVideo = () => {
-      setIsPlaying(true);
-      requestAnimationFrame(() => {
-        setIsTransitioningLoop(false);
-      });
-    };
-
-    const hideForLoopTransition = () => {
-      if (!video.duration || Number.isNaN(video.duration)) return;
-      if (video.duration - video.currentTime <= 0.18) {
-        setIsTransitioningLoop(true);
-      }
-    };
-
-    const handleSeeking = () => {
-      if (video.currentTime <= 0.12) {
-        setIsTransitioningLoop(true);
-      }
+    const onPlaying = () => {
+      // Small delay to ensure first frame is rendered
+      setTimeout(() => setShowOverlay(false), 100);
     };
 
     const tryPlay = () => {
-      const playPromise = video.play();
-      if (playPromise) {
-        playPromise.catch(() => {
+      const p = video.play();
+      if (p) {
+        p.catch(() => {
           const retry = () => void video.play();
           document.addEventListener("touchstart", retry, { once: true });
           document.addEventListener("click", retry, { once: true });
@@ -58,25 +42,18 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
       }
     };
 
+    video.addEventListener("playing", onPlaying);
     video.addEventListener("canplay", tryPlay);
-    video.addEventListener("playing", revealVideo);
-    video.addEventListener("timeupdate", hideForLoopTransition);
-    video.addEventListener("seeking", handleSeeking);
-    video.addEventListener("seeked", handleSeeking);
-
     if (video.readyState >= 3) tryPlay();
 
     return () => {
+      video.removeEventListener("playing", onPlaying);
       video.removeEventListener("canplay", tryPlay);
-      video.removeEventListener("playing", revealVideo);
-      video.removeEventListener("timeupdate", hideForLoopTransition);
-      video.removeEventListener("seeking", handleSeeking);
-      video.removeEventListener("seeked", handleSeeking);
     };
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-card">
+    <div className="relative w-full h-full bg-card overflow-hidden">
       <video
         ref={videoRef}
         muted
@@ -84,14 +61,13 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
         loop
         playsInline
         preload="auto"
-        className={`w-full h-full object-cover pointer-events-none ${isPlaying ? "visible" : "invisible"}`}
+        className="w-full h-full object-cover pointer-events-none"
         src={src}
       />
-      <div
-        className={`absolute inset-0 bg-card transition-opacity duration-200 pointer-events-none ${
-          isPlaying && !isTransitioningLoop ? "opacity-0" : "opacity-100"
-        }`}
-      />
+      {/* Initial overlay - fades away once video is playing, never comes back */}
+      {showOverlay && (
+        <div className="absolute inset-0 bg-card pointer-events-none" />
+      )}
     </div>
   );
 };
