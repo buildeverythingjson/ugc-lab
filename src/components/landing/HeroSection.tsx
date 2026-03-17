@@ -17,16 +17,16 @@ const HeroSection = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-sm text-foreground mb-8">
             <Play size={14} />
-            AI-drevet videogenerering
+            Norges første AI-videoplattform for UGC
           </div>
 
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-6">
-            Lag profesjonelle UGC-videoer med AI —{" "}
-            <span className="text-gradient">på sekunder</span>
+            Profesjonelle UGC-videoer{" "}
+            <span className="text-gradient">på norsk</span> — laget av AI på minutter
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Last opp et produktbilde, velg stil og lengde, og la AI skape engasjerende videoinnhold for sosiale medier.
+            Bygget for norske merkevarer. Last opp produktbildet ditt, og få engasjerende videoinnhold tilpasset det norske markedet — uten byråer eller freelancere.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
