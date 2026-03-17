@@ -23,7 +23,7 @@ const NewVideo = () => {
   const [language, setLanguage] = useState("Norsk");
   const [videoLength, setVideoLength] = useState("15");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isGeneratingScript, setIsGeneratingScript] = useState(false);
   const videosRemaining = profile?.videos_remaining ?? 0;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,11 +133,37 @@ const NewVideo = () => {
               <div className="absolute top-0 right-0">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors"
-                  onClick={() => toast.info("AI-manusskriver kommer snart!")}
+                  disabled={isGeneratingScript}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-muted-foreground hover:text-foreground hover:border-foreground/20 transition-colors disabled:opacity-50"
+                  onClick={async () => {
+                    if (!brandName.trim() || !targetAudience.trim()) {
+                      toast.error("Fyll inn merkenavn og målgruppe først.");
+                      return;
+                    }
+                    setIsGeneratingScript(true);
+                    try {
+                      const { data, error } = await supabase.functions.invoke("generate-script", {
+                        body: { brandName, targetAudience, language, videoLength },
+                      });
+                      if (error) throw error;
+                      if (data?.error) throw new Error(data.error);
+                      if (data?.script) {
+                        setCreativeDescription(data.script);
+                        toast.success("Manus generert!");
+                      }
+                    } catch (err: any) {
+                      console.error(err);
+                      toast.error(err.message || "Kunne ikke generere manus.");
+                    } finally {
+                      setIsGeneratingScript(false);
+                    }
+                  }}
                 >
-                  <Wand2 size={14} />
-                  AI Manus
+                  {isGeneratingScript ? (
+                    <><Loader2 size={14} className="animate-spin" /> Genererer...</>
+                  ) : (
+                    <><Wand2 size={14} /> AI Manus</>
+                  )}
                 </button>
               </div>
             </div>
