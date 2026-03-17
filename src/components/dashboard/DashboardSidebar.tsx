@@ -56,7 +56,7 @@ const DashboardSidebar = () => {
             {initials}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{profile?.display_name || "Bruker"}</p>
+            <p className="text-sm font-medium truncate">{profile?.first_name || "Bruker"}</p>
           </div>
         </div>
         <button
