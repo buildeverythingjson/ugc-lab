@@ -1,10 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, LogOut, ImagePlus, Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Oversikt", icon: LayoutDashboard, path: "/dashboard" },
   { label: "Ny video", icon: PlusCircle, path: "/dashboard/new-video" },
+  { label: "Nytt bilde", icon: ImagePlus, path: "/dashboard/new-image", comingSoon: true },
   { label: "Mine videoer", icon: Video, path: "/dashboard/videos" },
   { label: "Abonnement", icon: CreditCard, path: "/dashboard/subscription" },
   { label: "Innstillinger", icon: Settings, path: "/dashboard/settings" },
@@ -45,6 +46,11 @@ const DashboardSidebar = () => {
             >
               <item.icon size={18} />
               {item.label}
+              {item.comingSoon && (
+                <span className="ml-auto inline-flex items-center gap-1 text-[10px] text-muted-foreground/60">
+                  <Lock size={10} /> Snart
+                </span>
+              )}
             </Link>
           );
         })}
