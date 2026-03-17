@@ -53,6 +53,9 @@ const Navbar = () => {
           <a href="#priser" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
             Priser
           </a>
+          <a href="#faq" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
+            FAQ
+          </a>
           <Link to="/login" onClick={() => setMobileOpen(false)}>
             <Button variant="outline" size="sm" className="w-full border-border">
               Logg inn
