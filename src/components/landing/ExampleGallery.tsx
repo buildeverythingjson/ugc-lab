@@ -12,9 +12,13 @@ const examples = [
 
 const infiniteExamples = [...examples, ...examples];
 
+const LOOP_END_TRIM_SECONDS = 0.35;
+const LOOP_RESTART_AT_SECONDS = 0.06;
+
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showOverlay, setShowOverlay] = useState(true);
+  const isRestartingRef = useRef(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -22,13 +26,11 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
 
     video.muted = true;
     video.playsInline = true;
-    video.loop = true;
     video.autoplay = true;
     video.preload = "auto";
 
     const onPlaying = () => {
-      // Small delay to ensure first frame is rendered
-      setTimeout(() => setShowOverlay(false), 100);
+      window.setTimeout(() => setShowOverlay(false), 80);
     };
 
     const tryPlay = () => {
@@ -42,13 +44,34 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
       }
     };
 
+    const handleTimeUpdate = () => {
+      if (!video.duration || isRestartingRef.current) return;
+
+      if (video.currentTime >= video.duration - LOOP_END_TRIM_SECONDS) {
+        isRestartingRef.current = true;
+        video.currentTime = LOOP_RESTART_AT_SECONDS;
+
+        const restartPromise = video.play();
+        if (restartPromise) {
+          restartPromise.finally(() => {
+            isRestartingRef.current = false;
+          });
+        } else {
+          isRestartingRef.current = false;
+        }
+      }
+    };
+
     video.addEventListener("playing", onPlaying);
     video.addEventListener("canplay", tryPlay);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+
     if (video.readyState >= 3) tryPlay();
 
     return () => {
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
     };
   }, []);
 
@@ -58,16 +81,12 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
         ref={videoRef}
         muted
         autoPlay
-        loop
         playsInline
         preload="auto"
         className="w-full h-full object-cover pointer-events-none"
         src={src}
       />
-      {/* Initial overlay - fades away once video is playing, never comes back */}
-      {showOverlay && (
-        <div className="absolute inset-0 bg-card pointer-events-none" />
-      )}
+      {showOverlay && <div className="absolute inset-0 bg-card pointer-events-none" />}
     </div>
   );
 };
