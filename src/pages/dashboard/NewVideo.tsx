@@ -177,7 +177,7 @@ const NewVideo = () => {
           <div className="border-t border-border" />
 
           {/* Toolbar row */}
-          <div className="px-6 py-3 flex flex-wrap items-center gap-2">
+          <div className="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-2">
             {/* Image upload button */}
             <button
               type="button"
