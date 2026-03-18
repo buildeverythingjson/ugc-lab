@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const FinalCTA = () => {
   return (
-    <section className="py-24 bg-hero-gradient relative overflow-hidden">
+    <section className="py-16 sm:py-24 bg-hero-gradient relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
 
