@@ -15,7 +15,7 @@ export const STRIPE_TIERS = {
     ],
   },
   startup: {
-    name: "Startup",
+    name: "Basis",
     price: "499",
     price_id: "price_1TBOg909raYItIuAgRaaN8zT",
     product_id: "prod_U9i6QeNaASwqqS",
