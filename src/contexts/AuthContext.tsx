@@ -44,6 +44,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(data);
   };
 
+  const syncGoogleProfile = async (u: User) => {
+    const meta = u.user_metadata;
+    if (!meta?.full_name && !meta?.name) return;
+    
+    const { data: existing } = await supabase
+      .from("profiles")
+      .select("first_name, last_name")
+      .eq("id", u.id)
+      .single();
+    
+    if (existing?.first_name) return; // already has name
+
+    const fullName: string = meta.full_name || meta.name || "";
+    const parts = fullName.trim().split(/\s+/);
+    const firstName = parts[0] || null;
+    const lastName = parts.length > 1 ? parts.slice(1).join(" ") : null;
+
+    await supabase.from("profiles").update({
+      first_name: firstName,
+      last_name: lastName,
+      display_name: fullName || null,
+    }).eq("id", u.id);
+  };
+
   const refreshProfile = async () => {
     if (user) await fetchProfile(user.id);
   };
