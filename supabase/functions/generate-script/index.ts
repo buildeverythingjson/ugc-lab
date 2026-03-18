@@ -1,7 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN") || "https://ugclab.no";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigin,
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
@@ -14,6 +17,36 @@ serve(async (req) => {
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // Authenticate user for rate limiting
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) throw new Error("No authorization header");
+    const token = authHeader.replace("Bearer ", "");
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    const { data: userData, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !userData.user) throw new Error("User not authenticated");
+    const userId = userData.user.id;
+
+    // Rate limit: 10 requests per minute
+    const { data: allowed, error: rlError } = await supabase.rpc("check_rate_limit", {
+      p_user_id: userId,
+      p_function_name: "generate-script",
+      p_max_requests: 10,
+      p_window_seconds: 60,
+    });
+    if (rlError) console.error("Rate limit check error:", rlError.message);
+    if (allowed === false) {
+      return new Response(
+        JSON.stringify({ error: "For mange forespørsler. Prøv igjen om litt." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const { brandName, targetAudience, language, videoLength } = await req.json();
 

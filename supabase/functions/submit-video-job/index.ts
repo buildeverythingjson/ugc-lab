@@ -1,8 +1,10 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN") || "https://ugclab.no";
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigin,
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
@@ -40,10 +42,25 @@ serve(async (req) => {
     if (userError || !userData.user) throw new Error("User not authenticated");
     const userId = userData.user.id;
 
-    // 2. Parse request body
+    // 2. Rate limit: 5 requests per minute
+    const { data: allowed, error: rlError } = await supabase.rpc("check_rate_limit", {
+      p_user_id: userId,
+      p_function_name: "submit-video-job",
+      p_max_requests: 5,
+      p_window_seconds: 60,
+    });
+    if (rlError) console.error("Rate limit check error:", rlError.message);
+    if (allowed === false) {
+      return new Response(
+        JSON.stringify({ error: "For mange forespørsler. Prøv igjen om litt." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // 3. Parse request body
     const { jobId, imageUrl, brandName, targetAudience, creativeDescription, language, videoLength } = await req.json();
 
-    // 3. Atomically decrement credits (race-condition safe)
+    // 4. Atomically decrement credits (race-condition safe)
     const { data: creditResult, error: creditError } = await supabase.rpc("decrement_video_credit", {
       p_user_id: userId,
     });
@@ -56,10 +73,10 @@ serve(async (req) => {
       );
     }
 
-    // 4. Build callback URL (key sent via header by n8n, not in query param)
+    // 5. Build callback URL (key sent via header by n8n, not in query param)
     const callbackUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/video-job-callback`;
 
-    // 4b. Create signed upload URL for Supabase Storage (video delivery)
+    // 5b. Create signed upload URL for Supabase Storage (video delivery)
     const videoFileName = `${jobId}.mp4`;
     const { data: signedUploadData, error: signedUploadError } = await supabase.storage
       .from("generated-videos")
@@ -68,7 +85,7 @@ serve(async (req) => {
 
     const videoPublicUrl = `${Deno.env.get("SUPABASE_URL")}/storage/v1/object/public/generated-videos/${videoFileName}`;
 
-    // 5. Map values and POST to n8n
+    // 6. Map values and POST to n8n
     const mappedLength = VIDEO_LENGTH_MAP[videoLength] ?? "12 seconds";
     const mappedLanguage = LANGUAGE_MAP[language] ?? "Norwegian";
 
@@ -100,10 +117,10 @@ serve(async (req) => {
       throw new Error(`n8n webhook failed: ${n8nResponse.status} ${errText}`);
     }
 
-    // 6. Update job status to processing
+    // 7. Update job status to processing
     await supabase.from("video_jobs").update({ status: "processing" }).eq("id", jobId);
 
-    // 7. Return success
+    // 8. Return success
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

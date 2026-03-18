@@ -4,6 +4,7 @@ export const STRIPE_TIERS = {
     name: "Startup Trial",
     price: "10",
     price_id: "price_1TBvZn09raYItIuAon2pFcJT",
+    annual_price_id: "", // TODO: Add annual trial price ID from Stripe
     product_id: "prod_UAG5kKbvPbhTYE",
     videos_per_month: 1,
     max_length: 15,
@@ -17,7 +18,9 @@ export const STRIPE_TIERS = {
   startup: {
     name: "Basis",
     price: "499",
+    annual_price: "399",
     price_id: "price_1TBOg909raYItIuAgRaaN8zT",
+    annual_price_id: "", // TODO: Add annual Basis price ID from Stripe
     product_id: "prod_U9i6QeNaASwqqS",
     videos_per_month: 5,
     max_length: 15,
@@ -33,7 +36,9 @@ export const STRIPE_TIERS = {
   growth: {
     name: "Pluss",
     price: "899",
+    annual_price: "719",
     price_id: "price_1TBOgG09raYItIuApOD5GBfp",
+    annual_price_id: "", // TODO: Add annual Pluss price ID from Stripe
     product_id: "prod_U9i6UdxaxHRbcS",
     videos_per_month: 15,
     max_length: 15,
@@ -49,7 +54,9 @@ export const STRIPE_TIERS = {
   business: {
     name: "Business",
     price: "1 999",
+    annual_price: "1 599",
     price_id: "price_1TBOgL09raYItIuA0kJtfct2",
+    annual_price_id: "", // TODO: Add annual Business price ID from Stripe
     product_id: "prod_U9i6JhAVuRPx6u",
     videos_per_month: 30,
     max_length: 30,
