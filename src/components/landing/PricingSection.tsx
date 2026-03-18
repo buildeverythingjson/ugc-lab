@@ -113,9 +113,9 @@ const PricingSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`relative rounded-xl border p-8 flex flex-col ${
+                className={`relative rounded-xl border p-6 sm:p-8 flex flex-col ${
                   plan.popular
-                    ? "border-foreground bg-card glow-primary scale-[1.02]"
+                    ? "border-foreground bg-card glow-primary sm:scale-[1.02]"
                     : "border-border bg-card"
                 } card-shadow`}
               >
