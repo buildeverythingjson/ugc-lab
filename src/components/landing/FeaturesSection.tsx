@@ -32,7 +32,7 @@ const FeaturesSection = () => {
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Hvordan det fungerer
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
             Fire enkle steg fra produktbilde til ferdig video
           </p>
         </div>
