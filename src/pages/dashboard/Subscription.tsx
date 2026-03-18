@@ -71,17 +71,17 @@ const Subscription = () => {
       </div>
 
       {currentTier && (
-        <div className="flex gap-3">
-          <Button onClick={handlePortal} variant="outline">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
             Administrer abonnement
           </Button>
-          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline">
+          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" className="w-full sm:w-auto">
             Oppdater status
           </Button>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";

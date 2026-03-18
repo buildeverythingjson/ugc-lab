@@ -130,13 +130,13 @@ const NewVideo = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-bold">Lag ny video</h1>
+      <div className="flex items-start sm:items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="font-display text-xl sm:text-2xl font-bold">Lag ny video</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Beskriv produktet ditt og generer en UGC-video</p>
         </div>
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Kreditter</span>
+        <div className="flex items-center gap-2 text-sm shrink-0">
+          <span className="text-muted-foreground hidden sm:inline">Kreditter</span>
           <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-secondary font-semibold text-foreground">
             {videosRemaining}
           </span>
@@ -147,7 +147,7 @@ const NewVideo = () => {
         {/* Main card */}
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           {/* Script / Description area */}
-          <div className="p-6 pb-4">
+          <div className="p-4 sm:p-6 pb-4">
             <div className="relative">
               <Textarea
                 placeholder="Beskriv stilen og budskapet du ønsker for videoen..."
@@ -177,7 +177,7 @@ const NewVideo = () => {
           <div className="border-t border-border" />
 
           {/* Toolbar row */}
-          <div className="px-6 py-3 flex flex-wrap items-center gap-2">
+          <div className="px-4 sm:px-6 py-3 flex flex-wrap items-center gap-2">
             {/* Image upload button */}
             <button
               type="button"
@@ -247,12 +247,12 @@ const NewVideo = () => {
               ))}
             </div>
 
-            {/* Submit button - pushed to right */}
-            <div className="flex-1" />
+            {/* Submit button - full width on mobile, pushed right on desktop */}
+            <div className="hidden sm:block flex-1" />
             <Button
               type="submit"
               disabled={isSubmitting || !imageFile}
-              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90"
+              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto"
             >
               {isSubmitting ? (
                 <><Loader2 size={16} className="mr-1.5 animate-spin" /> Genererer...</>

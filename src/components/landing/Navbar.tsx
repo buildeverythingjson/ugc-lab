@@ -56,29 +56,31 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border px-4 pb-4 space-y-3">
-          <a href="#funksjoner" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
+        <div className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border px-4 pb-5 pt-2 space-y-1">
+          <a href="#funksjoner" className="block text-sm text-muted-foreground py-3 px-2 rounded-lg hover:bg-surface active:bg-surface-hover transition-colors" onClick={() => setMobileOpen(false)}>
             Funksjoner
           </a>
-          <a href="#priser" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
+          <a href="#priser" className="block text-sm text-muted-foreground py-3 px-2 rounded-lg hover:bg-surface active:bg-surface-hover transition-colors" onClick={() => setMobileOpen(false)}>
             Priser
           </a>
-          <a href="#faq" className="block text-sm text-muted-foreground" onClick={() => setMobileOpen(false)}>
+          <a href="#faq" className="block text-sm text-muted-foreground py-3 px-2 rounded-lg hover:bg-surface active:bg-surface-hover transition-colors" onClick={() => setMobileOpen(false)}>
             FAQ
           </a>
-          {user ? (
-            <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
-              <Button variant="outline" size="sm" className="w-full border-border">
-                Dashboard
-              </Button>
-            </Link>
-          ) : (
-            <Link to="/login" onClick={() => setMobileOpen(false)}>
-              <Button variant="outline" size="sm" className="w-full border-border">
-                Logg inn
-              </Button>
-            </Link>
-          )}
+          <div className="pt-2">
+            {user ? (
+              <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                <Button variant="outline" size="sm" className="w-full border-border h-11">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/login" onClick={() => setMobileOpen(false)}>
+                <Button variant="outline" size="sm" className="w-full border-border h-11">
+                  Logg inn
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </nav>

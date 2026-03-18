@@ -26,11 +26,11 @@ const features = [
 
 const WhyUGCLab = () => {
   return (
-    <section className="py-24 bg-hero-gradient">
+    <section className="py-16 sm:py-24 bg-hero-gradient">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Hvorfor UGC Lab?</h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Hvorfor UGC Lab?</h2>
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
             Alt du trenger for å lage profesjonelt videoinnhold
           </p>
         </div>
@@ -43,7 +43,7 @@ const WhyUGCLab = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative flex items-start gap-6 py-8"
+              className="relative flex items-start gap-4 sm:gap-6 py-6 sm:py-8"
             >
               {/* Vertical line connector */}
               {i < features.length - 1 && (
@@ -51,7 +51,7 @@ const WhyUGCLab = () => {
               )}
 
               {/* Icon */}
-              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-primary/5 border border-border flex items-center justify-center">
+              <div className="relative z-10 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/5 border border-border flex items-center justify-center">
                 <feature.icon size={20} className="text-foreground" />
               </div>
 

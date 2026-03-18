@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 
 const CostComparison = () => {
   return (
-    <section className="py-24 bg-background">
+    <section className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Spar tusenvis hver måned</h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Spar tusenvis hver måned</h2>
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
             Se forskjellen mellom tradisjonell UGC og UGC Lab
           </p>
         </div>
@@ -32,7 +32,7 @@ const CostComparison = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-[1fr,1fr]">
               {/* Traditional UGC */}
-              <div className="p-8 space-y-5">
+              <div className="p-6 sm:p-8 space-y-5">
                 <h3 className="font-display text-lg font-bold text-destructive">Tradisjonell UGC</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">
@@ -59,7 +59,7 @@ const CostComparison = () => {
               </div>
 
               {/* UGC Lab */}
-              <div className="p-8 space-y-5 bg-primary/[0.03]">
+              <div className="p-6 sm:p-8 space-y-5 bg-primary/[0.03]">
                 <h3 className="font-display text-lg font-bold text-foreground">UGC Lab</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">

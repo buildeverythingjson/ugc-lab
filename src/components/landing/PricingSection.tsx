@@ -91,18 +91,18 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="priser" className="py-24 bg-hero-gradient">
+    <section id="priser" className="py-16 sm:py-24 bg-hero-gradient">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Velg din plan
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Fleksible planer som vokser med deg
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {plans.map((plan, i) => {
             const showTrial = plan.trialPriceId && !hasUsedTrial;
 
@@ -113,9 +113,9 @@ const PricingSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`relative rounded-xl border p-8 flex flex-col ${
+                className={`relative rounded-xl border p-6 sm:p-8 flex flex-col ${
                   plan.popular
-                    ? "border-foreground bg-card glow-primary scale-[1.02]"
+                    ? "border-foreground bg-card glow-primary sm:scale-[1.02]"
                     : "border-border bg-card"
                 } card-shadow`}
               >
