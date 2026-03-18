@@ -45,13 +45,14 @@ const HowItWorks = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative p-6 rounded-xl bg-card border border-border hover:border-foreground/20 transition-colors card-shadow group"
+              className="relative p-4 sm:p-6 rounded-xl bg-card border border-border hover:border-foreground/20 transition-colors card-shadow group"
             >
-              <div className="text-xs font-semibold text-foreground mb-4">Steg {i + 1}</div>
-              <div className="w-12 h-12 rounded-lg bg-primary/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
-                <step.icon size={24} className="text-foreground" />
+              <div className="text-xs font-semibold text-foreground mb-3 sm:mb-4">Steg {i + 1}</div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/5 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary/10 transition-colors">
+                <step.icon size={20} className="text-foreground sm:hidden" />
+                <step.icon size={24} className="text-foreground hidden sm:block" />
               </div>
-              <h3 className="font-display font-semibold text-lg mb-2">{step.title}</h3>
+              <h3 className="font-display font-semibold text-base sm:text-lg mb-1 sm:mb-2">{step.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
             </motion.div>
           ))}
