@@ -54,6 +54,16 @@ const DashboardSidebar = () => {
             </Link>
           );
         })}
+        
+        {!profile?.subscription_tier && (
+          <Link
+            to="/dashboard/subscription"
+            className="flex items-center gap-3 mx-3 mt-4 px-3 py-2.5 rounded-lg text-sm font-medium bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity"
+          >
+            <ArrowUpCircle size={18} />
+            Oppgrader plan
+          </Link>
+        )}
       </nav>
 
       <div className="p-4 border-t border-border">
