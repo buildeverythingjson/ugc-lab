@@ -27,10 +27,6 @@ const platformLogos = [
 ];
 
 const HeroSection = () => {
-  const scrollToExamples = () => {
-    document.getElementById("example-gallery")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section className="relative min-h-[90vh] sm:min-h-screen flex items-center justify-center bg-hero-gradient overflow-hidden">
       {/* Ambient glow */}
