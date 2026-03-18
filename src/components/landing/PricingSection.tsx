@@ -224,7 +224,7 @@ const PricingSection = () => {
           <div className="inline-flex flex-col items-center gap-2 px-6 py-4 rounded-xl border border-border/50 bg-card/50">
             <div className="flex items-center gap-2 text-foreground">
               <Shield size={18} className="text-primary" />
-              <span className="text-sm font-semibold">30 dagers pengene-tilbake-garanti</span>
+              <span className="text-sm font-semibold">30 dagers fornøydgaranti</span>
             </div>
             <p className="text-xs text-muted-foreground">
               Ikke fornøyd? Få pengene tilbake, ingen spørsmål.
