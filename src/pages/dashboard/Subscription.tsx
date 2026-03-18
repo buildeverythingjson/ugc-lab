@@ -15,6 +15,7 @@ const Subscription = () => {
   useEffect(() => {
     if (searchParams.get("success") === "true") {
       toast.success("Abonnementet er aktivert!");
+      if (typeof window.fbq === "function") window.fbq("track", "Purchase", { currency: "NOK", value: 0 });
       supabase.functions.invoke("check-subscription").then(() => refreshProfile());
     }
   }, [searchParams]);
