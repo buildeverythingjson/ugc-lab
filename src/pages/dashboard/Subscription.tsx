@@ -15,7 +15,13 @@ const Subscription = () => {
   useEffect(() => {
     if (searchParams.get("success") === "true") {
       toast.success("Abonnementet er aktivert!");
-      if (typeof window.fbq === "function") window.fbq("track", "Purchase", { currency: "NOK", value: 0 });
+      if (typeof window.fbq === "function") {
+        const storedTier = localStorage.getItem("checkout_tier_key") as TierKey | null;
+        const tier = storedTier && STRIPE_TIERS[storedTier] ? STRIPE_TIERS[storedTier] : null;
+        const value = tier ? parseFloat(tier.price.replace(/\s/g, "")) : 0;
+        window.fbq("track", "Purchase", { currency: "NOK", value });
+        localStorage.removeItem("checkout_tier_key");
+      }
       supabase.functions.invoke("check-subscription").then(() => refreshProfile());
     }
   }, [searchParams]);
