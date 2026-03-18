@@ -73,6 +73,7 @@ const PricingSection = () => {
 
     const newWindow = window.open("about:blank", "_blank");
     try {
+      localStorage.setItem("checkout_tier_key", loadingKey);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId },
       });
