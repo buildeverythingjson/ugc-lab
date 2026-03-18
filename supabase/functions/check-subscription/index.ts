@@ -9,6 +9,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// ⚠️ SYNC: This mapping must match src/lib/stripe-config.ts STRIPE_TIERS and stripe-webhook/index.ts TIER_MAP
 const TIER_MAP: Record<string, { tier: string; videos: number }> = {
   "prod_UAG5kKbvPbhTYE": { tier: "trial", videos: 1 },
   "prod_U9i6QeNaASwqqS": { tier: "startup", videos: 5 },

@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
+// ⚠️ SYNC: This mapping must match src/lib/stripe-config.ts STRIPE_TIERS and check-subscription/index.ts TIER_MAP
 const TIER_MAP: Record<string, { tier: string; videos: number }> = {
   "prod_UAG5kKbvPbhTYE": { tier: "trial", videos: 1 },
   "prod_U9i6QeNaASwqqS": { tier: "startup", videos: 5 },

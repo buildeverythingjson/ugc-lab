@@ -1,3 +1,6 @@
+// ⚠️ SYNC: product_id and tier mappings must match TIER_MAP in:
+//   - supabase/functions/check-subscription/index.ts
+//   - supabase/functions/stripe-webhook/index.ts
 // Stripe tier configuration
 export const STRIPE_TIERS = {
   trial: {

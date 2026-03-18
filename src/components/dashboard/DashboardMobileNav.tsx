@@ -21,7 +21,7 @@ const DashboardMobileNav = () => {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${
+              className={`flex flex-col items-center gap-1 text-xs font-medium transition-colors ${
                 active ? "text-primary" : "text-muted-foreground"
               }`}
             >
