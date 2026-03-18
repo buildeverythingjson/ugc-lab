@@ -247,12 +247,12 @@ const NewVideo = () => {
               ))}
             </div>
 
-            {/* Submit button - pushed to right */}
-            <div className="flex-1" />
+            {/* Submit button - full width on mobile, pushed right on desktop */}
+            <div className="hidden sm:block flex-1" />
             <Button
               type="submit"
               disabled={isSubmitting || !imageFile}
-              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90"
+              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto"
             >
               {isSubmitting ? (
                 <><Loader2 size={16} className="mr-1.5 animate-spin" /> Genererer...</>
