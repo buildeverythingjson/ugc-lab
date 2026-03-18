@@ -62,6 +62,7 @@ const Overview = () => {
           </Link>
         </div>
       )}
+      {isTrialUser && (
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-3 flex-1">
             <div className="rounded-full bg-primary/10 p-2.5">
