@@ -116,6 +116,7 @@ const NewVideo = () => {
       if (fnError) throw fnError;
 
       await refreshProfile();
+      if (typeof window.fbq === "function") window.fbq("track", "Lead");
       toast.success("Videogenerering startet!");
       navigate(`/dashboard/videos/${jobId}`);
     } catch (err: any) {
