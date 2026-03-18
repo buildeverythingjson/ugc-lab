@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const plans = [
   {
-    name: "Startup",
+    name: "Basis",
     price: "499",
     tierKey: "startup",
     priceId: "price_1TBOg909raYItIuAgRaaN8zT",
@@ -25,7 +25,7 @@ const plans = [
     popular: false,
   },
   {
-    name: "Growth",
+    name: "Pluss",
     price: "899",
     tierKey: "growth",
     priceId: "price_1TBOgG09raYItIuApOD5GBfp",
