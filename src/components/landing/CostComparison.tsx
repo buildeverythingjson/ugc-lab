@@ -32,7 +32,7 @@ const CostComparison = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-[1fr,1fr]">
               {/* Traditional UGC */}
-              <div className="p-8 space-y-5">
+              <div className="p-6 sm:p-8 space-y-5">
                 <h3 className="font-display text-lg font-bold text-destructive">Tradisjonell UGC</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">
