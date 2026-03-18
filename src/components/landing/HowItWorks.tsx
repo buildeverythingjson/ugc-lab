@@ -26,18 +26,18 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section id="funksjoner" className="py-24 bg-background">
+    <section id="funksjoner" className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Hvordan det fungerer
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
             Fire enkle steg fra produktbilde til ferdig video
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 max-w-5xl mx-auto">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}
