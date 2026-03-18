@@ -24,8 +24,8 @@ const FinalCTA = () => {
             Lag din første AI-genererte video i dag. Ingen kredittkort nødvendig for å komme i gang.
           </p>
 
-          <Link to="/register">
-            <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-10 h-14 text-lg font-semibold">
+          <Link to="/register" className="block">
+            <Button size="lg" className="w-full sm:w-auto bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-10 h-14 text-lg font-semibold">
               Kom i gang gratis
               <ArrowRight className="ml-2" size={20} />
             </Button>
