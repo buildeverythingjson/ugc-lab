@@ -51,7 +51,7 @@ const WhyUGCLab = () => {
               )}
 
               {/* Icon */}
-              <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-primary/5 border border-border flex items-center justify-center">
+              <div className="relative z-10 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/5 border border-border flex items-center justify-center">
                 <feature.icon size={20} className="text-foreground" />
               </div>
 
