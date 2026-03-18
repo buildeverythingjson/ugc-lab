@@ -71,11 +71,11 @@ const Subscription = () => {
       </div>
 
       {currentTier && (
-        <div className="flex gap-3">
-          <Button onClick={handlePortal} variant="outline">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
             Administrer abonnement
           </Button>
-          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline">
+          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" className="w-full sm:w-auto">
             Oppdater status
           </Button>
         </div>
