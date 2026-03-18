@@ -26,13 +26,14 @@ const Subscription = () => {
     }
   }, [searchParams]);
 
-  const handleCheckout = async (tierKey: TierKey) => {
+  const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     const newWindow = window.open("about:blank", "_blank");
     try {
       const tier = STRIPE_TIERS[tierKey];
-      localStorage.setItem("checkout_tier_key", tierKey);
+      const priceId = priceIdOverride || tier.price_id;
+      localStorage.setItem("checkout_tier_key", priceIdOverride ? "trial" : tierKey);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId: tier.price_id },
+        body: { priceId },
       });
       if (error) throw error;
       if (data?.url && newWindow) {
