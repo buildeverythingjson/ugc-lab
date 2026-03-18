@@ -86,7 +86,6 @@ const Subscription = () => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";
           const showTrial = key === "startup" && !hasUsedTrial;
-          const isPopular = key === "growth";
 
           return (
             <div
