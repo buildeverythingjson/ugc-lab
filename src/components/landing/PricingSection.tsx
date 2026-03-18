@@ -25,7 +25,7 @@ const plans = [
     popular: false,
   },
   {
-    name: "Growth",
+    name: "Pluss",
     price: "899",
     tierKey: "growth",
     priceId: "price_1TBOgG09raYItIuApOD5GBfp",

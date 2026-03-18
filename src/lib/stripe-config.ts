@@ -31,7 +31,7 @@ export const STRIPE_TIERS = {
     ],
   },
   growth: {
-    name: "Growth",
+    name: "Pluss",
     price: "899",
     price_id: "price_1TBOgG09raYItIuApOD5GBfp",
     product_id: "prod_U9i6UdxaxHRbcS",
