@@ -28,6 +28,7 @@ const Subscription = () => {
       });
       if (error) throw error;
       if (data?.url && newWindow) {
+        if (typeof window.fbq === "function") window.fbq("track", "InitiateCheckout");
         newWindow.location.href = data.url;
       } else if (data?.url) {
         window.open(data.url, "_blank");
