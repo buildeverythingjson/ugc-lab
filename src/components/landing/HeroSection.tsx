@@ -56,22 +56,13 @@ const HeroSection = () => {
             Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex items-center justify-center">
             <Link to="/register">
               <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-8 h-12 text-base font-semibold">
                 Lag din første video
                 <ArrowRight className="ml-2" size={18} />
               </Button>
             </Link>
-            <Button
-              variant="outline"
-              size="lg"
-              className="h-12 text-base border-border hover:bg-accent/10"
-              onClick={scrollToExamples}
-            >
-              Se eksempler
-              <ChevronDown className="ml-2" size={18} />
-            </Button>
           </div>
         </motion.div>
 
