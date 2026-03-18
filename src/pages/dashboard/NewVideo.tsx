@@ -147,7 +147,7 @@ const NewVideo = () => {
         {/* Main card */}
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           {/* Script / Description area */}
-          <div className="p-6 pb-4">
+          <div className="p-4 sm:p-6 pb-4">
             <div className="relative">
               <Textarea
                 placeholder="Beskriv stilen og budskapet du ønsker for videoen..."
