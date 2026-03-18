@@ -134,7 +134,10 @@ const Subscription = () => {
                 })}
               </ul>
               <Button
-                onClick={() => handleCheckout(key)}
+                onClick={() => showTrial 
+                  ? handleCheckout(key, STRIPE_TIERS.trial.price_id) 
+                  : handleCheckout(key)
+                }
                 disabled={isCurrent || loading === key}
                 className={`w-full ${
                   isCurrent
@@ -142,7 +145,7 @@ const Subscription = () => {
                     : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
-                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : "Velg plan"}
+                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : showTrial ? "Prøv for 10 kr" : "Velg plan"}
               </Button>
             </div>
           );
