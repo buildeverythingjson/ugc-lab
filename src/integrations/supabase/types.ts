@@ -265,6 +265,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      decrement_video_credit: { Args: { p_user_id: string }; Returns: number }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -290,6 +291,7 @@ export type Database = {
           read_ct: number
         }[]
       }
+      refund_video_credit: { Args: { p_user_id: string }; Returns: number }
     }
     Enums: {
       [_ in never]: never
