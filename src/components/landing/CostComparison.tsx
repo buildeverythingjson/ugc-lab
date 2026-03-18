@@ -5,9 +5,9 @@ const CostComparison = () => {
   return (
     <section className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Spar tusenvis hver måned</h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Spar tusenvis hver måned</h2>
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
             Se forskjellen mellom tradisjonell UGC og UGC Lab
           </p>
         </div>
