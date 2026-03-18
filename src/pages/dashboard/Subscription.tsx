@@ -85,6 +85,8 @@ const Subscription = () => {
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";
+          const showTrial = key === "startup" && !hasUsedTrial;
+          const isPopular = key === "growth";
 
           return (
             <div
