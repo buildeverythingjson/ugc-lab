@@ -26,13 +26,14 @@ const Subscription = () => {
     }
   }, [searchParams]);
 
-  const handleCheckout = async (tierKey: TierKey) => {
+  const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     const newWindow = window.open("about:blank", "_blank");
     try {
       const tier = STRIPE_TIERS[tierKey];
-      localStorage.setItem("checkout_tier_key", tierKey);
+      const priceId = priceIdOverride || tier.price_id;
+      localStorage.setItem("checkout_tier_key", priceIdOverride ? "trial" : tierKey);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId: tier.price_id },
+        body: { priceId },
       });
       if (error) throw error;
       if (data?.url && newWindow) {
@@ -60,6 +61,7 @@ const Subscription = () => {
   };
 
   const currentTier = profile?.subscription_tier as TierKey | null;
+  const hasUsedTrial = !!profile?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
 
   return (
     <div className="space-y-8">
@@ -83,6 +85,7 @@ const Subscription = () => {
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";
+          const showTrial = key === "startup" && !hasUsedTrial;
 
           return (
             <div
@@ -130,7 +133,10 @@ const Subscription = () => {
                 })}
               </ul>
               <Button
-                onClick={() => handleCheckout(key)}
+                onClick={() => showTrial 
+                  ? handleCheckout(key, STRIPE_TIERS.trial.price_id) 
+                  : handleCheckout(key)
+                }
                 disabled={isCurrent || loading === key}
                 className={`w-full ${
                   isCurrent
@@ -138,7 +144,7 @@ const Subscription = () => {
                     : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
-                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : "Velg plan"}
+                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : showTrial ? "Prøv for 10 kr" : "Velg plan"}
               </Button>
             </div>
           );

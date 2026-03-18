@@ -38,9 +38,30 @@ const Overview = () => {
     { label: "Nåværende plan", value: tier.charAt(0).toUpperCase() + tier.slice(1), icon: CreditCard },
   ];
   const isTrialUser = profile?.has_used_trial && (!profile?.subscription_tier || profile?.subscription_tier === "trial");
+  const hasNoPlan = !profile?.subscription_tier;
 
   return (
     <div className="space-y-8">
+      {hasNoPlan && !isTrialUser && (
+        <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-3 flex-1">
+            <div className="rounded-full bg-primary/10 p-2.5">
+              <Sparkles size={20} className="text-primary" />
+            </div>
+            <div>
+              <p className="font-display font-semibold text-sm">Du har ingen aktiv plan</p>
+              <p className="text-muted-foreground text-sm mt-0.5">
+                Velg en plan for å begynne å lage UGC-videoer med AI.
+              </p>
+            </div>
+          </div>
+          <Link to="/dashboard/subscription">
+            <Button size="sm" className="bg-gradient-primary text-primary-foreground hover:opacity-90">
+              Oppgrader plan
+            </Button>
+          </Link>
+        </div>
+      )}
       {isTrialUser && (
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex items-center gap-3 flex-1">
