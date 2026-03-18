@@ -43,50 +43,20 @@ serve(async (req) => {
     // 2. Parse request body
     const { jobId, imageUrl, brandName, targetAudience, creativeDescription, language, videoLength } = await req.json();
 
-    // 3. Atomically decrement credits — prevents race conditions
-    const { data: updatedRows, error: creditError } = await supabase
-      .from("profiles")
-      .update({
-        videos_remaining: supabase.rpc ? undefined : undefined, // placeholder, actual SQL below
-      })
-      .eq("id", userId);
-
-    // Use raw rpc for atomic update
-    const { data: creditResult, error: atomicError } = await supabase.rpc("atomic_decrement_video_credit", {
+    // 3. Atomically decrement credits (race-condition safe)
+    const { data: creditResult, error: creditError } = await supabase.rpc("decrement_video_credit", {
       p_user_id: userId,
     });
 
-    // Fallback: use direct SQL via postgrest if rpc not available
-    // Actually, let's use a simpler approach with postgrest filters
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("videos_remaining")
-      .eq("id", userId)
-      .gt("videos_remaining", 0)
-      .single();
-
-    if (profileError || !profile) {
+    if (creditError) throw new Error(`Credit check failed: ${creditError.message}`);
+    if (creditResult === -1) {
       return new Response(
         JSON.stringify({ error: "Du har brukt alle videoene dine denne måneden" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Decrement atomically using SQL expression via update
-    // Since Supabase JS doesn't support SQL expressions directly,
-    // we'll use the approach of updating with a filter
-    const { error: decrementError, count } = await supabase
-      .from("profiles")
-      .update({
-        videos_remaining: profile.videos_remaining - 1,
-        videos_used_this_month: supabase.rpc ? undefined : undefined,
-      })
-      .eq("id", userId)
-      .gte("videos_remaining", 1);
-
-    // This is still not truly atomic. Let me use a proper approach.
-
-    // 4. Build callback URL (key sent via header, not query param)
+    // 4. Build callback URL (key sent via header by n8n, not in query param)
     const callbackUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/video-job-callback`;
 
     // 4b. Create signed upload URL for Supabase Storage (video delivery)

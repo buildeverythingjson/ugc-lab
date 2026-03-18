@@ -7,6 +7,13 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const ALLOWED_PRICE_IDS = new Set([
+  "price_1TBvZn09raYItIuAon2pFcJT", // trial
+  "price_1TBOg909raYItIuAgRaaN8zT", // startup / basis
+  "price_1TBOgG09raYItIuApOD5GBfp", // growth / pluss
+  "price_1TBOgL09raYItIuA0kJtfct2", // business
+]);
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -36,6 +43,13 @@ serve(async (req) => {
 
     const { priceId } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
+
+    if (!ALLOWED_PRICE_IDS.has(priceId)) {
+      return new Response(JSON.stringify({ error: "Invalid price ID" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",

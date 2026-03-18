@@ -7,6 +7,15 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -22,7 +31,6 @@ serve(async (req) => {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return new Response(
@@ -31,7 +39,6 @@ serve(async (req) => {
       );
     }
 
-    // Validate lengths
     if (name.length > 100 || email.length > 255 || message.length > 2000) {
       return new Response(
         JSON.stringify({ error: "Input exceeds maximum length" }),
@@ -43,7 +50,6 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Store in database
     const { error: dbError } = await supabase
       .from("contact_submissions")
       .insert({ name, email, message });
@@ -53,10 +59,13 @@ serve(async (req) => {
       throw new Error("Failed to store submission");
     }
 
-    // Send email notification via Resend
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
     if (RESEND_API_KEY) {
+      const safeName = escapeHtml(name);
+      const safeEmail = escapeHtml(email);
+      const safeMessage = escapeHtml(message);
+
       const emailRes = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -66,13 +75,13 @@ serve(async (req) => {
         body: JSON.stringify({
           from: "UGC Lab <noreply@ugclab.no>",
           to: ["hjelp@ugclab.no"],
-          subject: `Ny henvendelse fra ${name}`,
+          subject: `Ny henvendelse fra ${safeName}`,
           html: `
             <h2>Ny kontakthenvendelse</h2>
-            <p><strong>Navn:</strong> ${name}</p>
-            <p><strong>E-post:</strong> ${email}</p>
+            <p><strong>Navn:</strong> ${safeName}</p>
+            <p><strong>E-post:</strong> ${safeEmail}</p>
             <p><strong>Melding:</strong></p>
-            <p>${message.replace(/\n/g, "<br>")}</p>
+            <p>${safeMessage.replace(/\n/g, "<br>")}</p>
           `,
           reply_to: email,
         }),
