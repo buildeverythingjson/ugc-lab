@@ -91,13 +91,13 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="priser" className="py-24 bg-hero-gradient">
+    <section id="priser" className="py-16 sm:py-24 bg-hero-gradient">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Velg din plan
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg">
             Fleksible planer som vokser med deg
           </p>
         </div>
