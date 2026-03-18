@@ -130,13 +130,13 @@ const NewVideo = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-bold">Lag ny video</h1>
+      <div className="flex items-start sm:items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="font-display text-xl sm:text-2xl font-bold">Lag ny video</h1>
           <p className="text-muted-foreground text-sm mt-0.5">Beskriv produktet ditt og generer en UGC-video</p>
         </div>
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Kreditter</span>
+        <div className="flex items-center gap-2 text-sm shrink-0">
+          <span className="text-muted-foreground hidden sm:inline">Kreditter</span>
           <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-secondary font-semibold text-foreground">
             {videosRemaining}
           </span>
