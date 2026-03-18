@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, LogOut, ImagePlus, Lock } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, LogOut, ImagePlus, Lock, ArrowUpCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
