@@ -61,6 +61,7 @@ const Subscription = () => {
   };
 
   const currentTier = profile?.subscription_tier as TierKey | null;
+  const hasUsedTrial = !!profile?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
 
   return (
     <div className="space-y-8">
