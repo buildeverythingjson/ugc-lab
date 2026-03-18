@@ -26,7 +26,7 @@ const features = [
 
 const WhyUGCLab = () => {
   return (
-    <section className="py-24 bg-hero-gradient">
+    <section className="py-16 sm:py-24 bg-hero-gradient">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Hvorfor UGC Lab?</h2>
