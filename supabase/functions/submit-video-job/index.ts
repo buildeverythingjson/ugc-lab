@@ -43,24 +43,21 @@ serve(async (req) => {
     // 2. Parse request body
     const { jobId, imageUrl, brandName, targetAudience, creativeDescription, language, videoLength } = await req.json();
 
-    // 3. Check videos_remaining
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("videos_remaining, videos_used_this_month")
-      .eq("id", userId)
-      .single();
+    // 3. Atomically decrement credits (race-condition safe)
+    const { data: creditResult, error: creditError } = await supabase.rpc("decrement_video_credit", {
+      p_user_id: userId,
+    });
 
-    if (profileError || !profile) throw new Error("Could not fetch profile");
-
-    if (profile.videos_remaining <= 0) {
+    if (creditError) throw new Error(`Credit check failed: ${creditError.message}`);
+    if (creditResult === -1) {
       return new Response(
         JSON.stringify({ error: "Du har brukt alle videoene dine denne måneden" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // 4. Build callback URL
-    const callbackUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/video-job-callback?apiKey=${Deno.env.get("VIDEO_CALLBACK_API_KEY")}`;
+    // 4. Build callback URL (key sent via header by n8n, not in query param)
+    const callbackUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/video-job-callback`;
 
     // 4b. Create signed upload URL for Supabase Storage (video delivery)
     const videoFileName = `${jobId}.mp4`;
@@ -81,6 +78,7 @@ serve(async (req) => {
     const n8nPayload: Record<string, unknown> = {
       jobId,
       callbackUrl,
+      callbackApiKey: Deno.env.get("VIDEO_CALLBACK_API_KEY"),
       videoLength: mappedLength,
       language: mappedLanguage,
       productImageUrl: imageUrl,
@@ -105,16 +103,7 @@ serve(async (req) => {
     // 6. Update job status to processing
     await supabase.from("video_jobs").update({ status: "processing" }).eq("id", jobId);
 
-    // 7. Update profile credits
-    await supabase
-      .from("profiles")
-      .update({
-        videos_remaining: profile.videos_remaining - 1,
-        videos_used_this_month: profile.videos_used_this_month + 1,
-      })
-      .eq("id", userId);
-
-    // 8. Return success
+    // 7. Return success
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

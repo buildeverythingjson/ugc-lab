@@ -8,16 +8,20 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // 1. Handle OPTIONS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // 2. Validate API key from query params
+    // Validate API key from header (preferred) or query param (backwards compat)
     const url = new URL(req.url);
-    const apiKey = url.searchParams.get("apiKey");
     const expectedKey = Deno.env.get("VIDEO_CALLBACK_API_KEY") ?? "";
+
+    const authHeader = req.headers.get("authorization");
+    const headerKey = authHeader?.startsWith("Bearer ") ? authHeader.replace("Bearer ", "") : null;
+    const queryKey = url.searchParams.get("apiKey");
+    // TODO: Remove query param support once n8n is updated to use Authorization header
+    const apiKey = headerKey || queryKey;
 
     if (!apiKey || apiKey !== expectedKey) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -26,24 +30,19 @@ serve(async (req) => {
       });
     }
 
-    // 3. Parse request body
     const { jobId, status, videoUrl, driveLink, error } = await req.json();
 
-    // 4. Create Supabase client with service role key (bypass RLS)
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
 
-    // 5. Handle completed status
     if (status === "completed") {
       const updateData: Record<string, unknown> = { status: "completed", video_url: videoUrl };
       if (driveLink) updateData.drive_link = driveLink;
       await supabase.from("video_jobs").update(updateData).eq("id", jobId);
-    }
-    // 6. Handle failed status with credit refund
-    else if (status === "failed") {
+    } else if (status === "failed") {
       const { data: job } = await supabase
         .from("video_jobs")
         .update({ status: "failed", error_message: error })
@@ -51,26 +50,12 @@ serve(async (req) => {
         .select("user_id")
         .single();
 
+      // Atomically refund credit
       if (job?.user_id) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("videos_remaining, videos_used_this_month")
-          .eq("id", job.user_id)
-          .single();
-
-        if (profile) {
-          await supabase
-            .from("profiles")
-            .update({
-              videos_remaining: profile.videos_remaining + 1,
-              videos_used_this_month: Math.max(0, profile.videos_used_this_month - 1),
-            })
-            .eq("id", job.user_id);
-        }
+        await supabase.rpc("refund_video_credit", { p_user_id: job.user_id });
       }
     }
 
-    // 7. Return success
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
