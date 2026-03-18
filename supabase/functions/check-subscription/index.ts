@@ -2,8 +2,10 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN") || "https://ugclab.no";
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigin,
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
@@ -42,7 +44,6 @@ serve(async (req) => {
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
 
     if (customers.data.length === 0) {
-      // Update profile to unsubscribed state
       await supabaseClient.from("profiles").update({
         subscription_tier: null,
         subscription_status: null,
@@ -79,7 +80,6 @@ serve(async (req) => {
     const tierInfo = TIER_MAP[productId] || { tier: "starter", videos: 5 };
     const subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
 
-    // Get current profile to check if we need to reset videos
     const { data: profile } = await supabaseClient.from("profiles").select("*").eq("id", user.id).single();
 
     const updateData: Record<string, any> = {
@@ -90,12 +90,10 @@ serve(async (req) => {
       current_period_end: subscriptionEnd,
     };
 
-    // Mark trial as permanently used
     if (tierInfo.tier === "trial") {
       updateData.has_used_trial = true;
     }
 
-    // If tier changed or no videos remaining set, initialize videos
     if (!profile?.subscription_tier || profile.subscription_tier !== tierInfo.tier) {
       updateData.videos_remaining = tierInfo.videos;
       updateData.videos_used_this_month = 0;

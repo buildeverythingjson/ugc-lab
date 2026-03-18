@@ -1,5 +1,6 @@
-import { Check, Clock } from "lucide-react";
+import { Check, Clock, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,8 +12,10 @@ const plans = [
   {
     name: "Basis",
     price: "499",
+    annualPrice: "399",
     tierKey: "startup",
     priceId: "price_1TBOg909raYItIuAgRaaN8zT",
+    annualPriceId: "", // TODO: real annual price ID
     trialPriceId: "price_1TBvZn09raYItIuAon2pFcJT",
     features: [
       "5 videoer per måned",
@@ -27,8 +30,10 @@ const plans = [
   {
     name: "Pluss",
     price: "899",
+    annualPrice: "719",
     tierKey: "growth",
     priceId: "price_1TBOgG09raYItIuApOD5GBfp",
+    annualPriceId: "", // TODO: real annual price ID
     features: [
       "15 videoer per måned",
       "150 bilder per måned (kommer snart)",
@@ -42,8 +47,10 @@ const plans = [
   {
     name: "Business",
     price: "1 999",
+    annualPrice: "1 599",
     tierKey: "business",
     priceId: "price_1TBOgL09raYItIuA0kJtfct2",
+    annualPriceId: "", // TODO: real annual price ID
     features: [
       "30 videoer per måned",
       "300 bilder per måned (kommer snart)",
@@ -61,10 +68,16 @@ const PricingSection = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<string | null>(null);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const hasUsedTrial = !!profile?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
 
   const handlePlanSelect = async (priceId: string, loadingKey: string) => {
+    if (!priceId) {
+      toast.error("Årlig fakturering er ikke tilgjengelig ennå.");
+      return;
+    }
+
     if (!user) {
       localStorage.setItem("pending_checkout_price_id", priceId);
       navigate("/register");
@@ -97,14 +110,32 @@ const PricingSection = () => {
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Velg din plan
           </h2>
-          <p className="text-muted-foreground text-base sm:text-lg">
+          <p className="text-muted-foreground text-base sm:text-lg mb-8">
             Fleksible planer som vokser med deg
           </p>
+
+          {/* Billing toggle */}
+          <div className="flex items-center justify-center gap-3">
+            <span className={`text-sm font-medium ${!isAnnual ? "text-foreground" : "text-muted-foreground"}`}>
+              Månedlig
+            </span>
+            <Switch checked={isAnnual} onCheckedChange={setIsAnnual} />
+            <span className={`text-sm font-medium ${isAnnual ? "text-foreground" : "text-muted-foreground"}`}>
+              Årlig
+            </span>
+            {isAnnual && (
+              <span className="ml-1 px-2 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-semibold">
+                Spar 20%
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {plans.map((plan, i) => {
-            const showTrial = plan.trialPriceId && !hasUsedTrial;
+            const showTrial = plan.trialPriceId && !hasUsedTrial && !isAnnual;
+            const displayPrice = isAnnual ? plan.annualPrice : plan.price;
+            const activePriceId = isAnnual ? plan.annualPriceId : plan.priceId;
 
             return (
               <motion.div
@@ -127,8 +158,13 @@ const PricingSection = () => {
 
                 <h3 className="font-display text-xl font-bold mb-2">{plan.name}</h3>
                 <div className="mb-6">
-                  <span className="font-display text-4xl font-bold">{plan.price}</span>
+                  <span className="font-display text-4xl font-bold">{displayPrice}</span>
                   <span className="text-muted-foreground text-sm ml-1">kr/mnd</span>
+                  {isAnnual && (
+                    <div className="text-xs text-muted-foreground mt-1 line-through">
+                      {plan.price} kr/mnd
+                    </div>
+                  )}
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-1">
@@ -161,7 +197,7 @@ const PricingSection = () => {
                   onClick={() =>
                     showTrial
                       ? handlePlanSelect(plan.trialPriceId!, "trial")
-                      : handlePlanSelect(plan.priceId, plan.tierKey)
+                      : handlePlanSelect(activePriceId, plan.tierKey)
                   }
                 >
                   {loading === "trial" && showTrial
@@ -176,6 +212,25 @@ const PricingSection = () => {
             );
           })}
         </div>
+
+        {/* Money-back guarantee */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-10 sm:mt-14 text-center"
+        >
+          <div className="inline-flex flex-col items-center gap-2 px-6 py-4 rounded-xl border border-border/50 bg-card/50">
+            <div className="flex items-center gap-2 text-foreground">
+              <Shield size={18} className="text-primary" />
+              <span className="text-sm font-semibold">30 dagers pengene-tilbake-garanti</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Ikke fornøyd? Få pengene tilbake, ingen spørsmål.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

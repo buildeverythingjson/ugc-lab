@@ -2,8 +2,10 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
+const allowedOrigin = Deno.env.get("ALLOWED_ORIGIN") || "https://ugclab.no";
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigin,
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
@@ -12,6 +14,7 @@ const ALLOWED_PRICE_IDS = new Set([
   "price_1TBOg909raYItIuAgRaaN8zT", // startup / basis
   "price_1TBOgG09raYItIuApOD5GBfp", // growth / pluss
   "price_1TBOgL09raYItIuA0kJtfct2", // business
+  // TODO: Add annual price IDs here when created in Stripe
 ]);
 
 serve(async (req) => {
