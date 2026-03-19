@@ -147,26 +147,24 @@ const VideoDetail = () => {
       )}
 
       {status === "completed" && job.video_url && (
-        <Card className="border-green-500/20 bg-green-500/5">
-          <CardContent className="pt-6 space-y-4">
-            <div className="w-full max-w-[360px] mx-auto">
-              <AspectRatio ratio={9 / 16}>
-                <video
-                  src={job.video_url}
-                  controls
-                  playsInline
-                  className="w-full h-full rounded-lg bg-black object-contain"
-                />
-              </AspectRatio>
-            </div>
-            <a href={job.video_url} download>
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
-                <Download size={16} className="mr-2" />
-                Last ned video
-              </Button>
-            </a>
-          </CardContent>
-        </Card>
+        <div className="space-y-3">
+          <div className="w-full max-w-[280px]">
+            <AspectRatio ratio={9 / 16}>
+              <video
+                src={job.video_url}
+                controls
+                playsInline
+                className="w-full h-full rounded-lg bg-black object-contain"
+              />
+            </AspectRatio>
+          </div>
+          <a href={job.video_url} download>
+            <Button variant="outline" className="bg-foreground text-background hover:bg-foreground/90 border-0">
+              <Download size={16} className="mr-2" />
+              Last ned
+            </Button>
+          </a>
+        </div>
       )}
 
       {status === "failed" && (
