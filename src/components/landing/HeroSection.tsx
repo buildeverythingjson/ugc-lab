@@ -32,7 +32,7 @@ const HeroSection = () => {
             Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
           </p>
 
-          <div className="flex flex-col items-center gap-14">
+          <div className="flex flex-col items-center gap-16">
             <Link to="/register">
               <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-8 h-12 text-base font-semibold">
                 Lag din første video
