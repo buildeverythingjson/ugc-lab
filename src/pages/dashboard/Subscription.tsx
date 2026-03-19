@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 
 const Subscription = () => {
-  const { user, profile, refreshProfile } = useAuth();
+  const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
