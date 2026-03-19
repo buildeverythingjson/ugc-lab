@@ -67,7 +67,7 @@ const Privacy = () => {
             <p className="text-muted-foreground leading-relaxed">
               Personopplysninger lagres så lenge du har en aktiv konto. Produktbilder slettes automatisk
               30 dager etter at videojobben er fullført. Ved sletting av konto fjernes alle dine data
-              innen 30 dager, med unntak av opplysninger vi er pålagt å beholde etter lov.
+              innen 30 dager.
             </p>
           </section>
 
