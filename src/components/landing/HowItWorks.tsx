@@ -1,5 +1,4 @@
 import { Upload, Sliders, Sparkles, Download } from "lucide-react";
-import { motion } from "framer-motion";
 
 const steps = [
   {
