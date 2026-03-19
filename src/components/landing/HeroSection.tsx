@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import { motion } from "framer-motion";
 import nswingLogo from "@/assets/nswing-logo.png";
 import tallowLogo from "@/assets/tallow-logo.png";
 import nuavaLogo from "@/assets/nuava-logo.avif";
@@ -13,11 +12,7 @@ const HeroSection = () => {
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
 
       <div className="container mx-auto px-4 pt-28 sm:pt-24 pb-12 sm:pb-16 text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
+        <div>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-sm text-foreground mb-8">
             <Play size={14} />
             AI-drevet video- og bildegenerering
@@ -40,15 +35,10 @@ const HeroSection = () => {
               </Button>
             </Link>
           </div>
-        </motion.div>
+        </div>
 
         {/* Client logos */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-          className="mt-16 sm:mt-20"
-        >
+        <div className="mt-16 sm:mt-20">
           <p className="text-xs uppercase tracking-widest text-muted-foreground/40 mb-5">
             Brukt av norske merkevarer
           </p>
@@ -57,7 +47,7 @@ const HeroSection = () => {
             <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
             <img src={nuavaLogo} alt="Nuava" className="h-6 opacity-30 hover:opacity-60 transition-opacity" />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

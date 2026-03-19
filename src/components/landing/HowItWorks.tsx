@@ -1,5 +1,4 @@
 import { Upload, Sliders, Sparkles, Download } from "lucide-react";
-import { motion } from "framer-motion";
 
 const steps = [
   {
@@ -39,12 +38,8 @@ const HowItWorks = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 max-w-5xl mx-auto">
           {steps.map((step, i) => (
-            <motion.div
+            <div
               key={step.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative p-4 sm:p-6 rounded-xl bg-card border border-border hover:border-foreground/20 transition-colors card-shadow group"
             >
               <div className="text-xs font-semibold text-foreground mb-3 sm:mb-4">Steg {i + 1}</div>
@@ -54,7 +49,7 @@ const HowItWorks = () => {
               </div>
               <h3 className="font-display font-semibold text-base sm:text-lg mb-1 sm:mb-2">{step.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

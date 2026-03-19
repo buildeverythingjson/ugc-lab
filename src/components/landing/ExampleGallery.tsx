@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+
 import { useEffect, useRef, useState } from "react";
 
 const examples = [
@@ -109,17 +109,11 @@ const ExampleGallery = () => {
         {/* Desktop: grid layout */}
         <div className="hidden md:grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {examples.map((ex, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-            >
+            <div key={i}>
               <div className="rounded-xl overflow-hidden border border-border bg-card aspect-[9/16]">
                 <AutoPlayVideo src={ex.src} />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 

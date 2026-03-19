@@ -1,5 +1,4 @@
 import { X, Check } from "lucide-react";
-import { motion } from "framer-motion";
 
 const CostComparison = () => {
   return (
@@ -12,12 +11,7 @@ const CostComparison = () => {
           </p>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto"
+        <div className="max-w-3xl mx-auto"
         >
           <div className="rounded-2xl border border-border bg-card card-shadow overflow-visible relative">
             {/* Vertical divider line (desktop) */}
@@ -82,7 +76,7 @@ const CostComparison = () => {
           <p className="text-center text-muted-foreground mt-8">
             Start i dag og spar opptil <span className="text-foreground font-semibold">95%</span> på UGC-produksjon
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
