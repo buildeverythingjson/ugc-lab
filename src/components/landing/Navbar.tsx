@@ -36,16 +36,23 @@ const Navbar = () => {
           </a>
           {user ? (
             <Link to="/dashboard">
-              <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
+              <Button size="sm" className="bg-foreground text-background hover:bg-foreground/90">
                 Dashboard
               </Button>
             </Link>
           ) : (
-            <Link to="/login">
-              <Button variant="outline" size="sm" className="border-border hover:bg-secondary">
-                Logg inn
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                  Logg inn
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm" className="bg-foreground text-background hover:bg-foreground/90">
+                  Kom i gang
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
 
