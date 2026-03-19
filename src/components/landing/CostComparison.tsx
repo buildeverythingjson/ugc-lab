@@ -8,7 +8,7 @@ const CostComparison = () => {
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Spar tusenvis hver måned</h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
-            Se forskjellen mellom tradisjonell UGC og UGC Lab
+            Se forskjellen mellom tradisjonell UGC og Rendr.
           </p>
         </div>
 
@@ -60,7 +60,7 @@ const CostComparison = () => {
 
               {/* UGC Lab */}
               <div className="p-6 sm:p-8 space-y-5 bg-primary/[0.03]">
-                <h3 className="font-display text-lg font-bold text-foreground">UGC Lab</h3>
+                <h3 className="font-display text-lg font-bold text-foreground">Rendr.</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">
                     <Check size={16} className="text-foreground mt-0.5 shrink-0" />

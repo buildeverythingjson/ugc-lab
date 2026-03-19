@@ -8,7 +8,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="font-display text-xl font-bold text-gradient">
-              UGC Lab
+              Rendr.
             </Link>
             <p className="text-sm text-muted-foreground mt-3 max-w-xs leading-relaxed">
               AI-drevet UGC-videoproduksjon for moderne merkevarer
@@ -62,7 +62,7 @@ const Footer = () => {
 
         <div className="border-t border-border pt-8">
           <p className="text-sm text-muted-foreground text-center">
-            © {new Date().getFullYear()} UGC Lab. Alle rettigheter reservert.
+            © {new Date().getFullYear()} Rendr. Alle rettigheter reservert.
           </p>
         </div>
       </div>

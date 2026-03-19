@@ -12,13 +12,13 @@ const Terms = () => {
 
         <h2>1. Aksept av vilkår</h2>
         <p>
-          Ved å opprette en konto eller bruke UGC Lab («Tjenesten») aksepterer du disse brukervilkårene.
+          Ved å opprette en konto eller bruke Rendr. («Tjenesten») aksepterer du disse brukervilkårene.
           Dersom du ikke godtar vilkårene, skal du ikke bruke Tjenesten.
         </p>
 
         <h2>2. Beskrivelse av tjenesten</h2>
         <p>
-          UGC Lab er en AI-drevet plattform for generering av UGC-videoer (User Generated Content)
+          Rendr. er en AI-drevet plattform for generering av UGC-videoer (User Generated Content)
           for markedsføring. Tjenesten lar brukere laste opp produktbilder og generere videoinnhold
           basert på AI-teknologi.
         </p>
@@ -59,12 +59,12 @@ const Terms = () => {
         <ul>
           <li>Du beholder rettighetene til innhold du laster opp.</li>
           <li>Videoer generert gjennom Tjenesten kan brukes fritt av deg til kommersielle formål.</li>
-          <li>UGC Lab beholder alle rettigheter til plattformen, teknologien og merkevaren.</li>
+          <li>Rendr. beholder alle rettigheter til plattformen, teknologien og merkevaren.</li>
         </ul>
 
         <h2>8. Begrensning av ansvar</h2>
         <p>
-          UGC Lab leveres «som den er». Vi garanterer ikke at Tjenesten vil være uavbrutt eller
+          Rendr. leveres «som den er». Vi garanterer ikke at Tjenesten vil være uavbrutt eller
           feilfri. Vårt samlede ansvar er begrenset til beløpet du har betalt for Tjenesten
           de siste 12 månedene.
         </p>

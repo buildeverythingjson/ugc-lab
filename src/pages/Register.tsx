@@ -50,7 +50,7 @@ const Register = () => {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <Link to="/" className="font-display text-2xl font-bold text-gradient">
-            UGC Lab
+            Rendr.
           </Link>
         </div>
 

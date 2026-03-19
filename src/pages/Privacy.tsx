@@ -12,7 +12,7 @@ const Privacy = () => {
 
         <h2>1. Behandlingsansvarlig</h2>
         <p>
-          UGC Lab («vi», «oss», «vår») er behandlingsansvarlig for personopplysninger som samles inn
+          Rendr. («vi», «oss», «vår») er behandlingsansvarlig for personopplysninger som samles inn
           gjennom nettstedet ugclab.no og tilhørende tjenester.
         </p>
 
