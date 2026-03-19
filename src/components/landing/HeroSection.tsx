@@ -64,8 +64,8 @@ const HeroSection = () => {
           </div>
 
           <div className="flex items-center justify-center gap-10 mt-10">
-            <img src={nswingLogo} alt="NSWING" className="h-7 opacity-60 hover:opacity-90 transition-opacity" />
-            <img src={tallowLogo} alt="Tallow" className="h-7 opacity-60 hover:opacity-90 transition-opacity invert" />
+            <img src={nswingLogo} alt="NSWING" className="h-7 opacity-60 hover:opacity-90 transition-opacity invert" />
+            <img src={tallowLogo} alt="Tallow" className="h-7 opacity-60 hover:opacity-90 transition-opacity" />
           </div>
         </motion.div>
 
