@@ -8,8 +8,8 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 mb-10 sm:mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link to="/" className="font-display text-xl font-bold text-gradient">
-              Rendr.
+            <Link to="/">
+              <img src={logoImg} alt="Rendr" className="h-8" />
             </Link>
             <p className="text-sm text-muted-foreground mt-3 max-w-xs leading-relaxed">
               AI-drevet UGC-videoproduksjon for moderne merkevarer
