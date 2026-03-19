@@ -18,7 +18,7 @@ const Terms = () => {
 
         <h2>2. Beskrivelse av tjenesten</h2>
         <p>
-          UGC Lab er en AI-drevet plattform for generering av UGC-videoer (User Generated Content)
+          Rendr. er en AI-drevet plattform for generering av UGC-videoer (User Generated Content)
           for markedsføring. Tjenesten lar brukere laste opp produktbilder og generere videoinnhold
           basert på AI-teknologi.
         </p>
