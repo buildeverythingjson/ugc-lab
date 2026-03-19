@@ -28,33 +28,47 @@ serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("No authorization header");
+    if (!authHeader?.startsWith("Bearer ")) throw new Error("No authorization header");
 
     const token = authHeader.replace("Bearer ", "");
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError) throw new Error(`Auth error: ${userError.message}`);
-    const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated");
+    const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) throw new Error("User not authenticated");
+
+    const userId = claimsData.claims.sub as string;
+    const userEmail = claimsData.claims.email as string | undefined;
+    if (!userId) throw new Error("User not authenticated");
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2026-02-25.clover",
     });
 
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    const { data: profile } = await supabaseClient
+      .from("profiles")
+      .select("subscription_tier, stripe_customer_id, videos_remaining")
+      .eq("id", userId)
+      .single();
 
-    if (customers.data.length === 0) {
+    let customerId = profile?.stripe_customer_id ?? null;
+
+    if (!customerId && userEmail) {
+      const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
+      customerId = customers.data[0]?.id ?? null;
+    }
+
+    if (!customerId) {
       await supabaseClient.from("profiles").update({
         subscription_tier: null,
         subscription_status: null,
+        stripe_subscription_id: null,
+        current_period_end: null,
         videos_remaining: 0,
-      }).eq("id", user.id);
+      }).eq("id", userId);
 
       return new Response(JSON.stringify({ subscribed: false }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const customerId = customers.data[0].id;
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
       status: "active",
@@ -64,10 +78,12 @@ serve(async (req) => {
     if (subscriptions.data.length === 0) {
       await supabaseClient.from("profiles").update({
         stripe_customer_id: customerId,
+        stripe_subscription_id: null,
         subscription_tier: null,
         subscription_status: null,
+        current_period_end: null,
         videos_remaining: 0,
-      }).eq("id", user.id);
+      }).eq("id", userId);
 
       return new Response(JSON.stringify({ subscribed: false }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -76,12 +92,10 @@ serve(async (req) => {
 
     const subscription = subscriptions.data[0];
     const productId = subscription.items.data[0].price.product as string;
-    const tierInfo = TIER_MAP[productId] || { tier: "starter", videos: 5 };
+    const tierInfo = TIER_MAP[productId] || { tier: "startup", videos: 5 };
     const subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
 
-    const { data: profile } = await supabaseClient.from("profiles").select("*").eq("id", user.id).single();
-
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, unknown> = {
       stripe_customer_id: customerId,
       stripe_subscription_id: subscription.id,
       subscription_tier: tierInfo.tier,
@@ -98,13 +112,13 @@ serve(async (req) => {
       updateData.videos_used_this_month = 0;
     }
 
-    await supabaseClient.from("profiles").update(updateData).eq("id", user.id);
+    await supabaseClient.from("profiles").update(updateData).eq("id", userId);
 
     return new Response(JSON.stringify({
       subscribed: true,
       tier: tierInfo.tier,
       subscription_end: subscriptionEnd,
-      videos_remaining: updateData.videos_remaining ?? profile?.videos_remaining ?? 0,
+      videos_remaining: (updateData.videos_remaining as number | undefined) ?? profile?.videos_remaining ?? 0,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

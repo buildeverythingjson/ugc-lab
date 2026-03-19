@@ -39,8 +39,9 @@ serve(async (req) => {
       throw new Error("User not authenticated");
     }
 
+    const userId = claimsData.claims.sub as string;
     const email = claimsData.claims.email as string;
-    if (!email) throw new Error("No email in token");
+    if (!userId || !email) throw new Error("Missing user claims");
 
     const { priceId, stripeCustomerId } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
@@ -64,9 +65,23 @@ serve(async (req) => {
       }
     }
 
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email,
+        metadata: { user_id: userId },
+      });
+      customerId = customer.id;
+    }
+
+    await supabaseClient
+      .from("profiles")
+      .update({ stripe_customer_id: customerId })
+      .eq("id", userId);
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      customer_email: customerId ? undefined : email,
+      client_reference_id: userId,
+      metadata: { user_id: userId, price_id: priceId },
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "subscription",
       success_url: `${req.headers.get("origin")}/dashboard?success=true`,
