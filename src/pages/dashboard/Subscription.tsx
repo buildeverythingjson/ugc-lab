@@ -9,6 +9,7 @@ import { useState } from "react";
 const Subscription = () => {
   const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     setLoading(tierKey);
@@ -31,6 +32,7 @@ const Subscription = () => {
   };
 
   const handlePortal = async () => {
+    setPortalLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("customer-portal");
       if (error) throw error;
@@ -39,6 +41,8 @@ const Subscription = () => {
       }
     } catch (error: any) {
       toast.error(error.message || "Kunne ikke åpne abonnementsportalen");
+    } finally {
+      setPortalLoading(false);
     }
   };
 
@@ -57,8 +61,8 @@ const Subscription = () => {
       </div>
 
       {currentTier && (
-        <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
-          Administrer abonnement
+        <Button onClick={handlePortal} disabled={portalLoading} className="w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90">
+          {portalLoading ? "Laster..." : "Administrer abonnement"}
         </Button>
       )}
 
@@ -71,8 +75,10 @@ const Subscription = () => {
           return (
             <div
               key={key}
-              className={`relative rounded-xl border p-6 flex flex-col card-shadow ${
-                isPopular ? "border-primary glow-primary" : isCurrent ? "border-primary/50" : "border-border"
+              className={`relative rounded-xl border-2 p-6 flex flex-col card-shadow ${
+                isCurrent
+                  ? "border-primary bg-primary/5 ring-2 ring-primary/20 shadow-lg"
+                  : isPopular ? "border-primary glow-primary" : "border-border"
               } bg-card`}
             >
               {isPopular && (
