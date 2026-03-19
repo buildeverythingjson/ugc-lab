@@ -62,6 +62,11 @@ const HeroSection = () => {
               </Button>
             </Link>
           </div>
+
+          <div className="flex items-center justify-center gap-10 mt-10">
+            <img src={nswingLogo} alt="NSWING" className="h-7 opacity-60 hover:opacity-90 transition-opacity" />
+            <img src={tallowLogo} alt="Tallow" className="h-7 opacity-60 hover:opacity-90 transition-opacity invert" />
+          </div>
         </motion.div>
 
         {/* Platform logos */}
