@@ -32,24 +32,30 @@ const HeroSection = () => {
             Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
           </p>
 
-          <div className="flex flex-col items-center gap-20">
+          <div className="flex items-center justify-center">
             <Link to="/register">
               <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-8 h-12 text-base font-semibold">
                 Lag din første video
                 <ArrowRight className="ml-2" size={18} />
               </Button>
             </Link>
+          </div>
+        </motion.div>
 
-            <div className="flex flex-col items-center gap-4">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground/40">
-                Brukt av norske merkevarer
-              </p>
-              <div className="flex items-center gap-8">
-                <img src={nswingLogo} alt="Nordic Swing" className="h-7 opacity-30 hover:opacity-60 transition-opacity invert" />
-                <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
-                <img src={nuavaLogo} alt="Nuava" className="h-6 opacity-30 hover:opacity-60 transition-opacity" />
-              </div>
-            </div>
+        {/* Client logos */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+          className="mt-16 sm:mt-20"
+        >
+          <p className="text-xs uppercase tracking-widest text-muted-foreground/40 mb-5">
+            Brukt av norske merkevarer
+          </p>
+          <div className="flex items-center justify-center gap-8">
+            <img src={nswingLogo} alt="Nordic Swing" className="h-7 opacity-30 hover:opacity-60 transition-opacity invert" />
+            <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
+            <img src={nuavaLogo} alt="Nuava" className="h-6 opacity-30 hover:opacity-60 transition-opacity" />
           </div>
         </motion.div>
       </div>
