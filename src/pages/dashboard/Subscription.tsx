@@ -32,6 +32,7 @@ const Subscription = () => {
   };
 
   const handlePortal = async () => {
+    setPortalLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("customer-portal");
       if (error) throw error;
@@ -40,6 +41,8 @@ const Subscription = () => {
       }
     } catch (error: any) {
       toast.error(error.message || "Kunne ikke åpne abonnementsportalen");
+    } finally {
+      setPortalLoading(false);
     }
   };
 
