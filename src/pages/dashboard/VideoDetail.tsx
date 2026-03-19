@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { ArrowLeft, ChevronLeft, ChevronRight, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { Tables } from "@/integrations/supabase/types";
 import { useAuth } from "@/contexts/AuthContext";
@@ -226,21 +227,31 @@ const VideoDetail = () => {
           </div>
 
           {job.creative_description && (
-            <div>
-              <p className="text-muted-foreground text-xs mb-1">Kreativ beskrivelse</p>
-              <p className="text-sm leading-relaxed">{job.creative_description}</p>
-            </div>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground transition-colors group">
+                Kreativ beskrivelse
+                <ChevronDown size={12} className="transition-transform group-data-[state=open]:rotate-180" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <p className="text-sm leading-relaxed mt-1.5">{job.creative_description}</p>
+              </CollapsibleContent>
+            </Collapsible>
           )}
 
           {job.product_image_url && (
-            <div>
-              <p className="text-muted-foreground text-xs mb-1.5">Produktbilde</p>
-              <img
-                src={job.product_image_url}
-                alt="Produktbilde"
-                className="rounded-lg max-h-32 object-contain border border-border"
-              />
-            </div>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground transition-colors group">
+                Produktbilde
+                <ChevronDown size={12} className="transition-transform group-data-[state=open]:rotate-180" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <img
+                  src={job.product_image_url}
+                  alt="Produktbilde"
+                  className="rounded-lg max-h-32 object-contain border border-border mt-1.5"
+                />
+              </CollapsibleContent>
+            </Collapsible>
           )}
         </div>
       </div>
