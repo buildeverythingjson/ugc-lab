@@ -59,7 +59,7 @@ const Terms = () => {
         <ul>
           <li>Du beholder rettighetene til innhold du laster opp.</li>
           <li>Videoer generert gjennom Tjenesten kan brukes fritt av deg til kommersielle formål.</li>
-          <li>UGC Lab beholder alle rettigheter til plattformen, teknologien og merkevaren.</li>
+          <li>Rendr. beholder alle rettigheter til plattformen, teknologien og merkevaren.</li>
         </ul>
 
         <h2>8. Begrensning av ansvar</h2>
