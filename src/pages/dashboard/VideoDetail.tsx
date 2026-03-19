@@ -10,6 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { ArrowLeft, ChevronLeft, ChevronRight, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { Tables } from "@/integrations/supabase/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 type VideoJob = Tables<"video_jobs">;
 
