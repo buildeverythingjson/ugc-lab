@@ -27,7 +27,7 @@ const DashboardSidebar = () => {
     <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border bg-card">
       <div className="p-6">
         <Link to="/" className="font-display text-xl font-bold text-gradient">
-          UGC Lab
+          Rendr.
         </Link>
       </div>
 
