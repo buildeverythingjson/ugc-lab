@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 
 const Subscription = () => {
-  const { profile, refreshProfile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
@@ -62,9 +62,11 @@ const Subscription = () => {
             Administrer abonnement
           </Button>
         )}
-        <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" className="w-full sm:w-auto">
-          Oppdater status
-        </Button>
+        {user?.email === "espen@ugclab.no" && (
+          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" size="sm" className="w-full sm:w-auto opacity-60">
+            Synk status (admin)
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
