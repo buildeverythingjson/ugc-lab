@@ -31,12 +31,11 @@ serve(async (req) => {
     if (!authHeader?.startsWith("Bearer ")) throw new Error("No authorization header");
 
     const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) throw new Error("User not authenticated");
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
+    if (userError || !userData?.user) throw new Error(`Auth error: ${userError?.message || "User not found"}`);
 
-    const userId = claimsData.claims.sub as string;
-    const userEmail = claimsData.claims.email as string | undefined;
-    if (!userId) throw new Error("User not authenticated");
+    const userId = userData.user.id;
+    const userEmail = userData.user.email;
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2026-02-25.clover",
