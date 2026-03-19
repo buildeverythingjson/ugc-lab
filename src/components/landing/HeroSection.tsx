@@ -35,7 +35,7 @@ const HeroSection = () => {
               </Button>
             </Link>
           </div>
-        </motion.div>
+        </div>
 
         {/* Client logos */}
         <motion.div
