@@ -9,6 +9,7 @@ import { useState } from "react";
 const Subscription = () => {
   const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     setLoading(tierKey);
