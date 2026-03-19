@@ -107,9 +107,34 @@ const VideoDetail = () => {
 
   return (
     <div className="space-y-5 max-w-4xl">
-      <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-        <ArrowLeft size={16} /> Tilbake
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft size={16} /> Tilbake
+        </Link>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            disabled={!prevId}
+            onClick={() => prevId && navigate(`/dashboard/videos/${prevId}`)}
+          >
+            <ChevronLeft size={16} />
+          </Button>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {currentIndex >= 0 ? currentIndex + 1 : "–"} / {siblingIds.length}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            disabled={!nextId}
+            onClick={() => nextId && navigate(`/dashboard/videos/${nextId}`)}
+          >
+            <ChevronRight size={16} />
+          </Button>
+        </div>
+      </div>
 
       {status === "processing" && (
         <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
