@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 
 const Subscription = () => {
-  const { user, profile, refreshProfile } = useAuth();
+  const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
@@ -56,18 +56,11 @@ const Subscription = () => {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        {currentTier && (
-          <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
-            Administrer abonnement
-          </Button>
-        )}
-        {user?.email === "espen@ugclab.no" && (
-          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" size="sm" className="w-full sm:w-auto opacity-60">
-            Synk status (admin)
-          </Button>
-        )}
-      </div>
+      {currentTier && (
+        <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
+          Administrer abonnement
+        </Button>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
