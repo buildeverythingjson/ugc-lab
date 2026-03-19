@@ -38,12 +38,7 @@ const HeroSection = () => {
         </div>
 
         {/* Client logos */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-          className="mt-16 sm:mt-20"
-        >
+        <div className="mt-16 sm:mt-20">
           <p className="text-xs uppercase tracking-widest text-muted-foreground/40 mb-5">
             Brukt av norske merkevarer
           </p>
