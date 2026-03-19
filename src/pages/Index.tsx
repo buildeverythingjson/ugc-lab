@@ -1,7 +1,7 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
-
 import ExampleGallery from "@/components/landing/ExampleGallery";
+import PlatformLogos from "@/components/landing/PlatformLogos";
 import HowItWorks from "@/components/landing/HowItWorks";
 import WhyUGCLab from "@/components/landing/WhyUGCLab";
 import CostComparison from "@/components/landing/CostComparison";
@@ -16,6 +16,7 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <ExampleGallery />
+      <PlatformLogos />
       <HowItWorks />
       <WhyUGCLab />
       <CostComparison />
