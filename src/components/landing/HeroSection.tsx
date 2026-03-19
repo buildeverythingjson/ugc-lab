@@ -44,7 +44,7 @@ const HeroSection = () => {
           </div>
 
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-6">
-            UGC-innhold med AI{" "}
+            UGC med AI –{" "}
             <span className="text-gradient">på sekunder.</span>
           </h1>
 
