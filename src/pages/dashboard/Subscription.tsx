@@ -4,27 +4,11 @@ import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { STRIPE_TIERS, TierKey } from "@/lib/stripe-config";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 const Subscription = () => {
   const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    if (searchParams.get("success") === "true") {
-      toast.success("Abonnementet er aktivert!");
-      if (typeof window.fbq === "function") {
-        const storedTier = localStorage.getItem("checkout_tier_key") as TierKey | null;
-        const tier = storedTier && STRIPE_TIERS[storedTier] ? STRIPE_TIERS[storedTier] : null;
-        const value = tier ? parseFloat(tier.price.replace(/\s/g, "")) : 0;
-        window.fbq("track", "Purchase", { currency: "NOK", value });
-        localStorage.removeItem("checkout_tier_key");
-      }
-      supabase.functions.invoke("check-subscription").then(() => refreshProfile());
-    }
-  }, [searchParams]);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     setLoading(tierKey);
@@ -65,7 +49,11 @@ const Subscription = () => {
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-2xl sm:text-3xl font-bold">Ditt abonnement</h1>
-        <p className="text-muted-foreground mt-1">Administrer planen din</p>
+        <p className="text-muted-foreground mt-1">
+          {currentTier && STRIPE_TIERS[currentTier]
+            ? `Du abonnerer på ${STRIPE_TIERS[currentTier].name}-planen`
+            : "Administrer planen din"}
+        </p>
       </div>
 
       {currentTier && (
