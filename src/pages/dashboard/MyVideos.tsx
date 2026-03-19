@@ -288,7 +288,8 @@ const MyVideos = () => {
             );
           })}
         </div>
-      )}
+        );
+      })()}
 
       <AlertDialog open={!!deleteJobId} onOpenChange={(open) => !open && setDeleteJobId(null)}>
         <AlertDialogContent>
