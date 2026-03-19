@@ -98,24 +98,14 @@ const VideoDetail = () => {
   const StatusIcon = config.icon;
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-        <ArrowLeft size={16} /> Tilbake til Mine videoer
-      </Link>
-
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold">{job.brand_name}</h1>
-          <div className="mt-2">
-            <Badge variant="outline" className={`${config.color} border`}>
-              <StatusIcon size={14} className={`mr-1.5 ${status === "processing" ? "animate-spin" : ""}`} />
-              {config.label}
-            </Badge>
-          </div>
-        </div>
+    <div className="space-y-5 max-w-4xl">
+      <div className="flex items-center justify-between">
+        <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft size={16} /> Tilbake
+        </Link>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline" size="sm" className="text-destructive border-destructive/30 hover:bg-destructive/10">
+            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive">
               <Trash2 size={14} className="mr-1.5" /> Slett
             </Button>
           </AlertDialogTrigger>
@@ -137,91 +127,94 @@ const VideoDetail = () => {
       </div>
 
       {status === "processing" && (
-        <Card className="border-blue-500/20 bg-blue-500/5">
-          <CardContent className="pt-6">
-            <p className="text-blue-400 text-sm">
-              AI-en jobber med videoen din. Dette kan ta 2–5 minutter.
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {status === "completed" && job.video_url && (
-        <div className="space-y-3">
-          <div className="w-full max-w-[280px]">
-            <AspectRatio ratio={9 / 16}>
-              <video
-                src={job.video_url}
-                controls
-                playsInline
-                className="w-full h-full rounded-lg bg-black object-contain"
-              />
-            </AspectRatio>
-          </div>
-          <a href={job.video_url} download>
-            <Button variant="outline" className="bg-foreground text-background hover:bg-foreground/90 border-0">
-              <Download size={16} className="mr-2" />
-              Last ned
-            </Button>
-          </a>
+        <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+          <p className="text-blue-400 text-sm">
+            <Loader2 size={14} className="inline mr-2 animate-spin" />
+            AI-en jobber med videoen din. Dette kan ta 2–5 minutter.
+          </p>
         </div>
       )}
 
       {status === "failed" && (
-        <Card className="border-red-500/20 bg-red-500/5">
-          <CardContent className="pt-6 space-y-3">
-            <p className="text-red-400 text-sm">{job.error_message || "En ukjent feil oppstod."}</p>
-            <Link to="/dashboard/new-video">
-              <Button variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
-                <RefreshCw size={16} className="mr-2" />
-                Prøv igjen
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 space-y-2">
+          <p className="text-red-400 text-sm">{job.error_message || "En ukjent feil oppstod."}</p>
+          <Link to="/dashboard/new-video">
+            <Button variant="outline" size="sm" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
+              <RefreshCw size={14} className="mr-1.5" />
+              Prøv igjen
+            </Button>
+          </Link>
+        </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Detaljer</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {job.product_image_url && (
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">Produktbilde</p>
-              <img
-                src={job.product_image_url}
-                alt="Produktbilde"
-                className="rounded-lg max-h-48 object-contain border border-border"
-              />
+      {/* Side-by-side layout on desktop */}
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Video column */}
+        {status === "completed" && job.video_url && (
+          <div className="shrink-0 space-y-3">
+            <div className="w-full max-w-[240px] md:w-[240px]">
+              <AspectRatio ratio={9 / 16}>
+                <video
+                  src={job.video_url}
+                  controls
+                  playsInline
+                  className="w-full h-full rounded-lg bg-black object-contain"
+                />
+              </AspectRatio>
             </div>
-          )}
-          <div className="grid grid-cols-2 gap-4 text-sm">
+            <a href={job.video_url} download>
+              <Button variant="outline" size="sm" className="bg-foreground text-background hover:bg-foreground/90 border-0">
+                <Download size={14} className="mr-1.5" />
+                Last ned
+              </Button>
+            </a>
+          </div>
+        )}
+
+        {/* Details column */}
+        <div className="flex-1 min-w-0 space-y-4">
+          <div>
+            <h1 className="font-display text-xl font-bold">{job.brand_name}</h1>
+            <Badge variant="outline" className={`${config.color} border mt-1.5`}>
+              <StatusIcon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
+              {config.label}
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <p className="text-muted-foreground">Merkenavn</p>
-              <p className="font-medium">{job.brand_name}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Målgruppe</p>
+              <p className="text-muted-foreground text-xs">Målgruppe</p>
               <p className="font-medium">{job.target_audience}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Språk</p>
+              <p className="text-muted-foreground text-xs">Språk</p>
               <p className="font-medium">{job.language}</p>
             </div>
             <div>
-              <p className="text-muted-foreground">Videolengde</p>
+              <p className="text-muted-foreground text-xs">Videolengde</p>
               <p className="font-medium">{job.video_length} sek</p>
             </div>
           </div>
+
           {job.creative_description && (
             <div>
-              <p className="text-sm text-muted-foreground">Kreativ beskrivelse</p>
-              <p className="text-sm font-medium">{job.creative_description}</p>
+              <p className="text-muted-foreground text-xs mb-1">Kreativ beskrivelse</p>
+              <p className="text-sm leading-relaxed">{job.creative_description}</p>
             </div>
           )}
-        </CardContent>
-      </Card>
+
+          {job.product_image_url && (
+            <div>
+              <p className="text-muted-foreground text-xs mb-1.5">Produktbilde</p>
+              <img
+                src={job.product_image_url}
+                alt="Produktbilde"
+                className="rounded-lg max-h-32 object-contain border border-border"
+              />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
