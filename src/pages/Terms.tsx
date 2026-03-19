@@ -31,7 +31,7 @@ const Terms = () => {
           <section>
             <h2 className="font-display text-xl font-semibold mb-3">3. Konto og tilgang</h2>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground leading-relaxed">
-              <li>Du må være minst 18 år for å bruke Tjenesten.</li>
+              
               <li>Du er ansvarlig for å holde påloggingsinformasjonen din konfidensiell.</li>
               <li>Du er ansvarlig for all aktivitet under din konto.</li>
               <li>Vi forbeholder oss retten til å suspendere eller avslutte kontoer som bryter vilkårene.</li>
