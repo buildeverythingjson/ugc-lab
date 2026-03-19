@@ -8,7 +8,7 @@ const CostComparison = () => {
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Spar tusenvis hver måned</h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
-            Se forskjellen mellom tradisjonell UGC og UGC Lab
+            Se forskjellen mellom tradisjonell UGC og Rendr.
           </p>
         </div>
 
