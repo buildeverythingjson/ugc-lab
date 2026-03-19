@@ -10,12 +10,18 @@ const Subscription = () => {
   const { profile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     setLoading(tierKey);
     try {
       const tier = STRIPE_TIERS[tierKey];
-      const priceId = priceIdOverride || tier.price_id;
+      let priceId = priceIdOverride || tier.price_id;
+
+      if (isAnnual && !priceIdOverride && 'annual_price_id' in tier && tier.annual_price_id) {
+        priceId = tier.annual_price_id;
+      }
+
       localStorage.setItem("checkout_tier_key", priceIdOverride ? "trial" : tierKey);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId, stripeCustomerId: profile?.stripe_customer_id },
@@ -66,11 +72,38 @@ const Subscription = () => {
         </Button>
       )}
 
+      {/* Billing toggle */}
+      <div className="flex items-center justify-center gap-3">
+        <span className={`text-sm font-medium ${!isAnnual ? "text-foreground" : "text-muted-foreground"}`}>
+          Månedlig
+        </span>
+        <button
+          onClick={() => setIsAnnual(!isAnnual)}
+          className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+            isAnnual ? "bg-primary" : "bg-muted"
+          }`}
+        >
+          <span
+            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform ${
+              isAnnual ? "translate-x-6" : "translate-x-1"
+            }`}
+          />
+        </button>
+        <span className={`text-sm font-medium ${isAnnual ? "text-foreground" : "text-muted-foreground"}`}>
+          Årlig
+        </span>
+        <span className="ml-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+          Spar 20%
+        </span>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
           const isCurrent = currentTier === key;
           const isPopular = key === "growth";
           const showTrial = key === "startup" && !hasUsedTrial;
+          const hasAnnual = 'annual_price' in plan && plan.annual_price;
+          const displayPrice = isAnnual && hasAnnual ? plan.annual_price : plan.price;
 
           return (
             <div
@@ -93,8 +126,11 @@ const Subscription = () => {
               )}
               <h3 className="font-display text-lg font-bold mb-1">{plan.name}</h3>
               <div className="mb-4">
-                <span className="font-display text-3xl font-bold">{plan.price}</span>
+                <span className="font-display text-3xl font-bold">{displayPrice}</span>
                 <span className="text-muted-foreground text-sm ml-1">kr/mnd</span>
+                {isAnnual && hasAnnual && (
+                  <span className="ml-2 text-sm text-muted-foreground line-through">{plan.price} kr</span>
+                )}
               </div>
               <ul className="space-y-2 mb-6 flex-1">
                 {plan.features.map((f) => {
