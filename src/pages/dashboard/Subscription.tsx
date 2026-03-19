@@ -27,7 +27,7 @@ const Subscription = () => {
   }, [searchParams]);
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
-    const newWindow = window.open("about:blank", "_blank");
+    setLoading(tierKey);
     try {
       const tier = STRIPE_TIERS[tierKey];
       const priceId = priceIdOverride || tier.price_id;
@@ -36,14 +36,12 @@ const Subscription = () => {
         body: { priceId },
       });
       if (error) throw error;
-      if (data?.url && newWindow) {
+      if (data?.url) {
         if (typeof window.fbq === "function") window.fbq("track", "InitiateCheckout");
-        newWindow.location.href = data.url;
-      } else if (data?.url) {
-        window.open(data.url, "_blank");
+        window.location.href = data.url;
       }
     } catch (error: any) {
-      newWindow?.close();
+      setLoading(null);
       toast.error(error.message || "Noe gikk galt");
     }
   };
