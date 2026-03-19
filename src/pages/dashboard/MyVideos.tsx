@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2, Download, MoreVertical } from "lucide-react";
+import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2, Download, MoreVertical, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -33,6 +34,8 @@ const MyVideos = () => {
   const [jobs, setJobs] = useState<VideoJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteJobId, setDeleteJobId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const handleDelete = async () => {
     if (!deleteJobId) return;
@@ -106,6 +109,41 @@ const MyVideos = () => {
         )}
       </div>
 
+      {/* Search & filter bar */}
+      {!loading && jobs.length > 0 && (
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="relative flex-1">
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Søk etter merkenavn..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 h-9 bg-card border-border"
+            />
+          </div>
+          <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-0.5">
+            {[
+              { value: "all", label: "Alle" },
+              { value: "completed", label: "Ferdige" },
+              { value: "processing", label: "Pågår" },
+              { value: "failed", label: "Feilet" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setStatusFilter(opt.value)}
+                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                  statusFilter === opt.value
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {loading ? (
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
@@ -128,9 +166,20 @@ const MyVideos = () => {
             </Button>
           </Link>
         </div>
-      ) : (
+      ) : (() => {
+        const filtered = jobs.filter((job) => {
+          const matchesSearch = !search || job.brand_name.toLowerCase().includes(search.toLowerCase());
+          const matchesStatus = statusFilter === "all" || job.status === statusFilter || (statusFilter === "processing" && job.status === "pending");
+          return matchesSearch && matchesStatus;
+        });
+
+        return filtered.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-sm">Ingen videoer matcher søket ditt.</p>
+          </div>
+        ) : (
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-          {jobs.map((job) => {
+          {filtered.map((job) => {
             const status = (job.status as keyof typeof STATUS_CONFIG) || "pending";
             const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending;
             const StatusIcon = config.icon;
@@ -239,7 +288,8 @@ const MyVideos = () => {
             );
           })}
         </div>
-      )}
+        );
+      })()}
 
       <AlertDialog open={!!deleteJobId} onOpenChange={(open) => !open && setDeleteJobId(null)}>
         <AlertDialogContent>
