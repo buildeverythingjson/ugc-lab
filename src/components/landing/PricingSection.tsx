@@ -190,8 +190,12 @@ const PricingSection = () => {
                 </ul>
 
                 <Button
-                  className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90"
-                  disabled={loading !== null}
+                  className={`w-full ${
+                    loading !== null && loading !== plan.tierKey && !(loading === "trial" && showTrial)
+                      ? "bg-gradient-primary text-primary-foreground hover:opacity-90 pointer-events-none"
+                      : "bg-gradient-primary text-primary-foreground hover:opacity-90"
+                  }`}
+                  disabled={loading === plan.tierKey || (loading === "trial" && !!showTrial)}
                   onClick={() =>
                     showTrial
                       ? handlePlanSelect(plan.trialPriceId!, "trial")
