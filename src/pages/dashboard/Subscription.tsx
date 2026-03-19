@@ -61,8 +61,8 @@ const Subscription = () => {
       </div>
 
       {currentTier && (
-        <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
-          Administrer abonnement
+        <Button onClick={handlePortal} disabled={portalLoading} className="w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90">
+          {portalLoading ? "Laster..." : "Administrer abonnement"}
         </Button>
       )}
 
