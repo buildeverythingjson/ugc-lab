@@ -95,12 +95,6 @@ const ExampleGallery = () => {
   return (
     <section id="eksempler" className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10 sm:mb-16">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Se hva AI-en kan lage</h2>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
-            Ekte eksempler generert av UGC Lab
-          </p>
-        </div>
 
         {/* Mobile: infinite auto-scrolling marquee */}
         <div className="md:hidden overflow-hidden -mx-4">
