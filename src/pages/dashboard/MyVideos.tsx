@@ -91,46 +91,60 @@ const MyVideos = () => {
   }, [user]);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold">Mine videoer</h1>
-        <p className="text-muted-foreground mt-1">Se alle dine genererte videoer</p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">Mine videoer</h1>
+          <p className="text-muted-foreground text-sm mt-0.5">{jobs.length} video{jobs.length !== 1 ? "er" : ""}</p>
+        </div>
+        {jobs.length > 0 && (
+          <Link to="/dashboard/new-video">
+            <Button size="sm" className="bg-foreground text-background hover:bg-foreground/90">
+              + Ny video
+            </Button>
+          </Link>
+        )}
       </div>
 
       {loading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-48 rounded-xl" />
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="aspect-[9/16] w-full rounded-xl" />
+              <Skeleton className="h-4 w-2/3" />
+            </div>
           ))}
         </div>
       ) : jobs.length === 0 ? (
-        <div className="rounded-xl border border-border bg-card p-12 text-center card-shadow">
+        <div className="rounded-xl border border-border bg-card p-12 text-center">
           <Video size={48} className="text-muted-foreground mx-auto mb-4" />
           <h3 className="font-display font-semibold text-lg mb-2">Ingen videoer ennå</h3>
           <p className="text-muted-foreground text-sm mb-4">
             Lag din første video for å komme i gang
           </p>
           <Link to="/dashboard/new-video">
-            <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90">
+            <Button className="bg-foreground text-background hover:bg-foreground/90">
               Lag ny video
             </Button>
           </Link>
         </div>
       ) : (
-        <div className="grid gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           {jobs.map((job) => {
             const status = (job.status as keyof typeof STATUS_CONFIG) || "pending";
             const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending;
             const StatusIcon = config.icon;
+            const isCompleted = status === "completed";
 
             return (
               <Link
                 key={job.id}
                 to={`/dashboard/videos/${job.id}`}
-                className="rounded-xl border border-border bg-card card-shadow hover:border-primary/30 transition-colors block overflow-hidden group"
+                className="group block"
               >
+                {/* Thumbnail */}
                 <div
-                  className="w-full aspect-[9/16] bg-secondary/30 relative"
+                  className="w-full aspect-[9/16] rounded-xl overflow-hidden bg-secondary/30 relative border border-border group-hover:border-foreground/20 transition-all"
                   onMouseEnter={(e) => {
                     const video = e.currentTarget.querySelector("video");
                     if (video) video.play().catch(() => {});
@@ -156,22 +170,38 @@ const MyVideos = () => {
                     <img
                       src={job.product_image_url}
                       alt={job.brand_name}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain p-4"
                     />
                   ) : null}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:opacity-0 transition-opacity">
-                    <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                      <Play size={18} className="text-black ml-0.5" fill="black" />
+
+                  {/* Play overlay - only for completed videos */}
+                  {isCompleted && job.video_url && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/10 opacity-100 group-hover:opacity-0 transition-opacity">
+                      <div className="w-9 h-9 rounded-full bg-white/90 flex items-center justify-center shadow-md">
+                        <Play size={16} className="text-foreground ml-0.5" fill="currentColor" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="absolute top-1.5 right-1.5 z-10">
+                  )}
+
+                  {/* Status overlay for non-completed */}
+                  {!isCompleted && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Badge variant="outline" className={`${config.color} border text-xs backdrop-blur-sm`}>
+                        <StatusIcon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
+                        {config.label}
+                      </Badge>
+                    </div>
+                  )}
+
+                  {/* 3-dot menu */}
+                  <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                          className="w-5 h-5 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
+                          className="w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors"
                         >
-                          <MoreVertical size={11} className="text-white" />
+                          <MoreVertical size={13} className="text-white" />
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
@@ -191,21 +221,19 @@ const MyVideos = () => {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
+
+                  {/* Duration pill */}
+                  <div className="absolute bottom-2 left-2">
+                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-black/50 text-white backdrop-blur-sm">
+                      {job.video_length}s
+                    </span>
+                  </div>
                 </div>
-                <div className="p-3 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-sm truncate">{job.brand_name}</h3>
-                    {status !== "completed" && (
-                      <Badge variant="outline" className={`${config.color} border text-xs`}>
-                        <StatusIcon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
-                        {config.label}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{job.video_length} sek</span>
-                    <span>{formatDate(job.created_at)}</span>
-                  </div>
+
+                {/* Info below thumbnail */}
+                <div className="mt-2 px-0.5">
+                  <h3 className="font-medium text-sm truncate">{job.brand_name}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{formatDate(job.created_at)}</p>
                 </div>
               </Link>
             );
