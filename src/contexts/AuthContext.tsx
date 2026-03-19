@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .eq("id", u.id)
       .single();
     
-    if (existing?.first_name) return; // already has name
+    if (existing?.first_name) return;
 
     const fullName: string = meta.full_name || meta.name || "";
     const parts = fullName.trim().split(/\s+/);
@@ -69,8 +69,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }).eq("id", u.id);
   };
 
+  const syncSubscription = async () => {
+    try {
+      await supabase.functions.invoke("check-subscription");
+    } catch {
+      // no-op: profile fetch still works even if sync fails temporarily
+    }
+  };
+
+  const hydrateUserState = async (activeUser: User) => {
+    await Promise.allSettled([
+      syncGoogleProfile(activeUser),
+      syncSubscription(),
+    ]);
+    await fetchProfile(activeUser.id);
+  };
+
   const refreshProfile = async () => {
-    if (user) await fetchProfile(user.id);
+    if (user) {
+      await syncSubscription();
+      await fetchProfile(user.id);
+    }
   };
 
   useEffect(() => {
@@ -79,9 +98,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
-          setTimeout(async () => {
-            await syncGoogleProfile(session.user);
-            fetchProfile(session.user.id);
+          setTimeout(() => {
+            hydrateUserState(session.user);
           }, 0);
         } else {
           setProfile(null);
@@ -94,7 +112,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        hydrateUserState(session.user);
       }
       setLoading(false);
     });
