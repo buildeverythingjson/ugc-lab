@@ -188,11 +188,16 @@ const MyVideos = () => {
           </Link>
         </div>
       ) : (() => {
-        const filtered = jobs.filter((job) => {
-          const matchesSearch = !search || job.brand_name.toLowerCase().includes(search.toLowerCase());
-          const matchesStatus = statusFilter === "all" || job.status === statusFilter || (statusFilter === "processing" && job.status === "pending");
-          return matchesSearch && matchesStatus;
-        });
+        const filtered = jobs
+          .filter((job) => {
+            const matchesSearch = !search || job.brand_name.toLowerCase().includes(search.toLowerCase());
+            const matchesStatus = statusFilter === "all" || job.status === statusFilter || (statusFilter === "processing" && job.status === "pending");
+            return matchesSearch && matchesStatus;
+          })
+          .sort((a, b) => {
+            if (sortOrder === "oldest") return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          });
 
         return filtered.length === 0 ? (
           <div className="text-center py-12">
