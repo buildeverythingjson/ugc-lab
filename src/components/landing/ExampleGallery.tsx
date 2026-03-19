@@ -17,7 +17,7 @@ const LOOP_RESTART_AT_SECONDS = 0.06;
 
 const AutoPlayVideo = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [showOverlay, setShowOverlay] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const isRestartingRef = useRef(false);
 
   useEffect(() => {
@@ -29,11 +29,8 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
     video.autoplay = true;
     video.preload = "auto";
 
-    const onPlaying = () => {
-      window.setTimeout(() => setShowOverlay(false), 80);
-    };
-
-    const tryPlay = () => {
+    const onCanPlay = () => {
+      setIsLoaded(true);
       const p = video.play();
       if (p) {
         p.catch(() => {
@@ -62,31 +59,31 @@ const AutoPlayVideo = ({ src }: { src: string }) => {
       }
     };
 
-    video.addEventListener("playing", onPlaying);
-    video.addEventListener("canplay", tryPlay);
+    video.addEventListener("canplay", onCanPlay);
     video.addEventListener("timeupdate", handleTimeUpdate);
 
-    if (video.readyState >= 3) tryPlay();
+    if (video.readyState >= 3) onCanPlay();
 
     return () => {
-      video.removeEventListener("playing", onPlaying);
-      video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("canplay", onCanPlay);
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
   }, []);
 
   return (
     <div className="relative w-full h-full bg-card overflow-hidden">
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-secondary/30 animate-pulse" />
+      )}
       <video
         ref={videoRef}
         muted
         autoPlay
         playsInline
         preload="auto"
-        className="w-full h-full object-cover pointer-events-none"
+        className={`w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
         src={src}
       />
-      {showOverlay && <div className="absolute inset-0 bg-card pointer-events-none" />}
     </div>
   );
 };
