@@ -56,16 +56,16 @@ const Subscription = () => {
         </p>
       </div>
 
-      {currentTier && (
-        <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
+        {currentTier && (
           <Button onClick={handlePortal} variant="outline" className="w-full sm:w-auto">
             Administrer abonnement
           </Button>
-          <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" className="w-full sm:w-auto">
-            Oppdater status
-          </Button>
-        </div>
-      )}
+        )}
+        <Button onClick={() => { supabase.functions.invoke("check-subscription").then(() => refreshProfile()); }} variant="outline" className="w-full sm:w-auto">
+          Oppdater status
+        </Button>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {(Object.entries(STRIPE_TIERS) as [TierKey, typeof STRIPE_TIERS[TierKey]][]).filter(([key]) => key !== "trial").map(([key, plan]) => {
