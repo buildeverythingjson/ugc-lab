@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Clock, Loader2, CheckCircle2, XCircle, Download, RefreshCw, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { ArrowLeft, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -16,7 +16,6 @@ type VideoJob = Tables<"video_jobs">;
 const STATUS_CONFIG = {
   pending: { label: "Venter...", color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30", icon: Clock },
   processing: { label: "Genererer video...", color: "bg-blue-500/20 text-blue-400 border-blue-500/30", icon: Loader2 },
-  completed: { label: "Fullført", color: "bg-muted text-foreground border-border", icon: CheckCircle2 },
   failed: { label: "Feilet", color: "bg-red-500/20 text-red-400 border-red-500/30", icon: XCircle },
 } as const;
 
@@ -25,6 +24,7 @@ const VideoDetail = () => {
   const navigate = useNavigate();
   const [job, setJob] = useState<VideoJob | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -35,6 +35,7 @@ const VideoDetail = () => {
       toast({ title: "Video slettet" });
       navigate("/dashboard/videos");
     }
+    setShowDeleteDialog(false);
   };
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const VideoDetail = () => {
     return (
       <div className="space-y-6 max-w-2xl">
         <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={16} /> Tilbake til Mine videoer
+          <ArrowLeft size={16} /> Tilbake
         </Link>
         <p className="text-muted-foreground">Fant ikke videojobben.</p>
       </div>
@@ -94,37 +95,14 @@ const VideoDetail = () => {
   }
 
   const status = (job.status as keyof typeof STATUS_CONFIG) || "pending";
-  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.pending;
-  const StatusIcon = config.icon;
+  const isCompleted = job.status === "completed";
+  const config = !isCompleted ? STATUS_CONFIG[status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.pending : null;
 
   return (
     <div className="space-y-5 max-w-4xl">
-      <div className="flex items-center justify-between">
-        <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={16} /> Tilbake
-        </Link>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive">
-              <Trash2 size={14} className="mr-1.5" /> Slett
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Slett video?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Avbryt</AlertDialogCancel>
-              <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={handleDelete}>
-                Slett
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+      <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        <ArrowLeft size={16} /> Tilbake
+      </Link>
 
       {status === "processing" && (
         <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
@@ -150,9 +128,9 @@ const VideoDetail = () => {
       {/* Side-by-side layout on desktop */}
       <div className="flex flex-col md:flex-row gap-6">
         {/* Video column */}
-        {status === "completed" && job.video_url && (
-          <div className="shrink-0 space-y-3">
-            <div className="w-full max-w-[240px] md:w-[240px]">
+        {isCompleted && job.video_url && (
+          <div className="shrink-0">
+            <div className="w-full max-w-[240px] md:w-[240px] relative group">
               <AspectRatio ratio={9 / 16}>
                 <video
                   src={job.video_url}
@@ -161,13 +139,30 @@ const VideoDetail = () => {
                   className="w-full h-full rounded-lg bg-black object-contain"
                 />
               </AspectRatio>
+              {/* 3-dot menu overlay */}
+              <div className="absolute top-2 right-2 z-10">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="w-7 h-7 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-colors">
+                      <MoreVertical size={14} className="text-white" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <a href={job.video_url} download>
+                        <Download size={14} className="mr-2" /> Last ned
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive"
+                      onClick={() => setShowDeleteDialog(true)}
+                    >
+                      <Trash2 size={14} className="mr-2" /> Slett
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
-            <a href={job.video_url} download>
-              <Button variant="outline" size="sm" className="bg-foreground text-background hover:bg-foreground/90 border-0">
-                <Download size={14} className="mr-1.5" />
-                Last ned
-              </Button>
-            </a>
           </div>
         )}
 
@@ -175,10 +170,12 @@ const VideoDetail = () => {
         <div className="flex-1 min-w-0 space-y-4">
           <div>
             <h1 className="font-display text-xl font-bold">{job.brand_name}</h1>
-            <Badge variant="outline" className={`${config.color} border mt-1.5`}>
-              <StatusIcon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
-              {config.label}
-            </Badge>
+            {config && (
+              <Badge variant="outline" className={`${config.color} border mt-1.5`}>
+                <config.icon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
+                {config.label}
+              </Badge>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-sm">
@@ -215,6 +212,23 @@ const VideoDetail = () => {
           )}
         </div>
       </div>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Slett video?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Er du sikker på at du vil slette denne videoen? Denne handlingen kan ikke angres.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Avbryt</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive hover:bg-destructive/90" onClick={handleDelete}>
+              Slett
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
