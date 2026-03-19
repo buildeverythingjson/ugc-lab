@@ -34,6 +34,8 @@ const MyVideos = () => {
   const [jobs, setJobs] = useState<VideoJob[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteJobId, setDeleteJobId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const handleDelete = async () => {
     if (!deleteJobId) return;
