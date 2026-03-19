@@ -60,7 +60,7 @@ const CostComparison = () => {
 
               {/* UGC Lab */}
               <div className="p-6 sm:p-8 space-y-5 bg-primary/[0.03]">
-                <h3 className="font-display text-lg font-bold text-foreground">UGC Lab</h3>
+                <h3 className="font-display text-lg font-bold text-foreground">Rendr.</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3 text-sm">
                     <Check size={16} className="text-foreground mt-0.5 shrink-0" />

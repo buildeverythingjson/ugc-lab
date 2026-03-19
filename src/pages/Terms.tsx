@@ -64,7 +64,7 @@ const Terms = () => {
 
         <h2>8. Begrensning av ansvar</h2>
         <p>
-          UGC Lab leveres «som den er». Vi garanterer ikke at Tjenesten vil være uavbrutt eller
+          Rendr. leveres «som den er». Vi garanterer ikke at Tjenesten vil være uavbrutt eller
           feilfri. Vårt samlede ansvar er begrenset til beløpet du har betalt for Tjenesten
           de siste 12 månedene.
         </p>
