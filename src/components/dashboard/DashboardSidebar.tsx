@@ -28,7 +28,7 @@ const DashboardSidebar = () => {
     <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border bg-card">
       <div className="p-6">
         <Link to="/">
-          <img src={logoImg} alt="Rendr" className="h-5" />
+          <img src={logoImg} alt="Rendr" className="h-4" />
         </Link>
       </div>
 
