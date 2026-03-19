@@ -32,7 +32,7 @@ const HeroSection = () => {
             Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
           </p>
 
-          <div className="flex flex-col items-center gap-8">
+          <div className="flex flex-col items-center gap-14">
             <Link to="/register">
               <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-8 h-12 text-base font-semibold">
                 Lag din første video
@@ -41,9 +41,9 @@ const HeroSection = () => {
             </Link>
 
             <div className="flex items-center gap-8">
-              <img src={nswingLogo} alt="Nordic Swing" className="h-7 opacity-50 hover:opacity-80 transition-opacity invert" />
-              <img src={tallowLogo} alt="Tallow" className="h-10 opacity-50 hover:opacity-80 transition-opacity" />
-              <img src={nuavaLogo} alt="Nuava" className="h-7 opacity-50 hover:opacity-80 transition-opacity" />
+              <img src={nswingLogo} alt="Nordic Swing" className="h-7 opacity-30 hover:opacity-60 transition-opacity invert" />
+              <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
+              <img src={nuavaLogo} alt="Nuava" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
             </div>
           </div>
         </motion.div>
