@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import { motion } from "framer-motion";
 import nswingLogo from "@/assets/nswing-logo.png";
 import tallowLogo from "@/assets/tallow-logo.png";
 import nuavaLogo from "@/assets/nuava-logo.avif";
