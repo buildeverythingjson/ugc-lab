@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2, Download, MoreVertical, Search } from "lucide-react";
+import { Video, Clock, Loader2, CheckCircle2, XCircle, Play, Trash2, Download, MoreVertical, Search, SlidersHorizontal, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,6 +36,7 @@ const MyVideos = () => {
   const [deleteJobId, setDeleteJobId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sortOrder, setSortOrder] = useState<string>("newest");
 
   const handleDelete = async () => {
     if (!deleteJobId) return;
@@ -111,36 +112,56 @@ const MyVideos = () => {
 
       {/* Search & filter bar */}
       {!loading && jobs.length > 0 && (
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex gap-2">
           <div className="relative flex-1">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Søk etter merkenavn..."
+              placeholder="Søk etter tittel..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9 h-9 bg-card border-border"
             />
           </div>
-          <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-0.5">
-            {[
-              { value: "all", label: "Alle" },
-              { value: "completed", label: "Ferdige" },
-              { value: "processing", label: "Pågår" },
-              { value: "failed", label: "Feilet" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => setStatusFilter(opt.value)}
-                className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
-                  statusFilter === opt.value
-                    ? "bg-foreground text-background"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-9 gap-1.5 shrink-0">
+                <SlidersHorizontal size={14} />
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuLabel className="text-xs">Status</DropdownMenuLabel>
+              {[
+                { value: "all", label: "Alle" },
+                { value: "completed", label: "Ferdige" },
+                { value: "processing", label: "Pågår" },
+              ].map((opt) => (
+                <DropdownMenuItem
+                  key={opt.value}
+                  onClick={() => setStatusFilter(opt.value)}
+                  className="flex items-center justify-between"
+                >
+                  {opt.label}
+                  {statusFilter === opt.value && <Check size={14} />}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-xs">Sortering</DropdownMenuLabel>
+              {[
+                { value: "newest", label: "Nyeste først" },
+                { value: "oldest", label: "Eldste først" },
+              ].map((opt) => (
+                <DropdownMenuItem
+                  key={opt.value}
+                  onClick={() => setSortOrder(opt.value)}
+                  className="flex items-center justify-between"
+                >
+                  {opt.label}
+                  {sortOrder === opt.value && <Check size={14} />}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )}
 
@@ -167,11 +188,16 @@ const MyVideos = () => {
           </Link>
         </div>
       ) : (() => {
-        const filtered = jobs.filter((job) => {
-          const matchesSearch = !search || job.brand_name.toLowerCase().includes(search.toLowerCase());
-          const matchesStatus = statusFilter === "all" || job.status === statusFilter || (statusFilter === "processing" && job.status === "pending");
-          return matchesSearch && matchesStatus;
-        });
+        const filtered = jobs
+          .filter((job) => {
+            const matchesSearch = !search || job.brand_name.toLowerCase().includes(search.toLowerCase());
+            const matchesStatus = statusFilter === "all" || job.status === statusFilter || (statusFilter === "processing" && job.status === "pending");
+            return matchesSearch && matchesStatus;
+          })
+          .sort((a, b) => {
+            if (sortOrder === "oldest") return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          });
 
         return filtered.length === 0 ? (
           <div className="text-center py-12">
