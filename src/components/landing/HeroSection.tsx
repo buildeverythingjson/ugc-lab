@@ -40,10 +40,15 @@ const HeroSection = () => {
               </Button>
             </Link>
 
-            <div className="flex items-center gap-8">
-              <img src={nswingLogo} alt="Nordic Swing" className="h-7 opacity-30 hover:opacity-60 transition-opacity invert" />
-              <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
-              <img src={nuavaLogo} alt="Nuava" className="h-6 opacity-30 hover:opacity-60 transition-opacity" />
+            <div className="flex flex-col items-center gap-4">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground/40">
+                Brukt av norske merkevarer
+              </p>
+              <div className="flex items-center gap-8">
+                <img src={nswingLogo} alt="Nordic Swing" className="h-7 opacity-30 hover:opacity-60 transition-opacity invert" />
+                <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
+                <img src={nuavaLogo} alt="Nuava" className="h-6 opacity-30 hover:opacity-60 transition-opacity" />
+              </div>
             </div>
           </div>
         </motion.div>
