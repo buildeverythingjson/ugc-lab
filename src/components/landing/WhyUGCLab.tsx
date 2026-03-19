@@ -1,5 +1,4 @@
 import { FileText, Globe, UserCircle, Zap } from "lucide-react";
-import { motion } from "framer-motion";
 
 const features = [
   {
