@@ -75,8 +75,10 @@ const Subscription = () => {
           return (
             <div
               key={key}
-              className={`relative rounded-xl border p-6 flex flex-col card-shadow ${
-                isPopular ? "border-primary glow-primary" : isCurrent ? "border-primary/50" : "border-border"
+              className={`relative rounded-xl border-2 p-6 flex flex-col card-shadow ${
+                isCurrent
+                  ? "border-primary bg-primary/5 ring-2 ring-primary/20 shadow-lg"
+                  : isPopular ? "border-primary glow-primary" : "border-border"
               } bg-card`}
             >
               {isPopular && (
