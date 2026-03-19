@@ -18,17 +18,17 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs sm:text-sm text-foreground mb-6 sm:mb-8">
-            <Play size={12} className="sm:w-[14px] sm:h-[14px]" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-sm text-foreground mb-8">
+            <Play size={14} />
             AI-drevet video- og bildegenerering
           </div>
 
-          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-4 sm:mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-4xl mx-auto mb-6">
             UGC med AI –{" "}
             <span className="text-gradient">på sekunder.</span>
           </h1>
 
-          <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-10">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
             Designet for norske merkevarer. Fra produktbilder og idéer til konverterende innhold. AI-modeller som er tilpasset det norske markedet.
           </p>
 
