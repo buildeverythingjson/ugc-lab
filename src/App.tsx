@@ -52,6 +52,8 @@ const App = () => (
               <Route path="settings" element={<SettingsPage />} />
             </Route>
             <Route path="/kontakt" element={<Contact />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
