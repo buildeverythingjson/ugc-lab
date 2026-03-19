@@ -22,10 +22,12 @@ const STATUS_CONFIG = {
 
 const VideoDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [job, setJob] = useState<VideoJob | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [siblingIds, setSiblingIds] = useState<string[]>([]);
 
   const handleDelete = async () => {
     if (!id) return;
