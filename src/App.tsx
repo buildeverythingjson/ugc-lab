@@ -19,6 +19,8 @@ import Subscription from "./pages/dashboard/Subscription";
 import SettingsPage from "./pages/dashboard/SettingsPage";
 import VideoDetail from "./pages/dashboard/VideoDetail";
 import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
