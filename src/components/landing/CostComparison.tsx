@@ -11,12 +11,7 @@ const CostComparison = () => {
           </p>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto"
+        <div className="max-w-3xl mx-auto"
         >
           <div className="rounded-2xl border border-border bg-card card-shadow overflow-visible relative">
             {/* Vertical divider line (desktop) */}
