@@ -36,12 +36,8 @@ const WhyUGCLab = () => {
 
         <div className="max-w-3xl mx-auto space-y-0">
           {features.map((feature, i) => (
-            <motion.div
+            <div
               key={feature.title}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative flex items-start gap-4 sm:gap-6 py-6 sm:py-8"
             >
               {/* Vertical line connector */}
