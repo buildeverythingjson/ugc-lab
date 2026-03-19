@@ -126,14 +126,6 @@ const ExampleGallery = () => {
           ))}
         </div>
 
-        <div className="text-center mt-10 sm:mt-12">
-          <Link to="/register">
-            <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-90 glow-primary px-8 h-12 text-base font-semibold">
-              Lag din første video
-              <ArrowRight className="ml-2" size={18} />
-            </Button>
-          </Link>
-        </div>
       </div>
     </section>
   );
