@@ -9,7 +9,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/">
-              <img src={logoImg} alt="Rendr" className="h-8" />
+              <img src={logoImg} alt="Rendr" className="h-5" />
             </Link>
             <p className="text-sm text-muted-foreground mt-3 max-w-xs leading-relaxed">
               AI-drevet UGC-videoproduksjon for moderne merkevarer

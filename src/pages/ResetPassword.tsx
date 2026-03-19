@@ -58,7 +58,7 @@ const ResetPassword = () => {
         <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-8">
             <Link to="/">
-              <img src={logoImg} alt="Rendr" className="h-10 mx-auto" />
+              <img src={logoImg} alt="Rendr" className="h-6 mx-auto" />
             </Link>
           </div>
           <div className="rounded-xl border border-border bg-card p-8 card-shadow text-center">
@@ -82,7 +82,7 @@ const ResetPassword = () => {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <Link to="/">
-            <img src={logoImg} alt="Rendr" className="h-10 mx-auto" />
+            <img src={logoImg} alt="Rendr" className="h-6 mx-auto" />
           </Link>
         </div>
 
