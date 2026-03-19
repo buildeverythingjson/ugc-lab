@@ -81,8 +81,8 @@ const ResetPassword = () => {
 
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <Link to="/" className="font-display text-2xl font-bold text-gradient">
-            Rendr.
+          <Link to="/">
+            <img src={logoImg} alt="Rendr" className="h-10 mx-auto" />
           </Link>
         </div>
 
