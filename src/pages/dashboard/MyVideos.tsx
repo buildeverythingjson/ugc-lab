@@ -195,10 +195,12 @@ const MyVideos = () => {
                 <div className="p-3 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-sm truncate">{job.brand_name}</h3>
-                    <Badge variant="outline" className={`${config.color} border text-xs`}>
-                      <StatusIcon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
-                      {config.label}
-                    </Badge>
+                    {status !== "completed" && (
+                      <Badge variant="outline" className={`${config.color} border text-xs`}>
+                        <StatusIcon size={12} className={`mr-1 ${status === "processing" ? "animate-spin" : ""}`} />
+                        {config.label}
+                      </Badge>
+                    )}
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>{job.video_length} sek</span>
