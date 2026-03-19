@@ -84,22 +84,21 @@ const PricingSection = () => {
       return;
     }
 
-    const newWindow = window.open("about:blank", "_blank");
+    setLoading(loadingKey);
     try {
       localStorage.setItem("checkout_tier_key", loadingKey);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { priceId },
       });
       if (error) throw error;
-      if (data?.url && newWindow) {
+      if (data?.url) {
         if (typeof window.fbq === "function") window.fbq("track", "InitiateCheckout");
-        newWindow.location.href = data.url;
-      } else if (data?.url) {
         window.open(data.url, "_blank");
       }
     } catch (error: any) {
-      newWindow?.close();
       toast.error(error.message || "Noe gikk galt");
+    } finally {
+      setLoading(null);
     }
   };
 
