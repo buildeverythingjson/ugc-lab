@@ -227,21 +227,31 @@ const VideoDetail = () => {
           </div>
 
           {job.creative_description && (
-            <div>
-              <p className="text-muted-foreground text-xs mb-1">Kreativ beskrivelse</p>
-              <p className="text-sm leading-relaxed">{job.creative_description}</p>
-            </div>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground transition-colors group">
+                Kreativ beskrivelse
+                <ChevronDown size={12} className="transition-transform group-data-[state=open]:rotate-180" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <p className="text-sm leading-relaxed mt-1.5">{job.creative_description}</p>
+              </CollapsibleContent>
+            </Collapsible>
           )}
 
           {job.product_image_url && (
-            <div>
-              <p className="text-muted-foreground text-xs mb-1.5">Produktbilde</p>
-              <img
-                src={job.product_image_url}
-                alt="Produktbilde"
-                className="rounded-lg max-h-32 object-contain border border-border"
-              />
-            </div>
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center gap-1 text-muted-foreground text-xs hover:text-foreground transition-colors group">
+                Produktbilde
+                <ChevronDown size={12} className="transition-transform group-data-[state=open]:rotate-180" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <img
+                  src={job.product_image_url}
+                  alt="Produktbilde"
+                  className="rounded-lg max-h-32 object-contain border border-border mt-1.5"
+                />
+              </CollapsibleContent>
+            </Collapsible>
           )}
         </div>
       </div>
