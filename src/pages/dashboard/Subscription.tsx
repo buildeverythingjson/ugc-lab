@@ -135,7 +135,7 @@ const Subscription = () => {
                   ? handleCheckout(key, STRIPE_TIERS.trial.price_id) 
                   : handleCheckout(key)
                 }
-                disabled={isCurrent || loading === key}
+                disabled={isCurrent || loading !== null}
                 className={`w-full ${
                   isCurrent
                     ? "bg-secondary text-secondary-foreground"
