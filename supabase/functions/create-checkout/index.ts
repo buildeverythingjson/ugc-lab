@@ -34,14 +34,14 @@ serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
+    if (userError || !userData?.user) {
       throw new Error("User not authenticated");
     }
 
-    const userId = claimsData.claims.sub as string;
-    const email = claimsData.claims.email as string;
-    if (!userId || !email) throw new Error("Missing user claims");
+    const userId = userData.user.id;
+    const email = userData.user.email!;
+    if (!userId || !email) throw new Error("Missing user data");
 
     const { priceId, stripeCustomerId } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
