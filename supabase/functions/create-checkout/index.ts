@@ -42,7 +42,7 @@ serve(async (req) => {
     const email = claimsData.claims.email as string;
     if (!email) throw new Error("No email in token");
 
-    const { priceId } = await req.json();
+    const { priceId, stripeCustomerId } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
 
     if (!ALLOWED_PRICE_IDS.has(priceId)) {
@@ -56,10 +56,12 @@ serve(async (req) => {
       apiVersion: "2026-02-25.clover",
     });
 
-    const customers = await stripe.customers.list({ email, limit: 1 });
-    let customerId: string | undefined;
-    if (customers.data.length > 0) {
-      customerId = customers.data[0].id;
+    let customerId: string | undefined = stripeCustomerId || undefined;
+    if (!customerId) {
+      const customers = await stripe.customers.list({ email, limit: 1 });
+      if (customers.data.length > 0) {
+        customerId = customers.data[0].id;
+      }
     }
 
     const session = await stripe.checkout.sessions.create({
