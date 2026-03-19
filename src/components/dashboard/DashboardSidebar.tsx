@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, LogOut, ImagePlus, Lock, ArrowUpCircle } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
@@ -26,8 +27,8 @@ const DashboardSidebar = () => {
   return (
     <aside className="hidden lg:flex flex-col w-64 min-h-screen border-r border-border bg-card">
       <div className="p-6">
-        <Link to="/" className="font-display text-xl font-bold text-gradient">
-          Rendr.
+        <Link to="/">
+          <img src={logoImg} alt="Rendr" className="h-8" />
         </Link>
       </div>
 
