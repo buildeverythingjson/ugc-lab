@@ -12,7 +12,7 @@ const Terms = () => {
 
         <h2>1. Aksept av vilkår</h2>
         <p>
-          Ved å opprette en konto eller bruke UGC Lab («Tjenesten») aksepterer du disse brukervilkårene.
+          Ved å opprette en konto eller bruke Rendr. («Tjenesten») aksepterer du disse brukervilkårene.
           Dersom du ikke godtar vilkårene, skal du ikke bruke Tjenesten.
         </p>
 
