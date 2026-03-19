@@ -22,7 +22,6 @@ const Index = () => {
       <PricingSection />
       <FAQSection />
       <Footer />
-      <CookieConsent />
     </div>
   );
 };
