@@ -16,7 +16,7 @@ type VideoJob = Tables<"video_jobs">;
 const STATUS_CONFIG = {
   pending: { label: "Venter...", color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30", icon: Clock },
   processing: { label: "Genererer video...", color: "bg-blue-500/20 text-blue-400 border-blue-500/30", icon: Loader2 },
-  completed: { label: "Ferdig!", color: "bg-green-500/20 text-green-400 border-green-500/30", icon: CheckCircle2 },
+  completed: { label: "Fullført", color: "bg-muted text-foreground border-border", icon: CheckCircle2 },
   failed: { label: "Feilet", color: "bg-red-500/20 text-red-400 border-red-500/30", icon: XCircle },
 } as const;
 
