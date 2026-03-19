@@ -16,16 +16,16 @@ const Overview = () => {
       checkoutTriggered.current = true;
       localStorage.removeItem("pending_checkout_price_id");
       supabase.functions.invoke("create-checkout", {
-        body: { priceId: pendingPriceId },
+        body: { priceId: pendingPriceId, stripeCustomerId: profile?.stripe_customer_id },
       }).then(({ data, error }) => {
         if (error) {
           toast.error("Kunne ikke starte betaling");
           return;
         }
-        if (data?.url) window.open(data.url, "_blank");
+        if (data?.url) window.location.href = data.url;
       });
     }
-  }, []);
+  }, [profile]);
 
   const tier = profile?.subscription_tier || "Ingen";
   const remaining = profile?.videos_remaining ?? 0;
