@@ -7,9 +7,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { Tables } from "@/integrations/supabase/types";
+import { useAuth } from "@/contexts/AuthContext";
 
 type VideoJob = Tables<"video_jobs">;
 
@@ -21,10 +22,12 @@ const STATUS_CONFIG = {
 
 const VideoDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [job, setJob] = useState<VideoJob | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [siblingIds, setSiblingIds] = useState<string[]>([]);
 
   const handleDelete = async () => {
     if (!id) return;
@@ -39,15 +42,15 @@ const VideoDetail = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
 
     const fetchJob = async () => {
-      const { data, error } = await supabase
-        .from("video_jobs")
-        .select("*")
-        .eq("id", id)
-        .single();
-      if (!error && data) setJob(data);
+      const [jobRes, idsRes] = await Promise.all([
+        supabase.from("video_jobs").select("*").eq("id", id).single(),
+        supabase.from("video_jobs").select("id").eq("user_id", user.id).order("created_at", { ascending: false }),
+      ]);
+      if (!jobRes.error && jobRes.data) setJob(jobRes.data);
+      if (!idsRes.error && idsRes.data) setSiblingIds(idsRes.data.map((r) => r.id));
       setLoading(false);
     };
 
@@ -72,7 +75,11 @@ const VideoDetail = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [id]);
+  }, [id, user]);
+
+  const currentIndex = siblingIds.indexOf(id ?? "");
+  const prevId = currentIndex > 0 ? siblingIds[currentIndex - 1] : null;
+  const nextId = currentIndex < siblingIds.length - 1 ? siblingIds[currentIndex + 1] : null;
 
   if (loading) {
     return (
@@ -100,9 +107,34 @@ const VideoDetail = () => {
 
   return (
     <div className="space-y-5 max-w-4xl">
-      <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-        <ArrowLeft size={16} /> Tilbake
-      </Link>
+      <div className="flex items-center justify-between">
+        <Link to="/dashboard/videos" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft size={16} /> Tilbake
+        </Link>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            disabled={!prevId}
+            onClick={() => prevId && navigate(`/dashboard/videos/${prevId}`)}
+          >
+            <ChevronLeft size={16} />
+          </Button>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {currentIndex >= 0 ? currentIndex + 1 : "–"} / {siblingIds.length}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            disabled={!nextId}
+            onClick={() => nextId && navigate(`/dashboard/videos/${nextId}`)}
+          >
+            <ChevronRight size={16} />
+          </Button>
+        </div>
+      </div>
 
       {status === "processing" && (
         <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
