@@ -42,15 +42,15 @@ const VideoDetail = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
 
     const fetchJob = async () => {
-      const { data, error } = await supabase
-        .from("video_jobs")
-        .select("*")
-        .eq("id", id)
-        .single();
-      if (!error && data) setJob(data);
+      const [jobRes, idsRes] = await Promise.all([
+        supabase.from("video_jobs").select("*").eq("id", id).single(),
+        supabase.from("video_jobs").select("id").eq("user_id", user.id).order("created_at", { ascending: false }),
+      ]);
+      if (!jobRes.error && jobRes.data) setJob(jobRes.data);
+      if (!idsRes.error && idsRes.data) setSiblingIds(idsRes.data.map((r) => r.id));
       setLoading(false);
     };
 
@@ -75,7 +75,11 @@ const VideoDetail = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [id]);
+  }, [id, user]);
+
+  const currentIndex = siblingIds.indexOf(id ?? "");
+  const prevId = currentIndex > 0 ? siblingIds[currentIndex - 1] : null;
+  const nextId = currentIndex < siblingIds.length - 1 ? siblingIds[currentIndex + 1] : null;
 
   if (loading) {
     return (
