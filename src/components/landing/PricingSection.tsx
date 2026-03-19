@@ -88,7 +88,7 @@ const PricingSection = () => {
     try {
       localStorage.setItem("checkout_tier_key", loadingKey);
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId },
+        body: { priceId, stripeCustomerId: profile?.stripe_customer_id },
       });
       if (error) throw error;
       if (data?.url) {

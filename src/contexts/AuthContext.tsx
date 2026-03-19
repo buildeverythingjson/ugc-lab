@@ -14,6 +14,7 @@ interface Profile {
   videos_used_this_month: number;
   current_period_end: string | null;
   has_used_trial: boolean;
+  stripe_customer_id: string | null;
 }
 
 interface AuthContextType {
