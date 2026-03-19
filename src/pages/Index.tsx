@@ -1,5 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
+import CookieConsent from "@/components/CookieConsent";
 import ExampleGallery from "@/components/landing/ExampleGallery";
 import HowItWorks from "@/components/landing/HowItWorks";
 import WhyUGCLab from "@/components/landing/WhyUGCLab";
