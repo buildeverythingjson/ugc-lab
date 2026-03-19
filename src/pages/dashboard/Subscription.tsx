@@ -49,7 +49,11 @@ const Subscription = () => {
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-2xl sm:text-3xl font-bold">Ditt abonnement</h1>
-        <p className="text-muted-foreground mt-1">Administrer planen din</p>
+        <p className="text-muted-foreground mt-1">
+          {currentTier && STRIPE_TIERS[currentTier]
+            ? `Du abonnerer på ${STRIPE_TIERS[currentTier].name}-planen`
+            : "Administrer planen din"}
+        </p>
       </div>
 
       {currentTier && (

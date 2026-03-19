@@ -2,14 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Video, CreditCard, Clock, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { STRIPE_TIERS, TierKey } from "@/lib/stripe-config";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const Overview = () => {
-  const { profile } = useAuth();
+  const { profile, refreshProfile } = useAuth();
   const checkoutTriggered = useRef(false);
+  const [searchParams] = useSearchParams();
 
+  // Handle pending checkout from landing page
   useEffect(() => {
     const pendingPriceId = localStorage.getItem("pending_checkout_price_id");
     if (pendingPriceId && !checkoutTriggered.current) {
@@ -26,6 +30,21 @@ const Overview = () => {
       });
     }
   }, [profile]);
+
+  // Handle successful checkout return
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      toast.success("Abonnementet er aktivert!");
+      if (typeof window.fbq === "function") {
+        const storedTier = localStorage.getItem("checkout_tier_key") as TierKey | null;
+        const tier = storedTier && STRIPE_TIERS[storedTier] ? STRIPE_TIERS[storedTier] : null;
+        const value = tier ? parseFloat(tier.price.replace(/\s/g, "")) : 0;
+        window.fbq("track", "Purchase", { currency: "NOK", value });
+        localStorage.removeItem("checkout_tier_key");
+      }
+      supabase.functions.invoke("check-subscription").then(() => refreshProfile());
+    }
+  }, [searchParams]);
 
   const tier = profile?.subscription_tier || "Ingen";
   const remaining = profile?.videos_remaining ?? 0;
