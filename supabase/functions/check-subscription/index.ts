@@ -20,7 +20,7 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
+  const serviceRoleClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     { auth: { persistSession: false } }
@@ -31,17 +31,26 @@ serve(async (req) => {
     if (!authHeader?.startsWith("Bearer ")) throw new Error("No authorization header");
 
     const token = authHeader.replace("Bearer ", "");
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError || !userData?.user) throw new Error(`Auth error: ${userError?.message || "User not found"}`);
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      { global: { headers: { Authorization: authHeader } } }
+    );
 
-    const userId = userData.user.id;
-    const userEmail = userData.user.email;
+    const { data: claimsData, error: claimsError } = await authClient.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      throw new Error(`Auth error: ${claimsError?.message || "Invalid JWT"}`);
+    }
+
+    const userId = claimsData.claims.sub as string;
+    const userEmail = claimsData.claims.email as string | undefined;
+    if (!userId) throw new Error("User not authenticated");
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2026-02-25.clover",
     });
 
-    const { data: profile } = await supabaseClient
+    const { data: profile } = await serviceRoleClient
       .from("profiles")
       .select("subscription_tier, stripe_customer_id, videos_remaining")
       .eq("id", userId)
