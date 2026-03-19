@@ -113,7 +113,7 @@ const ExampleGallery = () => {
               <div className="rounded-xl overflow-hidden border border-border bg-card aspect-[9/16]">
                 <AutoPlayVideo src={ex.src} />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 

@@ -59,7 +59,7 @@ const WhyUGCLab = () => {
                   {feature.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -42,7 +42,7 @@ const PlatformLogos = () => {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

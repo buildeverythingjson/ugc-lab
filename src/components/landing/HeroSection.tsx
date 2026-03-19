@@ -47,7 +47,7 @@ const HeroSection = () => {
             <img src={tallowLogo} alt="Tallow" className="h-12 opacity-30 hover:opacity-60 transition-opacity" />
             <img src={nuavaLogo} alt="Nuava" className="h-6 opacity-30 hover:opacity-60 transition-opacity" />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

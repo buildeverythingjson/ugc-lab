@@ -76,7 +76,7 @@ const CostComparison = () => {
           <p className="text-center text-muted-foreground mt-8">
             Start i dag og spar opptil <span className="text-foreground font-semibold">95%</span> på UGC-produksjon
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

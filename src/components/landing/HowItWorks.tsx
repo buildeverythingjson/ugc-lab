@@ -49,7 +49,7 @@ const HowItWorks = () => {
               </div>
               <h3 className="font-display font-semibold text-base sm:text-lg mb-1 sm:mb-2">{step.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
