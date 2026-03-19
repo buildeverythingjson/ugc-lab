@@ -160,11 +160,13 @@ const Subscription = () => {
                   ? handleCheckout(key, STRIPE_TIERS.trial.price_id) 
                   : handleCheckout(key)
                 }
-                disabled={isCurrent || loading !== null}
+                disabled={isCurrent || loading === key}
                 className={`w-full ${
                   isCurrent
                     ? "bg-secondary text-secondary-foreground"
-                    : "bg-gradient-primary text-primary-foreground hover:opacity-90"
+                    : loading !== null && loading !== key
+                      ? "bg-gradient-primary text-primary-foreground hover:opacity-90 pointer-events-none"
+                      : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
                 {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : showTrial ? "Prøv for 10 kr" : "Velg plan"}
