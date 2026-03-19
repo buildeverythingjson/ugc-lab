@@ -38,12 +38,8 @@ const FeaturesSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 max-w-5xl mx-auto">
           {steps.map((step, i) => (
-            <motion.div
+            <div
               key={step.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative p-4 sm:p-6 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors card-shadow group"
             >
               <div className="text-xs font-semibold text-primary mb-4">Steg {i + 1}</div>
