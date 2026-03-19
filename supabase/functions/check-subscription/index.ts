@@ -64,7 +64,7 @@ serve(async (req) => {
     }
 
     if (!customerId) {
-      await supabaseClient.from("profiles").update({
+      await serviceRoleClient.from("profiles").update({
         subscription_tier: null,
         subscription_status: null,
         stripe_subscription_id: null,
@@ -84,7 +84,7 @@ serve(async (req) => {
     });
 
     if (subscriptions.data.length === 0) {
-      await supabaseClient.from("profiles").update({
+      await serviceRoleClient.from("profiles").update({
         stripe_customer_id: customerId,
         stripe_subscription_id: null,
         subscription_tier: null,
@@ -120,7 +120,7 @@ serve(async (req) => {
       updateData.videos_used_this_month = 0;
     }
 
-    await supabaseClient.from("profiles").update(updateData).eq("id", userId);
+    await serviceRoleClient.from("profiles").update(updateData).eq("id", userId);
 
     return new Response(JSON.stringify({
       subscribed: true,
