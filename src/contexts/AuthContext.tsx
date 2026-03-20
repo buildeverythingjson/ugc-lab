@@ -78,11 +78,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const hydrateUserState = async (activeUser: User) => {
-    await Promise.allSettled([
+    // Fetch profile immediately so the UI has data right away
+    await fetchProfile(activeUser.id);
+    // Then sync in the background and refresh profile when done
+    Promise.allSettled([
       syncGoogleProfile(activeUser),
       syncSubscription(),
-    ]);
-    await fetchProfile(activeUser.id);
+    ]).then(() => fetchProfile(activeUser.id));
   };
 
   const refreshProfile = async () => {
