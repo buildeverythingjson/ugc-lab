@@ -21,7 +21,7 @@ const VideoProgressBar = ({ createdAt, isCompleted }: VideoProgressBarProps) => 
       return;
     }
 
-    const EXPECTED_MS = 3.5 * 60 * 1000; // 3.5 min
+    const EXPECTED_MS = 4 * 60 * 1000; // ~4 min midtpunkt
     const startTime = new Date(createdAt).getTime();
 
     const tick = () => {
@@ -42,7 +42,7 @@ const VideoProgressBar = ({ createdAt, isCompleted }: VideoProgressBarProps) => 
       <div className="flex items-center justify-between text-sm">
         <span className="text-blue-400 flex items-center gap-2">
           <Loader2 size={14} className="animate-spin" />
-          {isCompleted ? "Ferdig!" : "Genererer video..."}
+          {isCompleted ? "Ferdig!" : "Genererer video (2–5 min)..."}
         </span>
         <span className="text-muted-foreground tabular-nums font-medium">
           {progress}%
