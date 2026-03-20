@@ -67,9 +67,24 @@ const NewVideo = () => {
     }
   };
 
+  const getMissingFields = () => {
+    const missing: string[] = [];
+    if (!imageFile) missing.push("produktbilde");
+    if (!brandName.trim()) missing.push("merkenavn");
+    if (!targetAudience.trim()) missing.push("målgruppe");
+    return missing;
+  };
+
+  const canSubmit = imageFile && brandName.trim() && targetAudience.trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageFile || !user) return;
+    const missing = getMissingFields();
+    if (missing.length > 0) {
+      toast.error(`Du må fylle inn: ${missing.join(", ")}`);
+      return;
+    }
+    if (!user) return;
 
     if (videosRemaining <= 0) {
       toast.error("Du har brukt alle videoene dine denne måneden. Oppgrader planen din for flere.");
