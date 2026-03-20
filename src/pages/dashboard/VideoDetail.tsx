@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ArrowLeft, ChevronDown, ChevronLeft, ChevronRight, Clock, Loader2, XCircle, Download, RefreshCw, Trash2, MoreVertical } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import VideoProgressBar from "@/components/dashboard/VideoProgressBar";
 import type { Tables } from "@/integrations/supabase/types";
 import { useAuth } from "@/contexts/AuthContext";
 
