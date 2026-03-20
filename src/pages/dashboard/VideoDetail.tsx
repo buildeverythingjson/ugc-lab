@@ -139,12 +139,7 @@ const VideoDetail = () => {
       </div>
 
       {status === "processing" && (
-        <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
-          <p className="text-blue-400 text-sm">
-            <Loader2 size={14} className="inline mr-2 animate-spin" />
-            AI-en jobber med videoen din. Dette kan ta 2–5 minutter.
-          </p>
-        </div>
+        <VideoProgressBar createdAt={job.created_at} isCompleted={false} />
       )}
 
       {status === "failed" && (
