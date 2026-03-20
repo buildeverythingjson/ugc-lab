@@ -79,11 +79,17 @@ const MyVideos = () => {
           if (payload.eventType === "INSERT") {
             setJobs((prev) => [payload.new as VideoJob, ...prev]);
           } else if (payload.eventType === "UPDATE") {
+            const updated = payload.new as VideoJob;
             setJobs((prev) =>
-              prev.map((j) =>
-                j.id === (payload.new as VideoJob).id ? (payload.new as VideoJob) : j
-              )
+              prev.map((j) => j.id === updated.id ? updated : j)
             );
+            if (updated.status === "failed") {
+              toast({
+                title: "Videogenerering feilet",
+                description: updated.error_message || `Noe gikk galt med "${updated.brand_name}".`,
+                variant: "destructive",
+              });
+            }
           }
         }
       )
