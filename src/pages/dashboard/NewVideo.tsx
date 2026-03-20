@@ -67,9 +67,24 @@ const NewVideo = () => {
     }
   };
 
+  const getMissingFields = () => {
+    const missing: string[] = [];
+    if (!imageFile) missing.push("produktbilde");
+    if (!brandName.trim()) missing.push("merkenavn");
+    if (!targetAudience.trim()) missing.push("målgruppe");
+    return missing;
+  };
+
+  const canSubmit = imageFile && brandName.trim() && targetAudience.trim();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageFile || !user) return;
+    const missing = getMissingFields();
+    if (missing.length > 0) {
+      toast.error(`Du må fylle inn: ${missing.join(", ")}`);
+      return;
+    }
+    if (!user) return;
 
     if (videosRemaining <= 0) {
       toast.error("Du har brukt alle videoene dine denne måneden. Oppgrader planen din for flere.");
@@ -250,9 +265,17 @@ const NewVideo = () => {
             {/* Submit button - full width on mobile, pushed right on desktop */}
             <div className="hidden sm:block flex-1" />
             <Button
-              type="submit"
-              disabled={isSubmitting || !imageFile}
-              className="rounded-full h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto"
+              type={canSubmit ? "submit" : "button"}
+              disabled={isSubmitting}
+              onClick={!canSubmit ? () => {
+                const missing = getMissingFields();
+                toast.error(`Du må fylle inn: ${missing.join(", ")}`);
+              } : undefined}
+              className={`rounded-full h-9 px-5 w-full sm:w-auto ${
+                canSubmit 
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+                  : "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed"
+              }`}
             >
               {isSubmitting ? (
                 <><Loader2 size={16} className="mr-1.5 animate-spin" /> Genererer...</>
