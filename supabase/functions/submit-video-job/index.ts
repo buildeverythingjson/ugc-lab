@@ -57,6 +57,9 @@ serve(async (req) => {
 
     // 3. Parse request body
     const { jobId, imageUrl, brandName, targetAudience, creativeDescription, language, videoLength } = await req.json();
+    if (!imageUrl || typeof imageUrl !== "string") {
+      throw new Error("imageUrl is required and must be a string");
+    }
 
     // 4. Atomically decrement credits (race-condition safe)
     const { data: creditResult, error: creditError } = await supabase.rpc("decrement_video_credit", {

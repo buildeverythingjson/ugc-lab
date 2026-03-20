@@ -103,6 +103,8 @@ const NewVideo = () => {
         .from('product-images')
         .getPublicUrl(filePath);
 
+      if (!publicUrl) throw new Error("Kunne ikke generere bilde-URL. Prøv igjen.");
+
       const jobId = crypto.randomUUID();
       const { error: insertError } = await supabase.from('video_jobs').insert({
         id: jobId,
