@@ -69,7 +69,15 @@ const VideoDetail = () => {
           filter: `id=eq.${id}`,
         },
         (payload) => {
-          setJob(payload.new as VideoJob);
+          const updated = payload.new as VideoJob;
+          setJob(updated);
+          if (updated.status === "failed") {
+            toast({
+              title: "Videogenerering feilet",
+              description: updated.error_message || "En ukjent feil oppstod under genereringen.",
+              variant: "destructive",
+            });
+          }
         }
       )
       .subscribe();
