@@ -987,7 +987,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [\n      {\"inline_data\": {\"mime_type\": \"{{ $binary.data.mimeType }}\", \"data\": \"{{ $binary.data.data }}\"}},\n      {\"text\": \"The image above is the EXACT product that must appear in this photo. Generate a photorealistic portrait photo, exactly 720x1280 pixels, 9:16 aspect ratio. {{ $json.message.content.replace(/\\\"/g, '\\\\\"').replace(/\\n/g, ' ') }} CRITICAL: The person MUST be holding this EXACT product from the reference image above — replicate its colors, packaging, label text, and design with complete accuracy.\"}\n    ]\n  }],\n  \"generationConfig\": {\n    \"responseModalities\": [\"TEXT\", \"IMAGE\"],\n    \"imageConfig\": {\n      \"aspectRatio\": \"9:16\"\n    }\n  }\n}",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [\n      {\"inline_data\": {\"mime_type\": \"image/jpeg\", \"data\": \"{{ $json.imageBase64 }}\"}},\n      {\"text\": \"The image above is the EXACT product that must appear in this photo. Generate a photorealistic portrait photo, exactly 720x1280 pixels, 9:16 aspect ratio. {{ $('Generate Avatar Prompt (GPT-4o)').item.json.message.content.replace(/\\\"/g, '\\\\\"').replace(/\\n/g, ' ') }} CRITICAL: The person MUST be holding this EXACT product from the reference image above — replicate its colors, packaging, label text, and design with complete accuracy.\"}\n    ]\n  }],\n  \"generationConfig\": {\n    \"responseModalities\": [\"TEXT\", \"IMAGE\"],\n    \"imageConfig\": {\n      \"aspectRatio\": \"9:16\"\n    }\n  }\n}",
         "options": {
           "timeout": 60000
         }
@@ -1013,7 +1013,7 @@
     {
       "parameters": {
         "method": "GET",
-        "url": "={{ $('Store Analysis').item.json.imageUrl }}",
+        "url": "={{ $('Parse Webhook Inputs').item.json.imageUrl }}",
         "options": {
           "response": {
             "response": {
@@ -1028,6 +1028,24 @@
       "typeVersion": 4.2,
       "position": [
         -3776,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "setAllData": false,
+        "destinationKey": "imageBase64",
+        "options": {},
+        "mode": "binaryToJson",
+        "sourceKey": "data",
+        "convertAllData": false
+      },
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Convert Image to Base64",
+      "type": "n8n-nodes-base.moveBinaryData",
+      "typeVersion": 1,
+      "position": [
+        -3712,
         800
       ]
     },
@@ -1093,7 +1111,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const response = $input.first().json;\nconst parts = response.candidates[0].content.parts;\nconst imagePart = parts.find(p => p.inlineData);\nif (!imagePart) throw new Error('No image data in Gemini response');\nconst b64 = imagePart.inlineData.data;\nconst mimeType = imagePart.inlineData.mimeType || 'image/png';\nconst buffer = Buffer.from(b64, 'base64');\nreturn [{\n  json: { mimeType },\n  binary: {\n    data: await this.helpers.prepareBinaryData(buffer, 'avatar.png', mimeType)\n  }\n}];"
+        "jsCode": "const response = $input.first().json;\nconst parts = response.candidates[0].content.parts;\nconst imagePart = parts.find(p => p.inlineData);\nif (!imagePart) throw new Error('No image data in Gemini response');\nconst b64 = imagePart.inlineData.data;\nconst mimeType = imagePart.inlineData.mimeType || 'image/png';\nreturn [{\n  json: { mimeType },\n  binary: {\n    data: {\n      data: b64,\n      mimeType: mimeType,\n      fileName: 'avatar.png',\n      fileExtension: 'png'\n    }\n  }\n}];"
       },
       "id": "d3773636-d9c8-4353-8cad-9ad267e78007",
       "name": "Parse Gemini Image Response",
@@ -1498,6 +1516,17 @@
       ]
     },
     "Fetch Product Image": {
+      "main": [
+        [
+          {
+            "node": "Convert Image to Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Image to Base64": {
       "main": [
         [
           {
