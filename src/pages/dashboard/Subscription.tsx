@@ -108,28 +108,29 @@ const Subscription = () => {
           return (
             <div
               key={key}
-              className={`relative rounded-xl border-2 p-6 flex flex-col card-shadow ${
+              className={`relative rounded-xl border-2 p-6 flex flex-col transition-all duration-300 ${
                 isCurrent
-                  ? "border-primary bg-primary/5 ring-2 ring-primary/20 shadow-lg"
-                  : isPopular ? "border-primary glow-primary" : "border-border"
-              } bg-card`}
+                  ? "border-foreground bg-foreground text-background shadow-2xl scale-[1.02]"
+                  : isPopular ? "border-primary glow-primary card-shadow" : "border-border card-shadow"
+              } ${!isCurrent ? "bg-card" : ""}`}
             >
-              {isPopular && (
+              {isPopular && !isCurrent && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-primary text-xs font-semibold text-primary-foreground">
                   Mest populær
                 </div>
               )}
               {isCurrent && (
-                <div className="absolute -top-3 right-4 px-3 py-0.5 rounded-full bg-status-completed text-xs font-semibold text-primary-foreground">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-background text-foreground text-xs font-bold shadow-md flex items-center gap-1.5">
+                  <Check size={12} className="shrink-0" />
                   Din plan
                 </div>
               )}
-              <h3 className="font-display text-lg font-bold mb-1">{plan.name}</h3>
+              <h3 className={`font-display text-lg font-bold mb-1 ${isCurrent ? "text-background" : ""}`}>{plan.name}</h3>
               <div className="mb-4">
-                <span className="font-display text-3xl font-bold">{displayPrice}</span>
-                <span className="text-muted-foreground text-sm ml-1">kr/mnd</span>
+                <span className={`font-display text-3xl font-bold ${isCurrent ? "text-background" : ""}`}>{displayPrice}</span>
+                <span className={`text-sm ml-1 ${isCurrent ? "text-background/60" : "text-muted-foreground"}`}>kr/mnd</span>
                 {isAnnual && hasAnnual && (
-                  <span className="ml-2 text-sm text-muted-foreground line-through">{plan.price} kr</span>
+                  <span className={`ml-2 text-sm line-through ${isCurrent ? "text-background/40" : "text-muted-foreground"}`}>{plan.price} kr</span>
                 )}
               </div>
               <ul className="space-y-2 mb-6 flex-1">
@@ -139,14 +140,16 @@ const Subscription = () => {
                   return (
                     <li key={f} className={`flex items-start gap-2 text-sm ${isComingSoon ? "opacity-60" : ""}`}>
                       {isComingSoon ? (
-                        <Clock size={14} className="text-muted-foreground mt-0.5 shrink-0" />
+                        <Clock size={14} className={`mt-0.5 shrink-0 ${isCurrent ? "text-background/50" : "text-muted-foreground"}`} />
                       ) : (
-                        <Check size={14} className="text-primary mt-0.5 shrink-0" />
+                        <Check size={14} className={`mt-0.5 shrink-0 ${isCurrent ? "text-background" : "text-primary"}`} />
                       )}
-                      <span className="text-muted-foreground">
+                      <span className={isCurrent ? "text-background/70" : "text-muted-foreground"}>
                         {displayText}
                         {isComingSoon && (
-                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-muted text-muted-foreground">
+                          <span className={`ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                            isCurrent ? "bg-background/10 text-background/60" : "bg-muted text-muted-foreground"
+                          }`}>
                             Kommer snart
                           </span>
                         )}
@@ -163,13 +166,13 @@ const Subscription = () => {
                 disabled={isCurrent || loading === key}
                 className={`w-full ${
                   isCurrent
-                    ? "bg-secondary text-secondary-foreground"
+                    ? "bg-background text-foreground hover:bg-background/90 font-semibold"
                     : loading !== null && loading !== key
                       ? "bg-gradient-primary text-primary-foreground hover:opacity-90 pointer-events-none"
                       : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
-                {isCurrent ? "Nåværende plan" : loading === key ? "Laster..." : showTrial ? "Prøv for 10 kr" : "Velg plan"}
+                {isCurrent ? "✓ Nåværende plan" : loading === key ? "Laster..." : showTrial ? "Prøv for 10 kr" : "Velg plan"}
               </Button>
             </div>
           );
