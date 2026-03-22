@@ -117,10 +117,20 @@ const Overview = () => {
           </Link>
         </div>
       )}
+      {used === 0 && (
+        <div className="rounded-xl border border-border bg-card p-6 card-shadow text-center space-y-2">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">
+            Velkommen, {profile?.first_name || "bruker"}!
+          </h1>
+          <p className="text-muted-foreground">
+            Kontoen din er klar. Kom i gang ved å lage din første AI-genererte UGC-video.
+          </p>
+        </div>
+      )}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold">
-            Velkommen tilbake, {profile?.first_name || "bruker"}!
+            {used > 0 ? `Velkommen tilbake, ${profile?.first_name || "bruker"}!` : "Oversikt"}
           </h1>
           <p className="text-muted-foreground mt-1">Her er en oversikt over kontoen din</p>
         </div>
