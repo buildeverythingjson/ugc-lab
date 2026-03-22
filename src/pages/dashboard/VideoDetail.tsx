@@ -74,9 +74,10 @@ const VideoDetail = () => {
           if (updated.status === "failed") {
             toast({
               title: "Videogenerering feilet",
-              description: updated.error_message || "En ukjent feil oppstod under genereringen.",
+              description: "Kreditten din er refundert. " + (updated.error_message || "En ukjent feil oppstod under genereringen."),
               variant: "destructive",
             });
+            refreshProfile();
           }
         }
       )
