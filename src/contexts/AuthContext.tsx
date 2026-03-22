@@ -51,22 +51,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     const { data: existing } = await supabase
       .from("profiles")
-      .select("first_name, last_name")
+      .select("first_name, last_name, has_used_trial")
       .eq("id", u.id)
       .single();
     
-    if (existing?.first_name) return;
+    const isNewUser = !existing?.first_name;
 
-    const fullName: string = meta.full_name || meta.name || "";
-    const parts = fullName.trim().split(/\s+/);
-    const firstName = parts[0] || null;
-    const lastName = parts.length > 1 ? parts.slice(1).join(" ") : null;
+    if (isNewUser) {
+      const fullName: string = meta.full_name || meta.name || "";
+      const parts = fullName.trim().split(/\s+/);
+      const firstName = parts[0] || null;
+      const lastName = parts.length > 1 ? parts.slice(1).join(" ") : null;
 
-    await supabase.from("profiles").update({
-      first_name: firstName,
-      last_name: lastName,
-      display_name: fullName || null,
-    }).eq("id", u.id);
+      await supabase.from("profiles").update({
+        first_name: firstName,
+        last_name: lastName,
+        display_name: fullName || null,
+      }).eq("id", u.id);
+
+      // Auto-activate free trial for new Google users
+      if (!existing?.has_used_trial) {
+        try {
+          await supabase.functions.invoke("activate-trial");
+        } catch {
+          // silently fail – user can activate manually later
+        }
+      }
+    }
   };
 
   const syncSubscription = async () => {
