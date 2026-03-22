@@ -5,12 +5,33 @@ import { useAuth } from "@/contexts/AuthContext";
 import { STRIPE_TIERS, TierKey } from "@/lib/stripe-config";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Subscription = () => {
   const { profile, refreshProfile } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
   const [isAnnual, setIsAnnual] = useState(false);
+
+  const handleFreeTrial = async () => {
+    setLoading("trial");
+    try {
+      const { data, error } = await supabase.functions.invoke("activate-trial");
+      if (error) throw error;
+      if (data?.error) {
+        toast.error(data.error);
+        setLoading(null);
+        return;
+      }
+      toast.success("Gratisprøven er aktivert! Du har 1 gratis video.");
+      await refreshProfile();
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || "Noe gikk galt");
+      setLoading(null);
+    }
+  };
 
   const handleCheckout = async (tierKey: TierKey, priceIdOverride?: string) => {
     setLoading(tierKey);
@@ -160,10 +181,10 @@ const Subscription = () => {
               </ul>
               <Button
                 onClick={() => showTrial 
-                  ? handleCheckout(key, STRIPE_TIERS.trial.price_id) 
+                  ? handleFreeTrial() 
                   : handleCheckout(key)
                 }
-                disabled={isCurrent || loading === key}
+                disabled={isCurrent || loading === key || (loading === "trial" && showTrial)}
                 className={`w-full ${
                   isCurrent
                     ? "bg-background text-foreground hover:bg-background/90 font-semibold"
@@ -172,7 +193,7 @@ const Subscription = () => {
                       : "bg-gradient-primary text-primary-foreground hover:opacity-90"
                 }`}
               >
-                {isCurrent ? "✓ Nåværende plan" : loading === key ? "Laster..." : showTrial ? "Prøv for 10 kr" : "Velg plan"}
+                {isCurrent ? "✓ Nåværende plan" : loading === "trial" && showTrial ? "Laster..." : loading === key ? "Laster..." : showTrial ? "Prøv gratis" : "Velg plan"}
               </Button>
             </div>
           );
