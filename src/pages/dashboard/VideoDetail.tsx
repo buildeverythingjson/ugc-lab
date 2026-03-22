@@ -154,7 +154,13 @@ const VideoDetail = () => {
       {status === "failed" && (
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3 space-y-2">
           <p className="text-red-400 text-sm">{job.error_message || "En ukjent feil oppstod."}</p>
-          <Link to="/dashboard/new-video">
+          <Link to="/dashboard/new-video" state={{
+            brandName: job.brand_name,
+            targetAudience: job.target_audience,
+            creativeDescription: job.creative_description || "",
+            language: job.language,
+            videoLength: job.video_length,
+          }}>
             <Button variant="outline" size="sm" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
               <RefreshCw size={14} className="mr-1.5" />
               Prøv igjen
