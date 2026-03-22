@@ -24,7 +24,7 @@ const STATUS_CONFIG = {
 
 const VideoDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [job, setJob] = useState<VideoJob | null>(null);
   const [loading, setLoading] = useState(true);
@@ -74,9 +74,10 @@ const VideoDetail = () => {
           if (updated.status === "failed") {
             toast({
               title: "Videogenerering feilet",
-              description: updated.error_message || "En ukjent feil oppstod under genereringen.",
+              description: "Kreditten din er refundert. " + (updated.error_message || "En ukjent feil oppstod under genereringen."),
               variant: "destructive",
             });
+            refreshProfile();
           }
         }
       )
