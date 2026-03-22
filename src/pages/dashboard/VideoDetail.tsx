@@ -24,7 +24,7 @@ const STATUS_CONFIG = {
 
 const VideoDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [job, setJob] = useState<VideoJob | null>(null);
   const [loading, setLoading] = useState(true);
