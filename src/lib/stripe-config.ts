@@ -4,9 +4,9 @@
 // Stripe tier configuration
 export const STRIPE_TIERS = {
   trial: {
-    name: "Startup Trial",
-    price: "10",
-    price_id: "price_1TBvZn09raYItIuAon2pFcJT",
+    name: "Gratis prøve",
+    price: "0",
+    price_id: "free_trial",
     annual_price_id: "", // TODO: Add annual trial price ID from Stripe
     product_id: "prod_UAG5kKbvPbhTYE",
     videos_per_month: 1,
