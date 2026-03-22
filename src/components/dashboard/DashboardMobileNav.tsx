@@ -4,8 +4,8 @@ import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, ImagePlus, Lo
 const navItems = [
   { label: "Oversikt", icon: LayoutDashboard, path: "/dashboard" },
   { label: "Ny video", icon: PlusCircle, path: "/dashboard/new-video" },
-  { label: "Bilde", icon: ImagePlus, path: "/dashboard/new-image", comingSoon: true },
   { label: "Videoer", icon: Video, path: "/dashboard/videos" },
+  { label: "Abonnement", icon: CreditCard, path: "/dashboard/subscription" },
   { label: "Innst.", icon: Settings, path: "/dashboard/settings" },
 ];
 
