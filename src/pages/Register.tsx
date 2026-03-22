@@ -53,6 +53,9 @@ const Register = () => {
           <Link to="/">
             <img src={logoImg} alt="Rendr" className="h-5 mx-auto" />
           </Link>
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
+            🎬 Få 1 gratis video ved registrering
+          </div>
         </div>
 
         <div className="rounded-xl border border-border bg-card p-8 card-shadow">
