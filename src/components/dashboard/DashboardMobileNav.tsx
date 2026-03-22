@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings, ImagePlus, Lock } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Video, CreditCard, Settings } from "lucide-react";
 
 const navItems = [
   { label: "Oversikt", icon: LayoutDashboard, path: "/dashboard" },
@@ -25,10 +25,7 @@ const DashboardMobileNav = () => {
                 active ? "text-primary" : "text-muted-foreground"
               }`}
             >
-              <div className="relative">
-                <item.icon size={20} />
-                {item.comingSoon && <Lock size={8} className="absolute -top-1 -right-2 text-muted-foreground/60" />}
-              </div>
+              <item.icon size={20} />
               {item.label}
             </Link>
           );
