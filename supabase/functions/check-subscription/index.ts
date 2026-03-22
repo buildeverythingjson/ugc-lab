@@ -101,7 +101,10 @@ serve(async (req) => {
     const subscription = subscriptions.data[0];
     const productId = subscription.items.data[0].price.product as string;
     const tierInfo = TIER_MAP[productId] || { tier: "startup", videos: 5 };
-    const subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+    const periodEnd = subscription.current_period_end;
+    const subscriptionEnd = typeof periodEnd === "number"
+      ? new Date(periodEnd * 1000).toISOString()
+      : new Date(periodEnd).toISOString();
 
     const updateData: Record<string, unknown> = {
       stripe_customer_id: customerId,
