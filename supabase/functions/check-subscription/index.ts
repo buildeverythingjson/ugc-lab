@@ -47,7 +47,7 @@ serve(async (req) => {
     if (!userId) throw new Error("User not authenticated");
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
-      apiVersion: "2026-02-25.clover",
+      apiVersion: "2025-08-27.basil",
     });
 
     const { data: profile } = await serviceRoleClient
