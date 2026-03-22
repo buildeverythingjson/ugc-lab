@@ -13,8 +13,24 @@ const Overview = () => {
   const checkoutTriggered = useRef(false);
   const [searchParams] = useSearchParams();
 
-  // Handle pending checkout from landing page
+  // Handle pending free trial from landing page
   useEffect(() => {
+    const pendingTrial = localStorage.getItem("pending_free_trial");
+    if (pendingTrial && !checkoutTriggered.current) {
+      checkoutTriggered.current = true;
+      localStorage.removeItem("pending_free_trial");
+      supabase.functions.invoke("activate-trial").then(({ data, error }) => {
+        if (error || data?.error) {
+          toast.error(data?.error || "Kunne ikke aktivere gratisprøven");
+          return;
+        }
+        toast.success("Gratisprøven er aktivert! Du har 1 gratis video.");
+        refreshProfile();
+      });
+      return;
+    }
+
+    // Handle pending checkout from landing page
     const pendingPriceId = localStorage.getItem("pending_checkout_price_id");
     if (pendingPriceId && !checkoutTriggered.current) {
       checkoutTriggered.current = true;
