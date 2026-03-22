@@ -224,6 +224,27 @@ export type Database = {
         }
         Relationships: []
       }
+      trial_activations: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       video_jobs: {
         Row: {
           brand_name: string

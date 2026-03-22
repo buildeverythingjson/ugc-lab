@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const plans = [
   {
@@ -71,6 +72,31 @@ const PricingSection = () => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   const hasUsedTrial = !!profile?.has_used_trial || ["trial", "startup", "growth", "business"].includes(profile?.subscription_tier ?? "");
+
+  const handleFreeTrial = async () => {
+    if (!user) {
+      localStorage.setItem("pending_free_trial", "true");
+      navigate("/register");
+      return;
+    }
+
+    setLoading("trial");
+    try {
+      const { data, error } = await supabase.functions.invoke("activate-trial");
+      if (error) throw error;
+      if (data?.error) {
+        toast.error(data.error);
+        setLoading(null);
+        return;
+      }
+      toast.success("Gratisprøven er aktivert! Du har 1 gratis video.");
+      if (typeof window.fbq === "function") window.fbq("track", "StartTrial");
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error.message || "Noe gikk galt");
+      setLoading(null);
+    }
+  };
 
   const handlePlanSelect = async (priceId: string, loadingKey: string) => {
     if (!priceId) {
@@ -198,7 +224,7 @@ const PricingSection = () => {
                   disabled={loading === plan.tierKey || (loading === "trial" && !!showTrial)}
                   onClick={() =>
                     showTrial
-                      ? handlePlanSelect(plan.trialPriceId!, "trial")
+                      ? handleFreeTrial()
                       : handlePlanSelect(activePriceId, plan.tierKey)
                   }
                 >
@@ -207,7 +233,7 @@ const PricingSection = () => {
                     : loading === plan.tierKey
                     ? "Laster..."
                     : showTrial
-                    ? "Prøv for 10 kr"
+                    ? "Prøv gratis"
                     : "Velg plan"}
                 </Button>
               </motion.div>
