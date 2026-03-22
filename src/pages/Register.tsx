@@ -27,7 +27,7 @@ const Register = () => {
       if (typeof window.fbq === "function") window.fbq("track", "CompleteRegistration");
       toast.success("Konto opprettet! Sjekk e-posten din for bekreftelse.");
       // Keep pending_checkout_price_id in localStorage so it persists through email verification + login
-      navigate("/login");
+      navigate("/dashboard");
     } catch (error: any) {
       toast.error(error.message || "Registrering feilet");
     } finally {
