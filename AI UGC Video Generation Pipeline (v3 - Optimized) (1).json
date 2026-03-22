@@ -358,7 +358,7 @@
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "httpHeaderAuth",
         "options": {
-          "timeout": 30000
+          "timeout": 120000
         }
       },
       "id": "96d03f18-fc6d-445a-9415-03da4b8aac3e",
