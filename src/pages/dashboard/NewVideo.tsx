@@ -14,14 +14,22 @@ const NewVideo = () => {
   const { user, profile, refreshProfile } = useAuth();
   const isBusiness = profile?.subscription_tier === "business";
   const navigate = useNavigate();
+  const location = useLocation();
+  const prefill = location.state as {
+    brandName?: string;
+    targetAudience?: string;
+    creativeDescription?: string;
+    language?: string;
+    videoLength?: string;
+  } | null;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [brandName, setBrandName] = useState("");
-  const [targetAudience, setTargetAudience] = useState("");
-  const [creativeDescription, setCreativeDescription] = useState("");
-  const [language, setLanguage] = useState("Norsk");
-  const [videoLength, setVideoLength] = useState("15");
+  const [brandName, setBrandName] = useState(prefill?.brandName || "");
+  const [targetAudience, setTargetAudience] = useState(prefill?.targetAudience || "");
+  const [creativeDescription, setCreativeDescription] = useState(prefill?.creativeDescription || "");
+  const [language, setLanguage] = useState(prefill?.language || "Norsk");
+  const [videoLength, setVideoLength] = useState(prefill?.videoLength || "15");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingScript, setIsGeneratingScript] = useState(false);
 
